@@ -74,6 +74,34 @@
             "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80"
         ];
 
+
+        // --- PROJECT PAGE HELPERS ---
+        const slugify = (text = "") => text.toLowerCase().trim().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+        const lines = (text = "") => text.split("\n").map(x => x.trim()).filter(Boolean);
+        const pairs = (text = "") => lines(text).map(row => {
+            const parts = row.split("|");
+            return { label: (parts.shift() || "").trim(), value: parts.join("|").trim() };
+        });
+        const normalizeProject = (p) => ({
+            ...p,
+            slug: p.slug || slugify(p.title || ("project-" + p.id)),
+            developer: p.developer || "Verified Developer",
+            reraNumber: p.reraNumber || "",
+            description: p.description || `Discover ${p.title}, a premium residential project in ${p.subLocality}, ${p.region}. Contact TruePillar Realty for verified pricing, layouts, availability and a complimentary site visit.`,
+            images: (Array.isArray(p.images) ? p.images : [p.image]).filter(x => typeof x === "string" && (x.startsWith("data:image/") || x.startsWith("http") || x.startsWith("blob:"))),
+            videos: Array.isArray(p.videos) ? p.videos : [],
+            sampleVideoLinks: Array.isArray(p.sampleVideoLinks) ? p.sampleVideoLinks : [],
+            highlightVideoLinks: Array.isArray(p.highlightVideoLinks) ? p.highlightVideoLinks : [],
+            pdfs: Array.isArray(p.pdfs) ? p.pdfs : [],
+            highlights: Array.isArray(p.highlights) ? p.highlights : [],
+            priceOptions: Array.isArray(p.priceOptions) ? p.priceOptions : [],
+            specifications: Array.isArray(p.specifications) ? p.specifications : [],
+            locationAdvantages: Array.isArray(p.locationAdvantages) ? p.locationAdvantages : [],
+            faqs: Array.isArray(p.faqs) ? p.faqs : [],
+            published: p.published !== false
+        });
+        const projectLink = p => `${location.origin}${location.pathname}#project/${p.slug || slugify(p.title)}`;
+
         // --- AUTOMATED PROPERTIES POPULATER ---
         const compileInitialListings = () => {
             const listings = [];
@@ -116,17 +144,17 @@
         };
 
         // --- SEARCH & FILTER COMPONENT ---
-        function SearchFilterBar({ search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
+        function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
             return (
                 <div className="bg-luxury-card border border-neutral-800 p-6 rounded-xl space-y-4 lg:space-y-0 lg:flex lg:gap-4 items-center shadow-xl w-full">
-                    <div className="flex-1 min-w-[200px]">
-                        <input 
-                            type="text" 
-                            placeholder="Search by project name, builder, or location..." 
-                            className="w-full bg-luxury-bg border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-luxury-gold text-white" 
-                            value={search} 
-                            onChange={(e) => setSearch(e.target.value)} 
-                        />
+                    <div className="flex-1 min-w-[200px] relative z-[100]" onFocus={()=>window.__tpSearchOpen=true}>
+                        <input type="text" placeholder="Search project, location, city, developer..." className="w-full bg-luxury-bg border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-luxury-gold text-white" value={search} onChange={(e)=>setSearch(e.target.value)} />
+                        {search.trim() && <div className="absolute left-0 right-0 top-full mt-2 bg-[#111114] border border-neutral-700 rounded-lg shadow-2xl max-h-80 overflow-y-auto">{(()=>{
+                            const q=search.toLowerCase(), seen=new Set(), items=[];
+                            const add=(type,label,detail)=>{if(label&&label.toLowerCase().includes(q)){const k=(type+label).toLowerCase();if(!seen.has(k)){seen.add(k);items.push({type,label,detail})}}};
+                            listings.filter(p=>p.published!==false).forEach(p=>{add("Project",p.title,`${p.subLocality}, ${p.region}`);add("Location",p.subLocality,p.region);add("City",p.region,"All matching projects");add("Developer",p.developer,p.title);add("Address",p.address,p.title)});
+                            return items.slice(0,12).length ? items.slice(0,12).map((s,i)=><button type="button" key={i} onClick={()=>setSearch(s.label)} className="w-full text-left px-4 py-3 border-b border-neutral-800 last:border-0 hover:bg-neutral-900 flex gap-3"><span className="text-[9px] uppercase text-luxury-gold border border-luxury-gold/40 rounded px-1.5 py-0.5 h-fit min-w-[58px] text-center">{s.type}</span><span><strong className="block text-sm text-white">{s.label}</strong><small className="text-neutral-500">{s.detail}</small></span></button>) : <div className="px-4 py-4 text-sm text-neutral-500">No matching project or location found.</div>;
+                        })()}</div>}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:flex lg:gap-3">
                         <select 
@@ -239,7 +267,11 @@
                                 <label className="block text-xs text-neutral-400 mb-1">Any Specific Requirements? (Optional)</label>
                                 <textarea rows="2" placeholder="e.g., Looking for higher floor, vastu compliant, ready to move in..." className="w-full bg-luxury-bg border border-neutral-800 rounded p-2.5 focus:outline-none focus:border-luxury-gold text-white resize-none" value={notes} onChange={e => setNotes(e.target.value)}></textarea>
                             </div>
-                            <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-wider transition text-xs shadow-lg">Confirm & Book Free Site Visit</button>
+                            
+<div className="space-y-3"><label className="block text-neutral-400">Upload Videos</label><input type="file" accept="video/*" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded"/>{(formData.videos||[]).map((v,i)=><div key={i} className="flex justify-between bg-luxury-bg p-2 rounded"><span>Video {i+1}</span><button type="button" className="text-red-400" onClick={()=>setFormData({...formData,videos:formData.videos.filter((_,x)=>x!==i)})}>Remove</button></div>)}</div>
+<div className="space-y-3"><label className="block text-neutral-400">Upload PDFs / Brochures / Cost Sheets</label><input type="file" accept="application/pdf" multiple onChange={handlePdfUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded"/>{(formData.pdfs||[]).map((p,i)=><div key={i} className="flex justify-between bg-luxury-bg p-2 rounded"><span>{p.name}</span><button type="button" className="text-red-400" onClick={()=>setFormData({...formData,pdfs:formData.pdfs.filter((_,x)=>x!==i)})}>Remove</button></div>)}</div>
+
+<button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-wider transition text-xs shadow-lg">Confirm & Book Free Site Visit</button>
                         </form>
                     </div>
                 </div>
@@ -247,11 +279,20 @@
         }
 
         // --- PROPERTY CARD VIEW ---
-        function PropertyCard({ property, onOpenEnquiry }) {
+        function MediaWatermark({ compact=false }) {
+            return <div className="pointer-events-none absolute inset-0 overflow-hidden z-20"><div className={`absolute inset-[-35%] flex flex-wrap items-center justify-center gap-x-16 gap-y-10 rotate-[-24deg] ${compact?'text-[8px]':'text-xs md:text-sm'} font-semibold tracking-widest text-white/[0.14]`}>{Array.from({length:compact?10:20}).map((_,i)=><span key={i} className="whitespace-nowrap">TRUEPILLAR REALTY • +91 77188 47841</span>)}</div></div>;
+        }
+
+        function PropertyCard({ property, onOpenEnquiry, onOpenProject }) {
+            const cardProject=normalizeProject(property);
+            const [cardImage,setCardImage]=React.useState(0);
+            React.useEffect(()=>{ if(cardProject.images.length<2)return; const timer=setInterval(()=>setCardImage(i=>(i+1)%cardProject.images.length),2800); return()=>clearInterval(timer); },[cardProject.id,cardProject.images.length]);
             return (
                 <div className="bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
                     <div className="relative overflow-hidden h-56 bg-neutral-900">
-                        <img src={property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                        <img src={cardProject.images[cardImage] || property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                            <MediaWatermark compact={true} />
+                            {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
                         <span className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30">{property.status}</span>
                         <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {property.carpetArea}</span>
                     </div>
@@ -261,7 +302,7 @@
                                 <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{property.configuration}</span>
                                 <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
                             </div>
-                            <h3 className="text-lg font-medium text-white group-hover:text-luxury-gold transition mb-2">{property.title}</h3>
+                            <button onClick={() => onOpenProject(property)} className="text-left w-full"><h3 className="text-lg font-medium text-white group-hover:text-luxury-gold transition mb-2">{property.title}</h3></button>
                             <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-3">{property.address}</p>
                             <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
                             
@@ -273,7 +314,11 @@
                         </div>
                         <div className="pt-4 border-t border-neutral-900 flex justify-between items-center mt-auto">
                             <div><span className="text-xl font-bold text-white tracking-tight">{property.price}</span></div>
-                            <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-xs font-bold px-4 py-2.5 rounded transition duration-200 tracking-wider uppercase shadow-md">Book Site Visit</button>
+                            <div className="grid grid-cols-2 gap-2 w-[238px]">
+                                <button onClick={() => onOpenProject(property)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
+                                <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">Site Visit</button>
+                                {cardProject.sampleVideoLinks.length > 0 && <a href={cardProject.sampleVideoLinks[0]} target="_blank" rel="noreferrer" className="col-span-2 flex items-center justify-center border border-red-700 text-red-400 text-[10px] font-bold px-3 py-2 rounded uppercase whitespace-nowrap">▶ Watch Sample Flat Video</a>}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -323,7 +368,7 @@
         }
 
         // --- HOME SCREEN VIEW ---
-        function Home({ setView, listings, onOpenEnquiry, filterState, onSubmitHomeLead }) {
+        function Home({ setView, listings, onOpenEnquiry, onOpenProject, filterState, onSubmitHomeLead }) {
             const [hName, setHName] = React.useState("");
             const [hPhone, setHPhone] = React.useState("");
             const [hLoc, setHLoc] = React.useState("Navi Mumbai");
@@ -390,7 +435,7 @@
                     {/* Integrated Search Filters Layout */}
                     <section id="search-section" className="px-6 lg:px-16 max-w-7xl mx-auto">
                         <div className="mb-4"><h3 className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Filter Real Estate Inventory</h3></div>
-                        <SearchFilterBar {...filterState} />
+                        <SearchFilterBar {...filterState} listings={listings} />
                     </section>
 
                     {/* Featured Grid Layout */}
@@ -400,7 +445,7 @@
                             <button onClick={() => setView('properties')} className="text-xs text-luxury-gold font-bold tracking-wider uppercase hover:underline">View All Flats ({listings.length}) &rarr;</button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {listings.slice(0, 6).map(p => <PropertyCard key={p.id} property={p} onOpenEnquiry={onOpenEnquiry} />)}
+                            {listings.slice(0, 6).map(p => <PropertyCard key={p.id} property={p} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} />)}
                         </div>
                     </section>
                 </div>
@@ -408,20 +453,122 @@
         }
 
         // --- PROPERTIES CATALOGUE VIEW ---
-        function Properties({ listings, onOpenEnquiry, filterState }) {
+        function Properties({ listings, onOpenEnquiry, onOpenProject, filterState }) {
             return (
                 <div className="bg-luxury-bg text-white min-h-screen py-12 px-6 lg:px-16 max-w-7xl mx-auto space-y-8">
                     <div>
                         <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Verified Listings</span>
                         <h1 className="text-3xl font-light tracking-wider mt-1">Available Properties & <span className="text-luxury-gold font-semibold">Apartments</span></h1>
                     </div>
-                    <SearchFilterBar {...filterState} />
+                    <SearchFilterBar {...filterState} listings={listings} />
                     <div className="text-xs text-neutral-400 font-light">Showing {listings.length} matches found across database nodes.</div>
                     {listings.length === 0 ? (
                         <div className="text-center py-20 border border-dashed border-neutral-800 rounded-xl text-neutral-500 text-sm">No properties match your filter selections. Try altering your choices.</div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {listings.map((property) => <PropertyCard key={property.id} property={property} onOpenEnquiry={onOpenEnquiry} />)}
+                            {listings.map((property) => <PropertyCard key={property.id} property={property} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} />)}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+
+        const openProjectPdf = (pdf) => {
+            try {
+                if (!pdf || !pdf.url) return;
+                if (!pdf.url.startsWith("data:application/pdf")) { window.open(pdf.url, "_blank"); return; }
+                const parts = pdf.url.split(",");
+                const meta = parts[0] || "";
+                const data = parts.slice(1).join(",");
+                let blob;
+                if (meta.includes(";base64")) {
+                    const binary = atob(data);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    blob = new Blob([bytes], { type: "application/pdf" });
+                } else { blob = new Blob([decodeURIComponent(data)], { type: "application/pdf" }); }
+                const blobUrl = URL.createObjectURL(blob);
+                window.open(blobUrl, "_blank");
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+            } catch (err) { console.error("PDF open error:", err); alert("Could not open this PDF. Please upload it again."); }
+        };
+
+        const getVideoEmbed = (url = "") => {
+            try {
+                if (url.includes("youtube.com/watch")) { const id=new URL(url).searchParams.get("v"); return id?`https://www.youtube.com/embed/${id}`:null; }
+                if (url.includes("youtu.be/")) { const id=url.split("youtu.be/")[1].split(/[?&]/)[0]; return id?`https://www.youtube.com/embed/${id}`:null; }
+                if (url.includes("youtube.com/shorts/")) { const id=url.split("/shorts/")[1].split(/[?&]/)[0]; return id?`https://www.youtube.com/embed/${id}`:null; }
+                return null;
+            } catch(e) { return null; }
+        };
+
+        function ProjectDetail({ property, onBack, onOpenEnquiry }) {
+            const p = normalizeProject(property);
+            const [activeImage, setActiveImage] = React.useState(0);
+            const [fullImageOpen, setFullImageOpen] = React.useState(false);
+            React.useEffect(() => { window.scrollTo(0,0); document.title = `${p.title} | TruePillar Realty`; }, [p.id]);
+            const share = async () => {
+                const url = projectLink(p);
+                if (navigator.share) { try { await navigator.share({title:p.title, url}); return; } catch(e) {} }
+                try { await navigator.clipboard.writeText(url); alert("Project link copied!"); } catch(e) { prompt("Copy project link:", url); }
+            };
+            return (
+                <div className="max-w-7xl mx-auto px-6 lg:px-16 py-8 space-y-10">
+                    <div className="flex justify-between gap-4"><button onClick={onBack} className="text-xs text-neutral-400 hover:text-luxury-gold">← Back to Properties</button><button onClick={share} className="border border-luxury-gold text-luxury-gold px-4 py-2 rounded text-xs font-bold uppercase">Share Project Link</button></div>
+                    <section className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                        <div className="lg:col-span-3 space-y-3">
+                            <div className="relative h-[320px] md:h-[480px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900">
+                                {p.images[activeImage] ? <img src={p.images[activeImage]} onClick={()=>setFullImageOpen(true)} className="w-full h-full object-cover cursor-zoom-in" title="Click to view full image" /> : <div className="w-full h-full flex items-center justify-center text-neutral-600">No project image uploaded</div>}{p.images[activeImage] && <MediaWatermark />}
+                                {p.images.length > 1 && <>
+                                    <button type="button" onClick={()=>setActiveImage(i=>(i-1+p.images.length)%p.images.length)} className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 text-white text-2xl hover:bg-luxury-gold hover:text-black">‹</button>
+                                    <button type="button" onClick={()=>setActiveImage(i=>(i+1)%p.images.length)} className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 text-white text-2xl hover:bg-luxury-gold hover:text-black">›</button>
+                                    <div className="absolute bottom-4 right-4 bg-black/70 px-3 py-1 rounded-full text-xs">{activeImage+1} / {p.images.length}</div>
+                                </>}
+                            </div>
+                            <div className="flex gap-2 overflow-x-auto">{p.images.map((img,i)=><button key={i} onClick={()=>setActiveImage(i)} className={`min-w-[90px] h-20 rounded overflow-hidden border ${i===activeImage?'border-luxury-gold':'border-neutral-800'}`}><img src={img} className="w-full h-full object-cover"/></button>)}</div>
+                        </div>
+                        <div className="lg:col-span-2 bg-luxury-card border border-neutral-800 rounded-2xl p-6 h-fit space-y-5">
+                            <div><span className="text-[10px] uppercase tracking-widest text-luxury-gold font-bold">{p.status}</span><h1 className="text-3xl font-semibold mt-2">{p.title}</h1><p className="text-sm text-neutral-400 mt-2">by {p.developer}</p><p className="text-sm text-neutral-400 mt-2">📍 {p.address}</p></div>
+                            <div className="grid grid-cols-2 gap-3 text-xs">
+                                <div className="bg-luxury-bg p-3 rounded"><span className="text-neutral-500 block">Configuration</span><b>{p.configuration}</b></div>
+                                <div className="bg-luxury-bg p-3 rounded"><span className="text-neutral-500 block">Carpet Area</span><b>{p.carpetArea}</b></div>
+                                <div className="bg-luxury-bg p-3 rounded"><span className="text-neutral-500 block">Possession</span><b>{p.possession}</b></div>
+                                <div className="bg-luxury-bg p-3 rounded"><span className="text-neutral-500 block">Starting Price</span><b className="text-luxury-gold">{p.price}</b></div>
+                            </div>
+                            {p.reraNumber && <div className="text-xs text-neutral-400">MahaRERA: <span className="text-white">{p.reraNumber}</span></div>}
+                            <button onClick={()=>onOpenEnquiry(p)} className="w-full bg-luxury-gold text-black py-3 rounded font-bold uppercase text-xs">Book Free Site Visit</button>
+                            <a target="_blank" href={`https://wa.me/917718847841?text=${encodeURIComponent(`Hello TruePillar Realty, please send me complete details for ${p.title}. ${projectLink(p)}`)}`} className="block text-center border border-emerald-700 text-emerald-400 py-3 rounded font-bold uppercase text-xs">WhatsApp for Details</a>
+                        </div>
+                    </section>
+                    <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2 space-y-8">
+                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Overview</h2><p className="text-sm text-neutral-300 leading-7 whitespace-pre-line">{p.description}</p></div>
+                            {p.highlights.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Highlights</h2><div className="grid md:grid-cols-2 gap-3">{p.highlights.map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-sm">✓ {x}</div>)}</div></div>}
+                            {p.priceOptions.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Configuration & Pricing</h2>{p.priceOptions.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><b className="text-luxury-gold">{x.value}</b></div>)}</div>}
+                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Amenities</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{(p.amenities||[]).map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-xs">✦ {x}</div>)}</div></div>
+                            {p.locationAdvantages.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Location Advantages</h2>{p.locationAdvantages.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><span className="text-luxury-gold">{x.value}</span></div>)}</div>}
+                            {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Videos</h2><div className="grid md:grid-cols-2 gap-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark /></div>)}</div></div>}
+                            {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Sample Flat Videos</h2><p className="text-xs text-neutral-500 mb-5">Sample flat tours and project walkthroughs.</p><div className="grid md:grid-cols-2 gap-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold"><span>▶ Watch Sample Flat Video {i+1}</span><span>Open ↗</span></a>})}</div></div>}
+                            {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Project Highlight Videos</h2><p className="text-xs text-neutral-500 mb-5">Project highlights, amenities, location and lifestyle videos.</p><div className="grid md:grid-cols-2 gap-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="relative flex aspect-video items-center justify-center border border-neutral-800 rounded-lg text-luxury-gold hover:border-luxury-gold bg-black/40"><span className="text-center">▶ Watch Project Highlight Video {i+1}<br/><small className="text-neutral-500">Instagram / Facebook</small></span><MediaWatermark /></a>})}</div></div>}
+                            {p.faqs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">FAQs</h2>{p.faqs.map((x,i)=><div key={i} className="mb-4"><b>{x.label}</b><p className="text-sm text-neutral-400 mt-1">{x.value}</p></div>)}</div>}
+                        </div>
+                        <aside className="space-y-6">
+                            {p.pdfs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">Downloads</h2>{p.pdfs.map((pdf,i)=><button type="button" key={i} onClick={()=>openProjectPdf(pdf)} className="block w-full text-left border border-neutral-800 rounded p-3 mb-3 text-sm text-luxury-gold hover:border-luxury-gold transition">📄 {pdf.name||`Project PDF ${i+1}`}</button>)}</div>}
+                            {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">Specifications</h2>{p.specifications.map((x,i)=><div key={i} className="mb-3 text-sm"><span className="text-neutral-500 block">{x.label}</span>{x.value}</div>)}</div>}
+                        </aside>
+                    </section>
+                    {fullImageOpen && p.images[activeImage] && (
+                        <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4" onClick={()=>setFullImageOpen(false)}>
+                            <button type="button" onClick={()=>setFullImageOpen(false)} className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white text-2xl">×</button>
+                            {p.images.length > 1 && (
+                                <>
+                                    <button type="button" onClick={(e)=>{e.stopPropagation();setActiveImage(i=>(i-1+p.images.length)%p.images.length)}} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 border border-white/30 text-white text-3xl">‹</button>
+                                    <button type="button" onClick={(e)=>{e.stopPropagation();setActiveImage(i=>(i+1)%p.images.length)}} className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 border border-white/30 text-white text-3xl">›</button>
+                                </>
+                            )}
+                            <div className="relative max-w-full max-h-[92vh]" onClick={(e)=>e.stopPropagation()}><img src={p.images[activeImage]} className="max-w-full max-h-[92vh] object-contain select-none" /><MediaWatermark /></div>
+                            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-black/70 px-4 py-2 rounded-full text-xs text-white">{activeImage+1} / {p.images.length}</div>
                         </div>
                     )}
                 </div>
@@ -431,7 +578,7 @@
         // --- ADMIN / LEAD PANEL VIEW ---
         function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
-            const [formData, setFormData] = React.useState({ id: '', title: '', region: 'Navi Mumbai', subLocality: 'Kharghar', configuration: '2 BHK', status: 'Ready to Move', price: '', image: STOCK_IMAGES[0], images: [], address: '', carpetArea: '', possession: '', amenities: '' });
+            const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
             const [isEditing, setIsEditing] = React.useState(false);
 
             const handleImageUpload = (e) => {
@@ -464,10 +611,14 @@
                 });
             };
 
+
+            const handleVideoUpload = (e) => Array.from(e.target.files || []).forEach(file => { if (file.size > 8 * 1024 * 1024) { alert("For this single-file website, please keep each video under 8 MB. Larger videos should use a hosted video link."); return; } const r=new FileReader(); r.onload=ev=>setFormData(prev=>({...prev,videos:[...(prev.videos||[]),ev.target.result]})); r.readAsDataURL(file); });
+            const handlePdfUpload = (e) => Array.from(e.target.files || []).forEach(file => { if (file.size > 4 * 1024 * 1024) { alert("Please keep each PDF under 4 MB for browser storage."); return; } const r=new FileReader(); r.onload=ev=>setFormData(prev=>({...prev,pdfs:[...(prev.pdfs||[]),{name:file.name,url:ev.target.result}]})); r.readAsDataURL(file); });
+
             const handleAssetSubmit = (e) => {
                 e.preventDefault();
                 const amenitiesArray = formData.amenities ? formData.amenities.split(',').map(item => item.trim()) : ["Clubhouse", "Gymnasium"];
-                const structure = { ...formData, id: isEditing ? formData.id : Date.now(), amenities: amenitiesArray };
+                const structure = normalizeProject({ ...formData, id:isEditing ? formData.id : Date.now(), slug:formData.slug || slugify(formData.title), amenities:amenitiesArray, highlights:lines(formData.highlights), priceOptions:pairs(formData.priceOptionsText), specifications:pairs(formData.specificationsText), locationAdvantages:pairs(formData.locationAdvantagesText), faqs:pairs(formData.faqsText) });
                 
                 if (isEditing) { onEdit(structure); setIsEditing(false); } 
                 else { onAdd(structure); }
@@ -602,29 +753,68 @@
                                         <input type="text" placeholder="Clubhouse, Swimming Pool, Gym" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.amenities.toString()} onChange={e => setFormData({...formData, amenities: e.target.value})} required />
                                     </div>
                                     
+
+<div className="border-t border-neutral-800 pt-4 space-y-4">
+    <h3 className="text-luxury-gold font-bold uppercase tracking-wider">Complete Project Page</h3>
+    <div className="grid grid-cols-2 gap-2">
+        <div><label className="block text-neutral-400 mb-1">Developer</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.developer||''} onChange={e=>setFormData({...formData,developer:e.target.value})}/></div>
+        <div><label className="block text-neutral-400 mb-1">MahaRERA Number</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.reraNumber||''} onChange={e=>setFormData({...formData,reraNumber:e.target.value})}/></div>
+    </div>
+    <div><label className="block text-neutral-400 mb-1">Project URL Slug</label><input placeholder="auto-created-from-name" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.slug||''} onChange={e=>setFormData({...formData,slug:slugify(e.target.value)})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Detailed Description</label><textarea rows="5" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.description||''} onChange={e=>setFormData({...formData,description:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Highlights — one per line</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.highlights||''} onChange={e=>setFormData({...formData,highlights:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Pricing — one per line: 2 BHK 750 sq.ft | ₹1.32 Cr</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.priceOptionsText||''} onChange={e=>setFormData({...formData,priceOptionsText:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Specifications — Name | Detail</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.specificationsText||''} onChange={e=>setFormData({...formData,specificationsText:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Location Advantages — Place | 5 min</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.locationAdvantagesText||''} onChange={e=>setFormData({...formData,locationAdvantagesText:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">FAQs — Question | Answer</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.faqsText||''} onChange={e=>setFormData({...formData,faqsText:e.target.value})}/></div>
+    <label className="flex items-center gap-2"><input type="checkbox" checked={formData.published!==false} onChange={e=>setFormData({...formData,published:e.target.checked})}/> Published on website</label>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Sample Flat Video Links</label>
+    <textarea rows="4" placeholder={"Paste one link per line\nYouTube, Instagram or Facebook"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={(formData.sampleVideoLinks||[]).join('\n')} onChange={e=>setFormData({...formData,sampleVideoLinks:lines(e.target.value)})}></textarea>
+    <p className="text-[10px] text-neutral-500">YouTube plays on the page. Instagram and Facebook open from the project page.</p>
+</div><div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Project Highlight Video Links</label>
+    <textarea rows="4" placeholder={"Paste one link per line\nYouTube, Instagram or Facebook"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={(formData.highlightVideoLinks||[]).join('\n')} onChange={e=>setFormData({...formData,highlightVideoLinks:lines(e.target.value)})}></textarea>
+    <p className="text-[10px] text-neutral-500">These appear in the Project Highlight Videos section on the detail page.</p>
+</div>
+
 <div className="space-y-3">
     <label className="block text-neutral-400 mb-1">Upload Multiple Project Images</label>
-
-    <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleImageUpload}
-        className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white"
-    />
-
+    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
     <div className="flex flex-wrap gap-2">
         {(formData.images || []).map((img, index) => (
             <div key={index} className="relative">
                 <img src={img} className="w-20 h-20 object-cover rounded border border-neutral-700" />
+                <button type="button" onClick={() => removeImage(index)} className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 rounded-full text-[10px]">×</button>
+            </div>
+        ))}
+    </div>
+</div>
 
-                <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 rounded-full text-[10px]"
-                >
-                    ×
-                </button>
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Upload Project Videos</label>
+    <input type="file" accept="video/mp4,video/webm,video/quicktime" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
+    <div className="space-y-2">
+        {(formData.videos || []).map((video, index) => (
+            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
+                <video src={video} className="w-24 h-16 object-cover rounded bg-black" controls />
+                <span className="text-[11px] text-neutral-400 flex-1">Project Video {index + 1}</span>
+                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, videos: formData.videos.filter((_, i) => i !== index)})}>Remove</button>
+            </div>
+        ))}
+    </div>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Upload PDFs / Brochures / Cost Sheets</label>
+    <input type="file" accept="application/pdf" multiple onChange={handlePdfUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
+    <div className="space-y-2">
+        {(formData.pdfs || []).map((pdf, index) => (
+            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
+                <span className="text-[11px] text-neutral-300 truncate flex-1">📄 {pdf.name || `PDF ${index + 1}`}</span>
+                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, pdfs: formData.pdfs.filter((_, i) => i !== index)})}>Remove</button>
             </div>
         ))}
     </div>
@@ -649,7 +839,7 @@
                                                 <td className="py-3 text-neutral-400 font-medium">{item.subLocality}, <span className="text-[10px] block text-neutral-500">{item.region}</span></td>
                                                 <td className="py-3 text-luxury-gold font-bold text-sm">{item.price}</td>
                                                 <td className="py-3 space-x-3 text-right font-medium">
-                                                    <button className="text-luxury-gold hover:underline" onClick={() => { setFormData({ ...item, amenities: item.amenities.join(', ') }); setIsEditing(true); }}>Edit</button>
+                                                    <button className="text-luxury-gold hover:underline" onClick={() => { setFormData({...normalizeProject(item), amenities:(item.amenities||[]).join(', '), highlights:(item.highlights||[]).join('\n'), priceOptionsText:(item.priceOptions||[]).map(x=>`${x.label} | ${x.value}`).join('\n'), specificationsText:(item.specifications||[]).map(x=>`${x.label} | ${x.value}`).join('\n'), locationAdvantagesText:(item.locationAdvantages||[]).map(x=>`${x.label} | ${x.value}`).join('\n'), faqsText:(item.faqs||[]).map(x=>`${x.label} | ${x.value}`).join('\n')}); setIsEditing(true); window.scrollTo({top:0,behavior:'smooth'}); }}>Edit</button>
                                                     <button className="text-red-400 hover:underline" onClick={() => onDelete(item.id)}>Delete</button>
                                                 </td>
                                             </tr>
@@ -707,11 +897,12 @@
         // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
         function App() {
             const [view, setView] = React.useState('home');
+            const [activeProject, setActiveProject] = React.useState(null);
             const [isAuthenticated, setIsAuthenticated] = React.useState(false);
             
             const [listings, setListings] = React.useState(() => {
                 const local = localStorage.getItem('tp_listings_v3');
-                return local ? JSON.parse(local) : compileInitialListings();
+                return (local ? JSON.parse(local) : compileInitialListings()).map(normalizeProject);
             });
             const [leads, setLeads] = React.useState(() => {
                 const local = localStorage.getItem('tp_leads_v3');
@@ -726,14 +917,33 @@
 
             const [activeEnquiryTarget, setActiveEnquiryTarget] = React.useState(null);
 
-            React.useEffect(() => { localStorage.setItem('tp_listings_v3', JSON.stringify(listings)); }, [listings]);
+
+            React.useEffect(() => {
+                const route = () => {
+                    const hash = location.hash || "";
+                    if (hash.startsWith("#project/")) {
+                        const slug = decodeURIComponent(hash.slice(9));
+                        const found = listings.find(p => (p.slug || slugify(p.title)) === slug);
+                        if (found) { setActiveProject(normalizeProject(found)); setView("project"); } else { setActiveProject(null); setView("properties"); }
+                    }
+                };
+                route(); addEventListener("hashchange", route);
+                return () => removeEventListener("hashchange", route);
+            }, [listings]);
+            const openProject = p => { const n=normalizeProject(p); setActiveProject(n); setView("project"); location.hash=`project/${n.slug}`; };
+            const closeProject = () => { setActiveProject(null); setView("properties"); history.pushState("",document.title,location.pathname+location.search); };
+
+            React.useEffect(() => {
+                try { localStorage.setItem('tp_listings_v3', JSON.stringify(listings)); }
+                catch (e) { console.warn('Project media is too large for browser storage.', e); }
+            }, [listings]);
             React.useEffect(() => { localStorage.setItem('tp_leads_v3', JSON.stringify(leads)); }, [leads]);
 
             const matchingFilteredListings = React.useMemo(() => {
                 return listings.filter((item) => {
-                    const matchedSearch = item.title.toLowerCase().includes(search.toLowerCase()) || 
-                                          item.address.toLowerCase().includes(search.toLowerCase()) ||
-                                          item.subLocality.toLowerCase().includes(search.toLowerCase());
+                    if (item.published === false) return false;
+                    const searchText = [item.title,item.address,item.subLocality,item.region,item.developer,item.configuration,item.status,item.reraNumber].filter(Boolean).join(" ").toLowerCase();
+                    const matchedSearch = searchText.includes(search.toLowerCase());
                     const matchedRegion = selectedRegion === "" || item.region === selectedRegion;
                     const matchedSub = selectedSubLocality === "" || item.subLocality === selectedSubLocality;
                     const matchedConfig = selectedConfig === "" || item.configuration === selectedConfig;
@@ -752,7 +962,8 @@
                             <Home 
                                 setView={setView} 
                                 listings={matchingFilteredListings} 
-                                onOpenEnquiry={setActiveEnquiryTarget} 
+                                onOpenEnquiry={setActiveEnquiryTarget}
+                                onOpenProject={openProject}
                                 filterState={filterPack} 
                                 onSubmitHomeLead={(newL) => setLeads([newL, ...leads])}
                             />
@@ -760,10 +971,12 @@
                         {view === 'properties' && (
                             <Properties 
                                 listings={matchingFilteredListings} 
-                                onOpenEnquiry={setActiveEnquiryTarget} 
+                                onOpenEnquiry={setActiveEnquiryTarget}
+                                onOpenProject={openProject}
                                 filterState={filterPack} 
                             />
                         )}
+                        {view === 'project' && activeProject && <ProjectDetail property={activeProject} onBack={closeProject} onOpenEnquiry={setActiveEnquiryTarget} />}
                         {view === 'about' && (
                             <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
                                 <div>
