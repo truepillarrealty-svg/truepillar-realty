@@ -92,6 +92,10 @@
             videos: Array.isArray(p.videos) ? p.videos : [],
             sampleVideoLinks: Array.isArray(p.sampleVideoLinks) ? p.sampleVideoLinks : [],
             highlightVideoLinks: Array.isArray(p.highlightVideoLinks) ? p.highlightVideoLinks : [],
+            floorPlans: Array.isArray(p.floorPlans) ? p.floorPlans : [],
+            mapLink: p.mapLink || "",
+            nearbyPlaces: Array.isArray(p.nearbyPlaces) ? p.nearbyPlaces : [],
+            statusBadge: p.statusBadge || "",
             pdfs: Array.isArray(p.pdfs) ? p.pdfs : [],
             highlights: Array.isArray(p.highlights) ? p.highlights : [],
             priceOptions: Array.isArray(p.priceOptions) ? p.priceOptions : [],
@@ -205,6 +209,9 @@
             const [email, setEmail] = React.useState("");
             const [date, setDate] = React.useState("");
             const [notes, setNotes] = React.useState("");
+            const [visitTime, setVisitTime] = React.useState("");
+            const [pickup, setPickup] = React.useState("");
+            const [visitors, setVisitors] = React.useState("1");
 
             const handleFormSubmit = (e) => {
                 e.preventDefault();
@@ -216,7 +223,7 @@
                     clientEmail: email,
                     assetTitle: property ? property.title : "General Home Page Request",
                     assetLocation: property ? `${property.subLocality}, ${property.region}` : "Multiple Locations Interest",
-                    clientNotes: `Preferred Visit Date: ${date || 'Not specified'}. ${notes}`,
+                    clientNotes: `Preferred Visit Date: ${date || 'Not specified'}. Preferred Time: ${visitTime || 'Not specified'}. Pickup Required: ${pickup || 'Not specified'}. Visitors: ${visitors}. ${notes}`,
                     status: "New Lead"
                 };
                 onSubmitLead(newLead);
@@ -265,7 +272,12 @@
                             </div>
                             <div>
                                 <label className="block text-xs text-neutral-400 mb-1">Any Specific Requirements? (Optional)</label>
-                                <textarea rows="2" placeholder="e.g., Looking for higher floor, vastu compliant, ready to move in..." className="w-full bg-luxury-bg border border-neutral-800 rounded p-2.5 focus:outline-none focus:border-luxury-gold text-white resize-none" value={notes} onChange={e => setNotes(e.target.value)}></textarea>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <select value={visitTime} onChange={e=>setVisitTime(e.target.value)} className="bg-luxury-bg border border-neutral-800 rounded p-2.5 text-white"><option value="">Visit Time</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+                                <select value={pickup} onChange={e=>setPickup(e.target.value)} className="bg-luxury-bg border border-neutral-800 rounded p-2.5 text-white"><option value="">Pickup?</option><option>Yes</option><option>No</option></select>
+                                <input type="number" min="1" value={visitors} onChange={e=>setVisitors(e.target.value)} placeholder="Visitors" className="bg-luxury-bg border border-neutral-800 rounded p-2.5 text-white"/>
+                            </div>
+                            <textarea rows="2" placeholder="e.g., Looking for higher floor, vastu compliant, ready to move in..." className="w-full bg-luxury-bg border border-neutral-800 rounded p-2.5 focus:outline-none focus:border-luxury-gold text-white resize-none" value={notes} onChange={e => setNotes(e.target.value)}></textarea>
                             </div>
                             
 <div className="space-y-3"><label className="block text-neutral-400">Upload Videos</label><input type="file" accept="video/*" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded"/>{(formData.videos||[]).map((v,i)=><div key={i} className="flex justify-between bg-luxury-bg p-2 rounded"><span>Video {i+1}</span><button type="button" className="text-red-400" onClick={()=>setFormData({...formData,videos:formData.videos.filter((_,x)=>x!==i)})}>Remove</button></div>)}</div>
@@ -283,6 +295,16 @@
             return <div className="pointer-events-none absolute inset-0 overflow-hidden z-20"><div className={`absolute inset-[-35%] flex flex-wrap items-center justify-center gap-x-16 gap-y-10 rotate-[-24deg] ${compact?'text-[8px]':'text-xs md:text-sm'} font-semibold tracking-widest text-white/[0.14]`}>{Array.from({length:compact?10:20}).map((_,i)=><span key={i} className="whitespace-nowrap">TRUEPILLAR REALTY • +91 77188 47841</span>)}</div></div>;
         }
 
+        function ProjectEmiCalculator({ price }) {
+            const priceNumber=(()=>{const n=parseFloat(String(price||"").replace(/[^0-9.]/g,""))||100;const s=String(price||"").toLowerCase();return s.includes("cr")?n*10000000:s.includes("l")?n*100000:n;})();
+            const [loan,setLoan]=React.useState(Math.round(priceNumber*0.8));
+            const [rate,setRate]=React.useState(8.5);
+            const [years,setYears]=React.useState(20);
+            const monthly=rate/1200, months=years*12;
+            const emi=Math.round(monthly?loan*monthly*Math.pow(1+monthly,months)/(Math.pow(1+monthly,months)-1):loan/months);
+            return <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-5">EMI Calculator</h2><div className="grid md:grid-cols-3 gap-3 text-sm"><label>Loan Amount<input type="number" value={loan} onChange={e=>setLoan(+e.target.value)} className="mt-2 w-full bg-luxury-bg border border-neutral-800 rounded p-3"/></label><label>Interest %<input type="number" step="0.1" value={rate} onChange={e=>setRate(+e.target.value)} className="mt-2 w-full bg-luxury-bg border border-neutral-800 rounded p-3"/></label><label>Tenure (Years)<input type="number" value={years} onChange={e=>setYears(+e.target.value)} className="mt-2 w-full bg-luxury-bg border border-neutral-800 rounded p-3"/></label></div><div className="mt-5 bg-luxury-bg rounded-lg p-4"><span className="text-xs text-neutral-500">Estimated Monthly EMI</span><div className="text-2xl text-luxury-gold font-bold mt-1">₹{Number.isFinite(emi)?emi.toLocaleString("en-IN"):"—"}</div></div></div>;
+        }
+
         function PropertyCard({ property, onOpenEnquiry, onOpenProject }) {
             const cardProject=normalizeProject(property);
             const [cardImage,setCardImage]=React.useState(0);
@@ -292,6 +314,7 @@
                     <div className="relative overflow-hidden h-56 bg-neutral-900">
                         <img src={cardProject.images[cardImage] || property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                             <MediaWatermark compact={true} />
+                            {cardProject.statusBadge && <span className="absolute top-3 left-3 z-30 bg-black/85 border border-luxury-gold text-luxury-gold text-[9px] font-bold uppercase px-2 py-1 rounded">{cardProject.statusBadge}</span>}
                             {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
                         <span className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30">{property.status}</span>
                         <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {property.carpetArea}</span>
@@ -503,11 +526,18 @@
             } catch(e) { return null; }
         };
 
-        function ProjectDetail({ property, onBack, onOpenEnquiry }) {
+        function ProjectDetail({ property, onBack, onOpenEnquiry, listings=[], onOpenProject }) {
             const p = normalizeProject(property);
             const [activeImage, setActiveImage] = React.useState(0);
             const [fullImageOpen, setFullImageOpen] = React.useState(false);
-            React.useEffect(() => { window.scrollTo(0,0); document.title = `${p.title} | TruePillar Realty`; }, [p.id]);
+            const [activeFloorPlan, setActiveFloorPlan] = React.useState(0);
+            const similarProjects=listings.filter(x=>x.id!==p.id&&x.published!==false&&(x.subLocality===p.subLocality||x.configuration===p.configuration)).slice(0,4);
+            const recentProjects=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").map(id=>listings.find(x=>x.id===id)).filter(x=>x&&x.id!==p.id).slice(0,4);
+            React.useEffect(() => {
+                window.scrollTo(0,0); document.title = `${p.title} | TruePillar Realty`;
+                const old=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").filter(id=>id!==p.id);
+                localStorage.setItem("tp_recent_projects",JSON.stringify([p.id,...old].slice(0,8)));
+            }, [p.id]);
             const share = async () => {
                 const url = projectLink(p);
                 if (navigator.share) { try { await navigator.share({title:p.title, url}); return; } catch(e) {} }
@@ -538,6 +568,8 @@
                             </div>
                             {p.reraNumber && <div className="text-xs text-neutral-400">MahaRERA: <span className="text-white">{p.reraNumber}</span></div>}
                             <button onClick={()=>onOpenEnquiry(p)} className="w-full bg-luxury-gold text-black py-3 rounded font-bold uppercase text-xs">Book Free Site Visit</button>
+                                <a target="_blank" rel="noreferrer" href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, please send me today's latest price and best available offer for "+p.title+". "+projectLink(p))}`} className="block text-center w-full border border-luxury-gold text-luxury-gold py-3 rounded font-bold uppercase text-xs">Get Today's Best Price</a>
+                                <button type="button" onClick={async()=>{const url=projectLink(p);try{if(navigator.share){await navigator.share({title:p.title,text:"Check this project on TruePillar Realty",url:url});}else{await navigator.clipboard.writeText(url);alert("Project link copied.");}}catch(e){}}} className="w-full border border-neutral-700 text-neutral-300 py-3 rounded font-bold uppercase text-xs">Share Project</button>
                             <a target="_blank" href={`https://wa.me/917718847841?text=${encodeURIComponent(`Hello TruePillar Realty, please send me complete details for ${p.title}. ${projectLink(p)}`)}`} className="block text-center border border-emerald-700 text-emerald-400 py-3 rounded font-bold uppercase text-xs">WhatsApp for Details</a>
                         </div>
                     </section>
@@ -551,6 +583,27 @@
                             {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Videos</h2><div className="grid md:grid-cols-2 gap-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark /></div>)}</div></div>}
                             {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Sample Flat Videos</h2><p className="text-xs text-neutral-500 mb-5">Sample flat tours and project walkthroughs.</p><div className="grid md:grid-cols-2 gap-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold"><span>▶ Watch Sample Flat Video {i+1}</span><span>Open ↗</span></a>})}</div></div>}
                             {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Project Highlight Videos</h2><p className="text-xs text-neutral-500 mb-5">Project highlights, amenities, location and lifestyle videos.</p><div className="grid md:grid-cols-2 gap-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="relative flex aspect-video items-center justify-center border border-neutral-800 rounded-lg text-luxury-gold hover:border-luxury-gold bg-black/40"><span className="text-center">▶ Watch Project Highlight Video {i+1}<br/><small className="text-neutral-500">Instagram / Facebook</small></span><MediaWatermark /></a>})}</div></div>}
+                            {p.floorPlans.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
+                                <h2 className="text-xl font-semibold mb-4">Floor Plans</h2>
+                                <div className="flex gap-2 overflow-x-auto mb-5">
+                                    {p.floorPlans.map((plan,i)=><button type="button" key={i} onClick={()=>setActiveFloorPlan(i)} className={`px-4 py-2 rounded border text-xs whitespace-nowrap ${activeFloorPlan===i?'border-luxury-gold text-luxury-gold':'border-neutral-800 text-neutral-400'}`}>{plan.label||`Plan ${i+1}`}</button>)}
+                                </div>
+                                {p.floorPlans[activeFloorPlan] && <div className="grid md:grid-cols-2 gap-6 items-center">
+                                    <img src={p.floorPlans[activeFloorPlan].image} onClick={()=>window.open(p.floorPlans[activeFloorPlan].image,"_blank")} className="w-full max-h-[420px] object-contain bg-white rounded-lg cursor-zoom-in" />
+                                    <div>
+                                        <h3 className="text-xl font-bold">{p.floorPlans[activeFloorPlan].label}</h3>
+                                        {p.floorPlans[activeFloorPlan].area && <p className="text-neutral-400 mt-3">{p.floorPlans[activeFloorPlan].area}</p>}
+                                        {p.floorPlans[activeFloorPlan].price && <p className="text-luxury-gold text-lg font-bold mt-3">{p.floorPlans[activeFloorPlan].price}</p>}
+                                        <p className="text-xs text-neutral-500 mt-4">Click the floor plan image to open it in full size.</p>
+                                    </div>
+                                </div>}
+                            </div>}
+                            {(p.mapLink || p.nearbyPlaces.length>0) && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
+                                <h2 className="text-xl font-semibold mb-4">Location & Nearby Places</h2>
+                                {p.mapLink && <a href={p.mapLink} target="_blank" rel="noreferrer" className="inline-block border border-luxury-gold text-luxury-gold px-4 py-2 rounded text-xs font-bold mb-5">Open Project Location in Maps ↗</a>}
+                                <div className="grid md:grid-cols-2 gap-3">{p.nearbyPlaces.map((place,i)=><div key={i} className="flex justify-between bg-luxury-bg rounded-lg p-3 text-sm"><span>{place.label}</span><span className="text-luxury-gold">{place.value}</span></div>)}</div>
+                            </div>}
+                            <ProjectEmiCalculator price={p.price} />
                             {p.faqs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">FAQs</h2>{p.faqs.map((x,i)=><div key={i} className="mb-4"><b>{x.label}</b><p className="text-sm text-neutral-400 mt-1">{x.value}</p></div>)}</div>}
                         </div>
                         <aside className="space-y-6">
@@ -558,6 +611,14 @@
                             {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">Specifications</h2>{p.specifications.map((x,i)=><div key={i} className="mb-3 text-sm"><span className="text-neutral-500 block">{x.label}</span>{x.value}</div>)}</div>}
                         </aside>
                     </section>
+                    <div className="fixed md:hidden bottom-0 left-0 right-0 z-[500] grid grid-cols-3 gap-2 bg-black/95 border-t border-neutral-800 p-2">
+                        <a href="tel:+917718847841" className="text-center border border-neutral-700 rounded py-3 text-xs font-bold">☎ Call</a>
+                        <a href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, I am interested in "+p.title+" | "+p.configuration+" | "+p.price+". Project link: "+projectLink(p))}`} target="_blank" rel="noreferrer" className="text-center border border-emerald-700 text-emerald-400 rounded py-3 text-xs font-bold">WhatsApp</a>
+                        <button type="button" onClick={()=>onOpenEnquiry(p)} className="bg-luxury-gold text-black rounded py-3 text-xs font-bold">Site Visit</button>
+                    </div>
+                    {similarProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">Similar Projects</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{similarProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
+                    {recentProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">Recently Viewed</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{recentProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
+                    <a href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, I am interested in "+p.title+". Project link: "+projectLink(p))}`} target="_blank" rel="noreferrer" className="hidden md:flex fixed right-5 bottom-5 z-[450] bg-emerald-600 text-white rounded-full px-5 py-3 font-bold text-sm shadow-2xl">WhatsApp • Ask about this project</a>
                     {fullImageOpen && p.images[activeImage] && (
                         <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4" onClick={()=>setFullImageOpen(false)}>
                             <button type="button" onClick={()=>setFullImageOpen(false)} className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white text-2xl">×</button>
@@ -578,7 +639,7 @@
         // --- ADMIN / LEAD PANEL VIEW ---
         function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
-            const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
+            const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
             const [isEditing, setIsEditing] = React.useState(false);
 
             const handleImageUpload = (e) => {
@@ -781,6 +842,34 @@
 </div>
 
 <div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Floor Plans</label>
+    <div className="grid md:grid-cols-3 gap-2">
+        <input id="fp-label" placeholder="Configuration e.g. 2 BHK" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
+        <input id="fp-area" placeholder="Carpet Area e.g. 750 sq.ft" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
+        <input id="fp-price" placeholder="Price e.g. ₹1.32 Cr" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
+    </div>
+    <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.target.files&&e.target.files[0];if(!file)return;if(file.size>2*1024*1024){alert("Please keep each floor plan image under 2 MB.");return;}const r=new FileReader();r.onload=()=>{const label=document.getElementById("fp-label").value.trim();const area=document.getElementById("fp-area").value.trim();const price=document.getElementById("fp-price").value.trim();if(!label){alert("Enter configuration first.");return;}setFormData({...formData,floorPlans:[...(formData.floorPlans||[]),{label,area,price,image:r.result}]});document.getElementById("fp-label").value="";document.getElementById("fp-area").value="";document.getElementById("fp-price").value="";e.target.value="";};r.readAsDataURL(file);}} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white"/>
+    <div className="space-y-2">{(formData.floorPlans||[]).map((plan,i)=><div key={i} className="flex items-center gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded"><img src={plan.image} className="w-16 h-16 object-contain bg-white rounded"/><div className="flex-1 text-xs"><b className="block text-white">{plan.label}</b><span className="text-neutral-500">{plan.area} {plan.price&&`• ${plan.price}`}</span></div><button type="button" onClick={()=>setFormData({...formData,floorPlans:formData.floorPlans.filter((_,x)=>x!==i)})} className="text-red-400 text-xs">Remove</button></div>)}</div>
+    <p className="text-[10px] text-neutral-500">Enter details, then choose the floor-plan image from your device.</p>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Google Maps Project Link</label>
+    <input value={formData.mapLink||''} onChange={e=>setFormData({...formData,mapLink:e.target.value})} placeholder="Paste Google Maps share link" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"/>
+</div>
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Nearby Places</label>
+    <textarea rows="4" value={(formData.nearbyPlaces||[]).map(x=>`${x.label} | ${x.value}`).join('\n')} onChange={e=>setFormData({...formData,nearbyPlaces:pairs(e.target.value)})} placeholder={"One per line:\nMetro Station | 5 min\nHospital | 7 min"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"></textarea>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Project Status Badge</label>
+    <select value={formData.statusBadge||''} onChange={e=>setFormData({...formData,statusBadge:e.target.value})} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"><option value="">No Badge</option><option>New Launch</option><option>Ready to Move</option><option>Near Possession</option><option>Limited Inventory</option><option>Price Updated Today</option></select>
+</div>
+<div className="space-y-3">
+    <button type="button" onClick={async()=>{const msg=`${formData.title||"Project"}\n📍 ${formData.subLocality||""}, ${formData.region||""}\n🏠 ${formData.configuration||""}\n💰 ${formData.price||""}\n📅 Possession: ${formData.possession||""}`;try{await navigator.clipboard.writeText(msg);alert("WhatsApp-ready project summary copied.");}catch(e){alert(msg);}}} className="w-full border border-emerald-700 text-emerald-400 p-3 rounded font-bold">Copy WhatsApp-Ready Project Summary</button>
+</div>
+<div className="space-y-3">
     <label className="block text-neutral-400 mb-1">Upload Multiple Project Images</label>
     <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
     <div className="flex flex-wrap gap-2">
@@ -835,7 +924,7 @@
                                     <tbody>
                                         {listings.map(item => (
                                             <tr key={item.id} className="border-b border-neutral-900/60 hover:bg-neutral-900/10">
-                                                <td className="py-3 font-semibold text-white max-w-[200px] truncate">{item.title} <span className="block text-[10px] text-neutral-500 font-light">{item.configuration} • {item.carpetArea}</span></td>
+                                                <td className="py-3 font-semibold text-white max-w-[220px]">{item.title}<span className="block text-[10px] text-neutral-500 font-light">{item.configuration} • {item.carpetArea}</span>{(()=>{const fields=[item.title,item.developer,item.reraNumber,item.description,item.images?.length,item.pdfs?.length,item.sampleVideoLinks?.length,item.highlightVideoLinks?.length,item.floorPlans?.length,item.mapLink,item.nearbyPlaces?.length];const score=Math.round(fields.filter(Boolean).length/fields.length*100);return <span className={`block text-[10px] mt-1 ${score>=80?'text-emerald-400':score>=50?'text-luxury-gold':'text-red-400'}`}>Project Profile: {score}% Complete</span>})()}</td>
                                                 <td className="py-3 text-neutral-400 font-medium">{item.subLocality}, <span className="text-[10px] block text-neutral-500">{item.region}</span></td>
                                                 <td className="py-3 text-luxury-gold font-bold text-sm">{item.price}</td>
                                                 <td className="py-3 space-x-3 text-right font-medium">
@@ -976,7 +1065,7 @@
                                 filterState={filterPack} 
                             />
                         )}
-                        {view === 'project' && activeProject && <ProjectDetail property={activeProject} onBack={closeProject} onOpenEnquiry={setActiveEnquiryTarget} />}
+                        {view === 'project' && activeProject && <ProjectDetail property={activeProject} onBack={closeProject} onOpenEnquiry={setActiveEnquiryTarget} listings={listings} onOpenProject={openProject} />}
                         {view === 'about' && (
                             <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
                                 <div>
