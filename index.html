@@ -38,6 +38,7 @@
     </script>
     <style>
         body { background-color: #0A0A0C; color: white; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+        h1, h2, h3 { font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.04em; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0A0A0C; }
         ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
@@ -151,7 +152,7 @@
             faqs: Array.isArray(p.faqs) ? p.faqs : [],
             published: p.published !== false
         });
-        const projectLink = p => `${location.origin}${location.pathname}#project/${p.slug || slugify(p.title)}`;
+        const projectLink = p => `${location.origin}/${p.slug || slugify(p.title)}`;
 
         // --- AUTOMATED PROPERTIES POPULATER ---
         const compileInitialListings = () => {
@@ -327,9 +328,6 @@
                             <textarea rows="2" placeholder="e.g., Looking for higher floor, vastu compliant, ready to move in..." className="w-full bg-luxury-bg border border-neutral-800 rounded p-2.5 focus:outline-none focus:border-luxury-gold text-white resize-none" value={notes} onChange={e => setNotes(e.target.value)}></textarea>
                             </div>
                             
-<div className="space-y-3"><label className="block text-neutral-400">Upload Videos</label><input type="file" accept="video/*" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded"/>{(formData.videos||[]).map((v,i)=><div key={i} className="flex justify-between bg-luxury-bg p-2 rounded"><span>Video {i+1}</span><button type="button" className="text-red-400" onClick={()=>setFormData({...formData,videos:formData.videos.filter((_,x)=>x!==i)})}>Remove</button></div>)}</div>
-<div className="space-y-3"><label className="block text-neutral-400">Upload PDFs / Brochures / Cost Sheets</label><input type="file" accept="application/pdf" multiple onChange={handlePdfUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded"/>{(formData.pdfs||[]).map((p,i)=><div key={i} className="flex justify-between bg-luxury-bg p-2 rounded"><span>{p.name}</span><button type="button" className="text-red-400" onClick={()=>setFormData({...formData,pdfs:formData.pdfs.filter((_,x)=>x!==i)})}>Remove</button></div>)}</div>
-
 <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-wider transition text-xs shadow-lg">Confirm & Book Free Site Visit</button>
                         </form>
                     </div>
@@ -1068,25 +1066,6 @@
 
         // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
         function App() {
-            /* tp-clean-route-handler */
-            React.useEffect(() => {
-                const applyRoute = () => {
-                    const route = getRouteFromPath();
-                    if (route.type === "project") {
-                        const match = listings.find(p => slugify(p.title) === route.slug);
-                        if (match) {
-                            setSelectedProject(match);
-                            setView("project");
-                        }
-                    } else {
-                        setView(route.view);
-                    }
-                };
-                applyRoute();
-                window.addEventListener("popstate", applyRoute);
-                return () => window.removeEventListener("popstate", applyRoute);
-            }, [listings]);
-
             const [view, setView] = React.useState('home');
             const [activeProject, setActiveProject] = React.useState(null);
             const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -1110,19 +1089,42 @@
 
 
             React.useEffect(() => {
-                const route = () => {
-                    const hash = location.hash || "";
-                    if (hash.startsWith("#project/")) {
-                        const slug = decodeURIComponent(hash.slice(9));
-                        const found = listings.find(p => (p.slug || slugify(p.title)) === slug);
-                        if (found) { setActiveProject(normalizeProject(found)); setView("project"); } else { setActiveProject(null); setView("properties"); }
+                const applyRoute = () => {
+                    const route = getRouteFromPath();
+                    if (route.type === "project") {
+                        const found = listings.find(p => (p.slug || slugify(p.title)) === route.slug);
+                        if (found) { setActiveProject(normalizeProject(found)); setView("project"); }
+                        else { setActiveProject(null); setView("properties"); }
+                    } else {
+                        setActiveProject(null);
+                        setView(route.view);
                     }
                 };
-                route(); addEventListener("hashchange", route);
-                return () => removeEventListener("hashchange", route);
+                applyRoute();
+                window.addEventListener("popstate", applyRoute);
+                return () => window.removeEventListener("popstate", applyRoute);
             }, [listings]);
-            const openProject = p => { const n=normalizeProject(p); setActiveProject(n); setView("project"); location.hash=`project/${n.slug}`; };
-            const closeProject = () => { setActiveProject(null); setView("properties"); history.pushState("",document.title,location.pathname+location.search); };
+
+            const navigateView = (nextView) => {
+                const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", admin: "/admin" };
+                setActiveProject(null);
+                setView(nextView);
+                window.history.pushState({ view: nextView }, "", paths[nextView] || "/");
+                window.scrollTo(0, 0);
+            };
+            const openProject = p => {
+                const n = normalizeProject(p);
+                setActiveProject(n);
+                setView("project");
+                navigateToProjectUrl(n);
+                window.scrollTo(0, 0);
+            };
+            const closeProject = () => {
+                setActiveProject(null);
+                setView("properties");
+                window.history.pushState({ view: "properties" }, "", "/properties");
+                window.scrollTo(0, 0);
+            };
 
             React.useEffect(() => {
                 try { localStorage.setItem('tp_listings_v3', JSON.stringify(listings)); }
@@ -1146,12 +1148,12 @@
 
             return (
                 <div className="bg-luxury-bg text-white min-h-screen flex flex-col justify-between">
-                    <Navbar currentView={view} setView={setView} />
+                    <Navbar currentView={view} setView={navigateView} />
                     
                     <main className="flex-grow pb-16">
                         {view === 'home' && (
                             <Home 
-                                setView={setView} 
+                                setView={navigateView} 
                                 listings={matchingFilteredListings} 
                                 onOpenEnquiry={setActiveEnquiryTarget}
                                 onOpenProject={openProject}
