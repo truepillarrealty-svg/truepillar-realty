@@ -43,6 +43,35 @@
         ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
     </style>
+
+    <link rel="canonical" href="https://truepillar.in/">
+    <!-- Clean URLs: /project-name -->
+    <meta name="author" content="TruePillar Realty">
+    <meta name="theme-color" content="#0A0A0C">
+    <meta name="format-detection" content="telephone=yes">
+    <meta property="og:site_name" content="TruePillar Realty">
+    <meta property="og:url" content="https://truepillar.in/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TruePillar Realty | Premium Homes & Zero Brokerage">
+    <meta name="twitter:description" content="Explore verified residential projects across Navi Mumbai, Thane, Mumbai and Dombivli. Book a free site visit.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80">
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"RealEstateAgent",
+      "name":"TruePillar Realty",
+      "url":"https://truepillar.in/",
+      "telephone":"+91-7718847841",
+      "areaServed":["Navi Mumbai","Thane","Mumbai","Dombivli"],
+      "description":"Verified premium residential properties with zero brokerage and free site visit assistance.",
+      "identifier":{"@type":"PropertyValue","name":"MahaRERA Registration Number","value":"A031272401680"},
+      "sameAs":[
+        "https://www.facebook.com/TruePillarRealty/",
+        "https://www.instagram.com/truepillar.realty/"
+      ]
+    }
+    </script>
+
 </head>
 <body>
     <div id="root"></div>
@@ -58,6 +87,7 @@
 
         const CONFIGURATIONS = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK / Penthouse"];
         const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch"];
+        const COMPANY_MAHARERA = "A031272401680";
         const AMENITIES_POOL = ["Premium Clubhouse", "Infinity Swimming Pool", "Modern Gymnasium", "24/7 Multi-tier Security", "High-Speed Elevators", "Grand Entrance Lobby", "Ample Car Parking", "Landscaped Gardens", "Kids Play Area", "100% Power Backup"];
 
         const TITLE_PREFIXES = ["The Grand", "Elysian", "Pinnacle", "Aura", "Regency", "Signature", "Golden", "Skyline", "Emerald", "Marquis", "Palazzo", "Imperial", "Sapphire", "Royal", "Oasis", "Vista", "Serene", "Meridian"];
@@ -77,6 +107,23 @@
 
         // --- PROJECT PAGE HELPERS ---
         const slugify = (text = "") => text.toLowerCase().trim().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+        const getRouteFromPath = () => {
+            const path = window.location.pathname.replace(/\/+$/, "") || "/";
+            if (path === "/") return { type: "view", view: "home" };
+            if (path === "/properties") return { type: "view", view: "properties" };
+            if (path === "/about") return { type: "view", view: "about" };
+            if (path === "/contact") return { type: "view", view: "contact" };
+            if (path === "/admin") return { type: "view", view: "admin" };
+            const slugMatch = path.match(/^\/([^/]+)$/);
+            if (slugMatch) return { type: "project", slug: decodeURIComponent(slugMatch[1]) };
+            return { type: "view", view: "home" };
+        };
+
+        const navigateToProjectUrl = (p) => {
+            const url = `/${slugify(p.title)}`;
+            if (window.location.pathname !== url) window.history.pushState({ project: p.id }, "", url);
+        };
         const lines = (text = "") => text.split("\n").map(x => x.trim()).filter(Boolean);
         const pairs = (text = "") => lines(text).map(row => {
             const parts = row.split("|");
@@ -311,7 +358,7 @@
             React.useEffect(()=>{ if(cardProject.images.length<2)return; const timer=setInterval(()=>setCardImage(i=>(i+1)%cardProject.images.length),2800); return()=>clearInterval(timer); },[cardProject.id,cardProject.images.length]);
             return (
                 <div className="bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
-                    <div className="relative overflow-hidden h-56 bg-neutral-900">
+                    <div className="relative overflow-hidden h-64 bg-neutral-900">
                         <img src={cardProject.images[cardImage] || property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                             <MediaWatermark compact={true} />
                             {cardProject.statusBadge && <span className="absolute top-3 left-3 z-30 bg-black/85 border border-luxury-gold text-luxury-gold text-[9px] font-bold uppercase px-2 py-1 rounded">{cardProject.statusBadge}</span>}
@@ -319,13 +366,13 @@
                         <span className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30">{property.status}</span>
                         <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {property.carpetArea}</span>
                     </div>
-                    <div className="p-6 flex-grow flex flex-col justify-between">
+                    <div className="p-7 flex-grow flex flex-col justify-between">
                         <div>
                             <div className="flex justify-between items-center mb-1">
                                 <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{property.configuration}</span>
                                 <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
                             </div>
-                            <button onClick={() => onOpenProject(property)} className="text-left w-full"><h3 className="text-lg font-medium text-white group-hover:text-luxury-gold transition mb-2">{property.title}</h3></button>
+                            <button onClick={() => onOpenProject(property)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
                             <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-3">{property.address}</p>
                             <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
                             
@@ -336,7 +383,7 @@
                             </div>
                         </div>
                         <div className="pt-4 border-t border-neutral-900 flex justify-between items-center mt-auto">
-                            <div><span className="text-xl font-bold text-white tracking-tight">{property.price}</span></div>
+                            <div><span className="text-2xl font-bold text-white tracking-tight">{property.price}</span></div>
                             <div className="grid grid-cols-2 gap-2 w-[238px]">
                                 <button onClick={() => onOpenProject(property)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
                                 <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">Site Visit</button>
@@ -351,10 +398,10 @@
         // --- NAVIGATION BAR ---
         function Navbar({ currentView, setView }) {
             const navLabels = {
-                'home': 'Home',
-                'properties': 'Properties',
-                'about': 'About Us',
-                'contact': 'Contact Us',
+                'home': 'HOME',
+                'properties': 'PROPERTIES',
+                'about': 'ABOUT US',
+                'contact': 'CONTACT US',
                 'admin': '🔒 Agent Login'
             };
 
@@ -365,7 +412,7 @@
                         <div className="text-[10px] tracking-widest text-luxury-textMuted uppercase block font-semibold">Trust • Transparency • Zero Brokerage</div>
                     </div>
                     
-                    <div className="flex flex-wrap justify-center gap-6 text-xs tracking-wider uppercase font-semibold">
+                    <div className="flex flex-wrap justify-center gap-7 text-sm tracking-wider uppercase font-bold">
                         {['home', 'properties', 'about', 'contact', 'admin'].map((viewId) => (
                             <button 
                                 key={viewId} 
@@ -395,6 +442,11 @@
             const [hName, setHName] = React.useState("");
             const [hPhone, setHPhone] = React.useState("");
             const [hLoc, setHLoc] = React.useState("Navi Mumbai");
+            const [hProject, setHProject] = React.useState("");
+            const [hDate, setHDate] = React.useState("");
+            const [hTime, setHTime] = React.useState("");
+            const [hVisitors, setHVisitors] = React.useState("1");
+            const [hMessage, setHMessage] = React.useState("");
 
             const handleHomeForm = (e) => {
                 e.preventDefault();
@@ -406,12 +458,12 @@
                     clientEmail: "N/A (Home Form)",
                     assetTitle: `Home Page Quick Booking`,
                     assetLocation: hLoc,
-                    clientNotes: `Client requested a direct builder consultation & site visit coordinates for properties in ${hLoc}.`,
+                    clientNotes: `Preferred Project: ${hProject || "Not specified"}. Preferred Date: ${hDate || "Not specified"}. Preferred Time: ${hTime || "Not specified"}. Visitors: ${hVisitors}. Message: ${hMessage || "None"}.`,
                     status: "New Lead"
                 };
                 onSubmitHomeLead(newLead);
                 
-                const customMsg = `Hello TruePillar Realty, my name is ${hName}. I would like to schedule a free site visit to look at properties in ${hLoc}. Please send me the top project brochures.`;
+                const customMsg = `Hello TruePillar Realty, my name is ${hName}. I would like to schedule a free site visit in ${hLoc}${hProject ? ` for ${hProject}` : ""}. Preferred date: ${hDate || "Flexible"}. Preferred time: ${hTime || "Flexible"}. Visitors: ${hVisitors}. ${hMessage}`;
                 window.open(`https://wa.me/917718847841?text=${encodeURIComponent(customMsg)}`, '_blank');
                 
                 setHName("");
@@ -424,7 +476,7 @@
                     {/* Hero Split Section */}
                     <section className="max-w-7xl mx-auto px-6 lg:px-16 pt-12 pb-6 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                         <div className="lg:col-span-3 space-y-6 text-center lg:text-left">
-                            <span className="inline-block px-3 py-1 bg-neutral-900 border border-neutral-800 text-luxury-gold text-xs tracking-widest uppercase rounded-full font-bold">Premium Residential Properties</span>
+                            <span className="inline-block px-3 py-1 bg-neutral-900 border border-neutral-800 text-luxury-gold text-xs tracking-widest uppercase rounded-full font-bold">PREMIUM RESIDENTIAL PROPERTIES</span>
                             <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-tight text-white">Find Your Dream Home with <span className="text-luxury-gold font-bold">Zero Brokerage</span></h1>
                             <p className="text-luxury-textMuted max-w-xl mx-auto lg:mx-0 text-sm md:text-base font-light">Explore handpicked residential landmarks across Mumbai, Thane, Navi Mumbai, and Dombivli. Buy directly from top developers with absolute trust, clarity, and zero brokerage fees.</p>
                             <div className="flex gap-4 justify-center lg:justify-start">
@@ -435,29 +487,32 @@
                         {/* Inline Home Booking Card Form */}
                         <div className="lg:col-span-2 bg-luxury-card border border-neutral-800 p-6 rounded-2xl shadow-2xl space-y-4">
                             <div className="text-center lg:text-left">
-                                <h3 className="text-lg font-bold text-white tracking-wide">Book a Free Site Visit</h3>
+                                <h3 className="text-lg font-bold text-white tracking-wide">BOOK A FREE SITE VISIT</h3>
                                 <p className="text-xs text-luxury-textMuted font-light">Get free pickup, developer pricing sheets, and direct tours.</p>
                             </div>
                             <form onSubmit={handleHomeForm} className="space-y-3 text-xs text-neutral-300">
-                                <div>
-                                    <input type="text" placeholder="Your Name" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 focus:outline-none focus:border-luxury-gold text-white" value={hName} onChange={e => setHName(e.target.value)} required />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <input type="text" placeholder="YOUR NAME *" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" value={hName} onChange={e => setHName(e.target.value)} required />
+                                    <input type="tel" placeholder="MOBILE NUMBER *" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" value={hPhone} onChange={e => setHPhone(e.target.value)} required />
                                 </div>
-                                <div>
-                                    <input type="tel" placeholder="Mobile Number" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 focus:outline-none focus:border-luxury-gold text-white" value={hPhone} onChange={e => setHPhone(e.target.value)} required />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hLoc} onChange={e => {setHLoc(e.target.value);setHProject("");}}>{Object.keys(REGIONS).map(r => <option key={r} value={r}>LOCATION: {r}</option>)}</select>
+                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hProject} onChange={e => setHProject(e.target.value)}><option value="">SELECT PROJECT</option>{listings.filter(p => p.region === hLoc && p.published !== false).slice(0,30).map(p => <option key={p.id} value={p.title}>{p.title}</option>)}</select>
                                 </div>
-                                <div>
-                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted focus:border-luxury-gold" value={hLoc} onChange={e => setHLoc(e.target.value)}>
-                                        {Object.keys(REGIONS).map(r => <option key={r} value={r}>Target Location: {r}</option>)}
-                                    </select>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <input type="date" min={new Date().toISOString().split("T")[0]} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hDate} onChange={e => setHDate(e.target.value)} />
+                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hTime} onChange={e => setHTime(e.target.value)}><option value="">VISIT TIME</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hVisitors} onChange={e => setHVisitors(e.target.value)}><option value="1">1 VISITOR</option><option value="2">2 VISITORS</option><option value="3">3 VISITORS</option><option value="4+">4+ VISITORS</option></select>
                                 </div>
-                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-widest transition shadow-lg mt-2">Schedule Free Tour</button>
+                                <textarea rows="2" placeholder="ANY SPECIAL REQUIREMENT? (OPTIONAL)" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white resize-none" value={hMessage} onChange={e => setHMessage(e.target.value)}></textarea>
+                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-widest transition shadow-lg mt-2">SCHEDULE FREE SITE VISIT</button>
                             </form>
                         </div>
                     </section>
 
                     {/* Integrated Search Filters Layout */}
                     <section id="search-section" className="px-6 lg:px-16 max-w-7xl mx-auto">
-                        <div className="mb-4"><h3 className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Filter Real Estate Inventory</h3></div>
+                        <div className="mb-4"><h3 className="text-xs uppercase font-bold text-luxury-gold tracking-widest">FILTER REAL ESTATE INVENTORY</h3></div>
                         <SearchFilterBar {...filterState} listings={listings} />
                     </section>
 
@@ -467,7 +522,7 @@
                             <h2 className="text-xl md:text-2xl font-light tracking-wider">Premium Featured <span className="text-luxury-gold font-medium">Projects</span></h2>
                             <button onClick={() => setView('properties')} className="text-xs text-luxury-gold font-bold tracking-wider uppercase hover:underline">View All Flats ({listings.length}) &rarr;</button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
                             {listings.slice(0, 6).map(p => <PropertyCard key={p.id} property={p} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} />)}
                         </div>
                     </section>
@@ -488,7 +543,7 @@
                     {listings.length === 0 ? (
                         <div className="text-center py-20 border border-dashed border-neutral-800 rounded-xl text-neutral-500 text-sm">No properties match your filter selections. Try altering your choices.</div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
                             {listings.map((property) => <PropertyCard key={property.id} property={property} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} />)}
                         </div>
                     )}
@@ -534,7 +589,35 @@
             const similarProjects=listings.filter(x=>x.id!==p.id&&x.published!==false&&(x.subLocality===p.subLocality||x.configuration===p.configuration)).slice(0,4);
             const recentProjects=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").map(id=>listings.find(x=>x.id===id)).filter(x=>x&&x.id!==p.id).slice(0,4);
             React.useEffect(() => {
-                window.scrollTo(0,0); document.title = `${p.title} | TruePillar Realty`;
+                window.scrollTo(0,0);
+                document.title = `${p.title} in ${p.subLocality} | Price, Floor Plan & Site Visit | TruePillar Realty`;
+                const seoDescription = `${p.title} by ${p.developer} in ${p.subLocality}, ${p.region}. ${p.configuration}, starting from ${p.price}. Check floor plans, amenities, videos and book a free site visit with TruePillar Realty.`;
+                let metaDesc = document.querySelector('meta[name="description"]');
+                if (metaDesc) metaDesc.setAttribute("content", seoDescription);
+                let canonical = document.querySelector('link[rel="canonical"]');
+                if (canonical) canonical.setAttribute("href", projectLink(p));
+                let ogTitle = document.querySelector('meta[property="og:title"]');
+                if (ogTitle) ogTitle.setAttribute("content", document.title);
+                let ogDesc = document.querySelector('meta[property="og:description"]');
+                if (ogDesc) ogDesc.setAttribute("content", seoDescription);
+                let ogUrl = document.querySelector('meta[property="og:url"]');
+                if (ogUrl) ogUrl.setAttribute("content", projectLink(p));
+                let projectSchema = document.getElementById("tp-project-schema");
+                if (!projectSchema) {
+                    projectSchema = document.createElement("script");
+                    projectSchema.type = "application/ld+json";
+                    projectSchema.id = "tp-project-schema";
+                    document.head.appendChild(projectSchema);
+                }
+                projectSchema.textContent = JSON.stringify({
+                    "@context":"https://schema.org",
+                    "@type":"Residence",
+                    "name":p.title,
+                    "description":seoDescription,
+                    "url":projectLink(p),
+                    "address":{"@type":"PostalAddress","streetAddress":p.address,"addressLocality":p.subLocality,"addressRegion":p.region,"addressCountry":"IN"},
+                    "offers":{"@type":"Offer","priceCurrency":"INR","description":p.price}
+                });
                 const old=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").filter(id=>id!==p.id);
                 localStorage.setItem("tp_recent_projects",JSON.stringify([p.id,...old].slice(0,8)));
             }, [p.id]);
@@ -575,16 +658,16 @@
                     </section>
                     <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-8">
-                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Overview</h2><p className="text-sm text-neutral-300 leading-7 whitespace-pre-line">{p.description}</p></div>
-                            {p.highlights.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Highlights</h2><div className="grid md:grid-cols-2 gap-3">{p.highlights.map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-sm">✓ {x}</div>)}</div></div>}
-                            {p.priceOptions.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Configuration & Pricing</h2>{p.priceOptions.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><b className="text-luxury-gold">{x.value}</b></div>)}</div>}
-                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Amenities</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{(p.amenities||[]).map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-xs">✦ {x}</div>)}</div></div>
-                            {p.locationAdvantages.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Location Advantages</h2>{p.locationAdvantages.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><span className="text-luxury-gold">{x.value}</span></div>)}</div>}
-                            {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">Project Videos</h2><div className="grid md:grid-cols-2 gap-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark /></div>)}</div></div>}
-                            {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Sample Flat Videos</h2><p className="text-xs text-neutral-500 mb-5">Sample flat tours and project walkthroughs.</p><div className="grid md:grid-cols-2 gap-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold"><span>▶ Watch Sample Flat Video {i+1}</span><span>Open ↗</span></a>})}</div></div>}
-                            {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">Project Highlight Videos</h2><p className="text-xs text-neutral-500 mb-5">Project highlights, amenities, location and lifestyle videos.</p><div className="grid md:grid-cols-2 gap-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="relative flex aspect-video items-center justify-center border border-neutral-800 rounded-lg text-luxury-gold hover:border-luxury-gold bg-black/40"><span className="text-center">▶ Watch Project Highlight Video {i+1}<br/><small className="text-neutral-500">Instagram / Facebook</small></span><MediaWatermark /></a>})}</div></div>}
+                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT OVERVIEW</h2><p className="text-sm text-neutral-300 leading-7 whitespace-pre-line">{p.description}</p></div>
+                            {p.highlights.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT HIGHLIGHTS</h2><div className="grid md:grid-cols-2 gap-3">{p.highlights.map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-sm">✓ {x}</div>)}</div></div>}
+                            {p.priceOptions.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">CONFIGURATION & PRICING</h2>{p.priceOptions.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><b className="text-luxury-gold">{x.value}</b></div>)}</div>}
+                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">AMENITIES</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{(p.amenities||[]).map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-xs">✦ {x}</div>)}</div></div>
+                            {p.locationAdvantages.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">LOCATION ADVANTAGES</h2>{p.locationAdvantages.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><span className="text-luxury-gold">{x.value}</span></div>)}</div>}
+                            {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT VIDEOS</h2><div className="grid md:grid-cols-2 gap-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark /></div>)}</div></div>}
+                            {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">SAMPLE FLAT VIDEOS</h2><p className="text-xs text-neutral-500 mb-5">Sample flat tours and project walkthroughs.</p><div className="grid md:grid-cols-2 gap-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold"><span>▶ Watch Sample Flat Video {i+1}</span><span>Open ↗</span></a>})}</div></div>}
+                            {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">PROJECT HIGHLIGHT VIDEOS</h2><p className="text-xs text-neutral-500 mb-5">Project highlights, amenities, location and lifestyle videos.</p><div className="grid md:grid-cols-2 gap-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="relative flex aspect-video items-center justify-center border border-neutral-800 rounded-lg text-luxury-gold hover:border-luxury-gold bg-black/40"><span className="text-center">▶ Watch Project Highlight Video {i+1}<br/><small className="text-neutral-500">Instagram / Facebook</small></span><MediaWatermark /></a>})}</div></div>}
                             {p.floorPlans.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
-                                <h2 className="text-xl font-semibold mb-4">Floor Plans</h2>
+                                <h2 className="text-xl font-semibold mb-4">FLOOR PLANS</h2>
                                 <div className="flex gap-2 overflow-x-auto mb-5">
                                     {p.floorPlans.map((plan,i)=><button type="button" key={i} onClick={()=>setActiveFloorPlan(i)} className={`px-4 py-2 rounded border text-xs whitespace-nowrap ${activeFloorPlan===i?'border-luxury-gold text-luxury-gold':'border-neutral-800 text-neutral-400'}`}>{plan.label||`Plan ${i+1}`}</button>)}
                                 </div>
@@ -599,7 +682,7 @@
                                 </div>}
                             </div>}
                             {(p.mapLink || p.nearbyPlaces.length>0) && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
-                                <h2 className="text-xl font-semibold mb-4">Location & Nearby Places</h2>
+                                <h2 className="text-xl font-semibold mb-4">LOCATION & NEARBY PLACES</h2>
                                 {p.mapLink && <a href={p.mapLink} target="_blank" rel="noreferrer" className="inline-block border border-luxury-gold text-luxury-gold px-4 py-2 rounded text-xs font-bold mb-5">Open Project Location in Maps ↗</a>}
                                 <div className="grid md:grid-cols-2 gap-3">{p.nearbyPlaces.map((place,i)=><div key={i} className="flex justify-between bg-luxury-bg rounded-lg p-3 text-sm"><span>{place.label}</span><span className="text-luxury-gold">{place.value}</span></div>)}</div>
                             </div>}
@@ -607,8 +690,8 @@
                             {p.faqs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">FAQs</h2>{p.faqs.map((x,i)=><div key={i} className="mb-4"><b>{x.label}</b><p className="text-sm text-neutral-400 mt-1">{x.value}</p></div>)}</div>}
                         </div>
                         <aside className="space-y-6">
-                            {p.pdfs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">Downloads</h2>{p.pdfs.map((pdf,i)=><button type="button" key={i} onClick={()=>openProjectPdf(pdf)} className="block w-full text-left border border-neutral-800 rounded p-3 mb-3 text-sm text-luxury-gold hover:border-luxury-gold transition">📄 {pdf.name||`Project PDF ${i+1}`}</button>)}</div>}
-                            {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">Specifications</h2>{p.specifications.map((x,i)=><div key={i} className="mb-3 text-sm"><span className="text-neutral-500 block">{x.label}</span>{x.value}</div>)}</div>}
+                            {p.pdfs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">DOWNLOADS</h2>{p.pdfs.map((pdf,i)=><button type="button" key={i} onClick={()=>openProjectPdf(pdf)} className="block w-full text-left border border-neutral-800 rounded p-3 mb-3 text-sm text-luxury-gold hover:border-luxury-gold transition">📄 {pdf.name||`Project PDF ${i+1}`}</button>)}</div>}
+                            {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">SPECIFICATIONS</h2>{p.specifications.map((x,i)=><div key={i} className="mb-3 text-sm"><span className="text-neutral-500 block">{x.label}</span>{x.value}</div>)}</div>}
                         </aside>
                     </section>
                     <div className="fixed md:hidden bottom-0 left-0 right-0 z-[500] grid grid-cols-3 gap-2 bg-black/95 border-t border-neutral-800 p-2">
@@ -616,8 +699,8 @@
                         <a href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, I am interested in "+p.title+" | "+p.configuration+" | "+p.price+". Project link: "+projectLink(p))}`} target="_blank" rel="noreferrer" className="text-center border border-emerald-700 text-emerald-400 rounded py-3 text-xs font-bold">WhatsApp</a>
                         <button type="button" onClick={()=>onOpenEnquiry(p)} className="bg-luxury-gold text-black rounded py-3 text-xs font-bold">Site Visit</button>
                     </div>
-                    {similarProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">Similar Projects</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{similarProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
-                    {recentProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">Recently Viewed</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{recentProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
+                    {similarProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">SIMILAR PROJECTS</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{similarProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
+                    {recentProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">RECENTLY VIEWED</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{recentProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
                     <a href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, I am interested in "+p.title+". Project link: "+projectLink(p))}`} target="_blank" rel="noreferrer" className="hidden md:flex fixed right-5 bottom-5 z-[450] bg-emerald-600 text-white rounded-full px-5 py-3 font-bold text-sm shadow-2xl">WhatsApp • Ask about this project</a>
                     {fullImageOpen && p.images[activeImage] && (
                         <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4" onClick={()=>setFullImageOpen(false)}>
@@ -842,7 +925,7 @@
 </div>
 
 <div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Floor Plans</label>
+    <label className="block text-neutral-400 mb-1">FLOOR PLANS</label>
     <div className="grid md:grid-cols-3 gap-2">
         <input id="fp-label" placeholder="Configuration e.g. 2 BHK" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
         <input id="fp-area" placeholder="Carpet Area e.g. 750 sq.ft" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
@@ -985,6 +1068,25 @@
 
         // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
         function App() {
+            /* tp-clean-route-handler */
+            React.useEffect(() => {
+                const applyRoute = () => {
+                    const route = getRouteFromPath();
+                    if (route.type === "project") {
+                        const match = listings.find(p => slugify(p.title) === route.slug);
+                        if (match) {
+                            setSelectedProject(match);
+                            setView("project");
+                        }
+                    } else {
+                        setView(route.view);
+                    }
+                };
+                applyRoute();
+                window.addEventListener("popstate", applyRoute);
+                return () => window.removeEventListener("popstate", applyRoute);
+            }, [listings]);
+
             const [view, setView] = React.useState('home');
             const [activeProject, setActiveProject] = React.useState(null);
             const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -1070,7 +1172,7 @@
                             <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
                                 <div>
                                     <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest block mb-1">Who We Are</span>
-                                    <h1 className='text-3xl text-white font-medium tracking-wide mb-4'>About TruePillar Realty</h1>
+                                    <h1 className='text-3xl text-white font-medium tracking-wide mb-4'>About TruePillar Realty</h1><div className="mt-5 inline-flex items-center gap-3 bg-luxury-card border border-neutral-800 rounded-lg px-4 py-3 text-sm"><span className="text-neutral-400">MAHARERA REGISTRATION NO.</span><strong className="text-luxury-gold">A031272401680</strong></div>
                                     <p className="text-sm md:text-base text-neutral-300">TruePillar Realty is a premium property consultancy firm specializing in handpicked luxury homes, under-construction residential marvels, and modern apartments across the Mumbai Metropolitan Region. Built upon the three core pillars of **Trust, Transparency, and Value**, we help modern families discover their dream spaces without navigating confusing, opaque market channels.</p>
                                 </div>
 
