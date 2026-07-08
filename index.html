@@ -584,6 +584,8 @@
             const [activeImage, setActiveImage] = React.useState(0);
             const [fullImageOpen, setFullImageOpen] = React.useState(false);
             const [activeFloorPlan, setActiveFloorPlan] = React.useState(0);
+            const [overviewExpanded, setOverviewExpanded] = React.useState(false);
+            const [floorPlanOpen, setFloorPlanOpen] = React.useState(false);
             const similarProjects=listings.filter(x=>x.id!==p.id&&x.published!==false&&(x.subLocality===p.subLocality||x.configuration===p.configuration)).slice(0,4);
             const recentProjects=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").map(id=>listings.find(x=>x.id===id)).filter(x=>x&&x.id!==p.id).slice(0,4);
             React.useEffect(() => {
@@ -656,29 +658,19 @@
                     </section>
                     <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-8">
-                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT OVERVIEW</h2><p className="text-sm text-neutral-300 leading-7 whitespace-pre-line">{p.description}</p></div>
+                            <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
+                                <h2 className="text-xl font-semibold mb-4">PROJECT OVERVIEW</h2>
+                                <div className={`relative ${overviewExpanded ? "" : "max-h-44 overflow-hidden"}`}>
+                                    <p className="text-sm text-neutral-300 leading-7 whitespace-pre-line">{p.description}</p>
+                                    {!overviewExpanded && <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-luxury-card to-transparent pointer-events-none"></div>}
+                                </div>
+                                {p.description && p.description.length > 420 && <button type="button" onClick={()=>setOverviewExpanded(v=>!v)} className="mt-4 text-luxury-gold text-xs font-bold uppercase tracking-wider hover:underline">{overviewExpanded ? "SHOW LESS" : "READ MORE"}</button>}
+                            </div>
+                            {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">SPECIFICATIONS</h2><div className="grid sm:grid-cols-2 gap-x-8">{p.specifications.map((x,i)=><div key={i} className="py-3 border-b border-neutral-900 text-sm"><span className="text-neutral-500 block text-xs mb-1">{x.label}</span><span className="text-white">{x.value}</span></div>)}</div></div>}
                             {p.highlights.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT HIGHLIGHTS</h2><div className="grid md:grid-cols-2 gap-3">{p.highlights.map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-sm">✓ {x}</div>)}</div></div>}
                             {p.priceOptions.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">CONFIGURATION & PRICING</h2>{p.priceOptions.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><b className="text-luxury-gold">{x.value}</b></div>)}</div>}
                             <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">AMENITIES</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{(p.amenities||[]).map((x,i)=><div key={i} className="bg-luxury-bg p-3 rounded text-xs">✦ {x}</div>)}</div></div>
                             {p.locationAdvantages.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">LOCATION ADVANTAGES</h2>{p.locationAdvantages.map((x,i)=><div key={i} className="flex justify-between border-b border-neutral-900 py-3 text-sm"><span>{x.label}</span><span className="text-luxury-gold">{x.value}</span></div>)}</div>}
-                            {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-4">PROJECT VIDEOS</h2><div className="grid md:grid-cols-2 gap-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark /></div>)}</div></div>}
-                            {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">SAMPLE FLAT VIDEOS</h2><p className="text-xs text-neutral-500 mb-5">Sample flat tours and project walkthroughs.</p><div className="grid md:grid-cols-2 gap-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold"><span>▶ Watch Sample Flat Video {i+1}</span><span>Open ↗</span></a>})}</div></div>}
-                            {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-xl font-semibold mb-2">PROJECT HIGHLIGHT VIDEOS</h2><p className="text-xs text-neutral-500 mb-5">Project highlights, amenities, location and lifestyle videos.</p><div className="grid md:grid-cols-2 gap-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark /></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="relative flex aspect-video items-center justify-center border border-neutral-800 rounded-lg text-luxury-gold hover:border-luxury-gold bg-black/40"><span className="text-center">▶ Watch Project Highlight Video {i+1}<br/><small className="text-neutral-500">Instagram / Facebook</small></span><MediaWatermark /></a>})}</div></div>}
-                            {p.floorPlans.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
-                                <h2 className="text-xl font-semibold mb-4">FLOOR PLANS</h2>
-                                <div className="flex gap-2 overflow-x-auto mb-5">
-                                    {p.floorPlans.map((plan,i)=><button type="button" key={i} onClick={()=>setActiveFloorPlan(i)} className={`px-4 py-2 rounded border text-xs whitespace-nowrap ${activeFloorPlan===i?'border-luxury-gold text-luxury-gold':'border-neutral-800 text-neutral-400'}`}>{plan.label||`Plan ${i+1}`}</button>)}
-                                </div>
-                                {p.floorPlans[activeFloorPlan] && <div className="grid md:grid-cols-2 gap-6 items-center">
-                                    <img src={p.floorPlans[activeFloorPlan].image} onClick={()=>window.open(p.floorPlans[activeFloorPlan].image,"_blank")} className="w-full max-h-[420px] object-contain bg-white rounded-lg cursor-zoom-in" />
-                                    <div>
-                                        <h3 className="text-xl font-bold">{p.floorPlans[activeFloorPlan].label}</h3>
-                                        {p.floorPlans[activeFloorPlan].area && <p className="text-neutral-400 mt-3">{p.floorPlans[activeFloorPlan].area}</p>}
-                                        {p.floorPlans[activeFloorPlan].price && <p className="text-luxury-gold text-lg font-bold mt-3">{p.floorPlans[activeFloorPlan].price}</p>}
-                                        <p className="text-xs text-neutral-500 mt-4">Click the floor plan image to open it in full size.</p>
-                                    </div>
-                                </div>}
-                            </div>}
                             {(p.mapLink || p.nearbyPlaces.length>0) && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
                                 <h2 className="text-xl font-semibold mb-4">LOCATION & NEARBY PLACES</h2>
                                 {p.mapLink && <a href={p.mapLink} target="_blank" rel="noreferrer" className="inline-block border border-luxury-gold text-luxury-gold px-4 py-2 rounded text-xs font-bold mb-5">Open Project Location in Maps ↗</a>}
@@ -689,7 +681,26 @@
                         </div>
                         <aside className="space-y-6">
                             {p.pdfs.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">DOWNLOADS</h2>{p.pdfs.map((pdf,i)=><button type="button" key={i} onClick={()=>openProjectPdf(pdf)} className="block w-full text-left border border-neutral-800 rounded p-3 mb-3 text-sm text-luxury-gold hover:border-luxury-gold transition">📄 {pdf.name||`Project PDF ${i+1}`}</button>)}</div>}
-                            {p.specifications.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6"><h2 className="text-lg font-semibold mb-4">SPECIFICATIONS</h2>{p.specifications.map((x,i)=><div key={i} className="mb-3 text-sm"><span className="text-neutral-500 block">{x.label}</span>{x.value}</div>)}</div>}
+
+                            {p.videos.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-5"><h2 className="text-lg font-semibold mb-4">PROJECT VIDEOS</h2><div className="space-y-4">{p.videos.map((v,i)=><div key={i} className="relative overflow-hidden rounded-lg bg-black"><video src={v} controls className="w-full bg-black"/><MediaWatermark compact={true}/></div>)}</div></div>}
+
+                            {p.sampleVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-5"><h2 className="text-lg font-semibold mb-4">SAMPLE FLAT VIDEOS</h2><div className="space-y-4">{p.sampleVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Sample Flat Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark compact={true}/></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="block border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold">▶ Watch Sample Flat Video {i+1}</a>})}</div></div>}
+
+                            {p.highlightVideoLinks.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-5"><h2 className="text-lg font-semibold mb-4">PROJECT HIGHLIGHT VIDEOS</h2><div className="space-y-4">{p.highlightVideoLinks.map((url,i)=>{const embed=getVideoEmbed(url); return embed ? <div key={i} className="relative overflow-hidden rounded-lg bg-black"><iframe src={embed} title={`Project Highlight Video ${i+1}`} className="w-full aspect-video bg-black" allowFullScreen></iframe><MediaWatermark compact={true}/></div> : <a key={i} href={url} target="_blank" rel="noreferrer" className="block border border-neutral-800 rounded-lg p-4 text-luxury-gold hover:border-luxury-gold">▶ Watch Project Highlight Video {i+1}</a>})}</div></div>}
+
+                            {p.floorPlans.length>0 && <div className="bg-luxury-card border border-neutral-800 rounded-xl p-5">
+                                <h2 className="text-lg font-semibold mb-4">FLOOR PLANS</h2>
+                                <div className="flex gap-2 overflow-x-auto mb-4">{p.floorPlans.map((plan,i)=><button type="button" key={i} onClick={()=>setActiveFloorPlan(i)} className={`px-3 py-2 rounded border text-[10px] whitespace-nowrap ${activeFloorPlan===i?'border-luxury-gold text-luxury-gold':'border-neutral-800 text-neutral-400'}`}>{plan.label||`Plan ${i+1}`}</button>)}</div>
+                                {p.floorPlans[activeFloorPlan] && <div>
+                                    <button type="button" onClick={()=>setFloorPlanOpen(true)} className="w-full block cursor-zoom-in">
+                                        <img src={p.floorPlans[activeFloorPlan].image} className="w-full max-h-[360px] object-contain bg-white rounded-lg" alt={p.floorPlans[activeFloorPlan].label||"Floor plan"}/>
+                                    </button>
+                                    <h3 className="font-bold mt-4">{p.floorPlans[activeFloorPlan].label}</h3>
+                                    {p.floorPlans[activeFloorPlan].area && <p className="text-neutral-400 text-sm mt-1">{p.floorPlans[activeFloorPlan].area}</p>}
+                                    {p.floorPlans[activeFloorPlan].price && <p className="text-luxury-gold font-bold mt-1">{p.floorPlans[activeFloorPlan].price}</p>}
+                                    <button type="button" onClick={()=>setFloorPlanOpen(true)} className="mt-3 text-luxury-gold text-xs font-bold uppercase">CLICK TO VIEW FULL SIZE</button>
+                                </div>}
+                            </div>}
                         </aside>
                     </section>
                     <div className="fixed md:hidden bottom-0 left-0 right-0 z-[500] grid grid-cols-3 gap-2 bg-black/95 border-t border-neutral-800 p-2">
@@ -700,6 +711,19 @@
                     {similarProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">SIMILAR PROJECTS</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{similarProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
                     {recentProjects.length>0 && <section><h2 className="text-2xl font-semibold mb-5">RECENTLY VIEWED</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{recentProjects.map(x=><button type="button" key={x.id} onClick={()=>onOpenProject(x)} className="text-left bg-luxury-card border border-neutral-800 rounded-xl overflow-hidden hover:border-luxury-gold"><img src={(x.images&&x.images[0])||x.image} className="w-full h-32 object-cover"/><div className="p-4"><b className="block">{x.title}</b><span className="text-xs text-neutral-500">{x.subLocality} • {x.price}</span></div></button>)}</div></section>}
                     <a href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, I am interested in "+p.title+". Project link: "+projectLink(p))}`} target="_blank" rel="noreferrer" className="hidden md:flex fixed right-5 bottom-5 z-[450] bg-emerald-600 text-white rounded-full px-5 py-3 font-bold text-sm shadow-2xl">WhatsApp • Ask about this project</a>
+                    {floorPlanOpen && p.floorPlans[activeFloorPlan] && (
+                        <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4" onClick={()=>setFloorPlanOpen(false)}>
+                            <button type="button" onClick={()=>setFloorPlanOpen(false)} className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white text-2xl z-10">×</button>
+                            {p.floorPlans.length > 1 && <>
+                                <button type="button" onClick={(e)=>{e.stopPropagation();setActiveFloorPlan(i=>(i-1+p.floorPlans.length)%p.floorPlans.length)}} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 border border-white/30 text-white text-3xl z-10">‹</button>
+                                <button type="button" onClick={(e)=>{e.stopPropagation();setActiveFloorPlan(i=>(i+1)%p.floorPlans.length)}} className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 border border-white/30 text-white text-3xl z-10">›</button>
+                            </>}
+                            <div className="max-w-6xl w-full max-h-[92vh] text-center" onClick={e=>e.stopPropagation()}>
+                                <img src={p.floorPlans[activeFloorPlan].image} className="mx-auto max-w-full max-h-[82vh] object-contain bg-white rounded-lg" alt={p.floorPlans[activeFloorPlan].label||"Floor plan full size"}/>
+                                <div className="mt-3 text-sm text-white">{p.floorPlans[activeFloorPlan].label} {p.floorPlans[activeFloorPlan].area && `• ${p.floorPlans[activeFloorPlan].area}`}</div>
+                            </div>
+                        </div>
+                    )}
                     {fullImageOpen && p.images[activeImage] && (
                         <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4" onClick={()=>setFullImageOpen(false)}>
                             <button type="button" onClick={()=>setFullImageOpen(false)} className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white text-2xl">×</button>
