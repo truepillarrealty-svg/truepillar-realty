@@ -77,6 +77,397 @@
     }
     </script>
 
+
+<style id="tp-v20-premium">
+@media (min-width:1024px){
+  .tp-v20-property-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}
+  .tp-v20-card-image{height:205px!important}
+  .tp-v20-card-body{padding:18px!important}
+  .tp-v20-detail-grid{grid-template-columns:minmax(0,1.35fr) minmax(340px,.75fr)!important;gap:22px!important;align-items:start!important}
+  .tp-v20-detail-image{height:430px!important}
+  .tp-v20-detail-side{position:sticky;top:88px}
+}
+.tp-v20-hero{position:relative;overflow:hidden;isolation:isolate}
+.tp-v20-hero:before{content:"";position:absolute;inset:0;z-index:-2;background:
+radial-gradient(circle at 72% 32%,rgba(218,175,40,.18),transparent 30%),
+linear-gradient(120deg,#07080a 0%,#0b0d11 55%,#15120a 100%)}
+.tp-v20-hero:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.34;background-image:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px}
+.tp-v20-spotlight{background:linear-gradient(145deg,rgba(22,23,27,.98),rgba(8,9,11,.98));border:1px solid rgba(218,175,40,.32);box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.tp-v20-spotlight-media{background:radial-gradient(circle at 50% 35%,rgba(218,175,40,.18),transparent 55%),#090a0c}
+.tp-v20-visit-panel .tp-v20-visit-form{display:none}
+.tp-v20-visit-panel.tp-v20-open .tp-v20-visit-form{display:block}
+.tp-v20-visit-panel.tp-v20-open .tp-v20-visit-trigger{display:none}
+@media(max-width:1023px){
+ .tp-v20-detail-image{height:330px!important}
+ .tp-v20-property-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:640px){.tp-v20-property-grid{grid-template-columns:1fr!important}}
+</style>
+
+
+<style id="tp-v21-force">
+@media(min-width:1024px){
+ .tp-v20-property-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ .tp-v20-property-grid > *{font-size:.92em}
+ .tp-v20-property-grid img{max-height:205px!important;object-fit:cover}
+ .tp-v20-detail-grid{grid-template-columns:minmax(0,1.35fr) minmax(340px,.75fr)!important}
+ .tp-v20-detail-image{max-height:420px!important;object-fit:cover}
+}
+</style>
+
+<style id="tp-v22">
+.tp-v22-filter{background:#fff!important;border-radius:14px!important;padding:8px!important;box-shadow:0 14px 45px rgba(0,0,0,.3)!important}
+.tp-v22-filter input,.tp-v22-filter select{background:#fff!important;color:#111!important;border-color:#e5e7eb!important;min-height:48px!important}.tp-v22-filter input::placeholder{color:#6b7280!important}.tp-v22-filter option{color:#111;background:#fff}
+@media(min-width:1024px){.tp-v20-hero h1{font-size:clamp(2.8rem,5vw,5.5rem)!important;line-height:.92!important}.tp-v20-spotlight{min-height:300px}}
+</style>
+<style id="tp-v23-final-fixes">
+@media(min-width:1024px){
+  .tp-v23-hero-title{font-size:clamp(2.25rem,3.6vw,4rem)!important;white-space:nowrap!important;line-height:1!important}
+}
+.tp-v23-housing-filter{
+  background:#ffffff!important;
+  border:1px solid #e5e7eb!important;
+  border-radius:16px!important;
+  padding:10px!important;
+  box-shadow:0 16px 45px rgba(0,0,0,.28)!important;
+  gap:0!important;
+}
+.tp-v23-housing-filter input,
+.tp-v23-housing-filter select{
+  background:#ffffff!important;
+  color:#111827!important;
+  border:0!important;
+  border-right:1px solid #e5e7eb!important;
+  border-radius:0!important;
+  min-height:52px!important;
+}
+.tp-v23-housing-filter input::placeholder{color:#6b7280!important}
+.tp-v23-housing-filter select option{background:#fff!important;color:#111!important}
+.tp-v23-housing-filter > *:first-child{border-radius:10px 0 0 10px!important}
+.tp-v23-housing-filter > *:last-child{border-right:0!important;border-radius:0 10px 10px 0!important}
+@media(max-width:767px){
+  .tp-v23-housing-filter{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+  .tp-v23-housing-filter input,.tp-v23-housing-filter select{border:1px solid #e5e7eb!important;border-radius:10px!important}
+  .tp-v23-hero-title{font-size:2.25rem!important}
+}
+</style>
+
+
+<style id="tp-v24-final">
+.tp-v24-hero{background:radial-gradient(circle at 82% 35%,rgba(218,175,40,.10),transparent 38%),linear-gradient(90deg,#090a0c,#0d0e10)}
+.tp-v24-hero h1{font-size:clamp(2rem,3.15vw,3.65rem)!important;line-height:.98!important;max-width:none!important;margin-top:8px!important}
+.tp-v24-hero p{margin-top:10px!important}
+.tp-v24-filter-wrap{position:relative;z-index:30}
+.tp-v23-housing-filter{
+ display:grid!important;
+ grid-template-columns:minmax(280px,1.7fr) repeat(4,minmax(140px,.8fr))!important;
+ gap:0!important;
+ padding:5px!important;
+ background:#111216!important;
+ border:1px solid #2b2d31!important;
+ border-radius:14px!important;
+ box-shadow:0 16px 42px rgba(0,0,0,.35)!important;
+ overflow:visible!important;
+}
+.tp-v23-housing-filter>div,.tp-v23-housing-filter>select{min-width:0!important}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{
+ background:#111216!important;color:#f5f5f5!important;border:0!important;
+ border-right:1px solid #303238!important;border-radius:0!important;
+ min-height:48px!important;padding-left:14px!important;
+}
+.tp-v23-housing-filter input::placeholder{color:#9ca3af!important}
+.tp-v23-housing-filter select option{background:#111216!important;color:#fff!important}
+.tp-v20-spotlight{margin-top:8px!important}
+@media(min-width:1024px){
+ .tp-v24-hero{min-height:0!important}
+ .tp-v20-spotlight{min-height:255px!important}
+ .tp-v20-spotlight-media{min-height:255px!important}
+}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important;gap:5px!important}
+ .tp-v23-housing-filter>div:first-child{grid-column:1/-1}
+ .tp-v23-housing-filter input,.tp-v23-housing-filter select{border:1px solid #303238!important;border-radius:8px!important}
+}
+</style>
+
+
+<style id="tp-v25-ui">
+/* Opening screen: intentionally compact so hero + spotlight + search are visible */
+.tp-v24-hero{padding-top:14px!important;padding-bottom:14px!important;min-height:0!important}
+.tp-v24-hero > div > span{font-size:9px!important}
+.tp-v24-hero h1{font-size:clamp(1.75rem,2.65vw,3rem)!important;line-height:1!important;margin:6px 0!important}
+.tp-v24-hero p{font-size:12px!important;line-height:1.5!important;max-width:650px!important;margin:6px 0!important}
+.tp-v24-hero button{padding:9px 18px!important}
+
+/* Spotlight visible directly below hero */
+.tp-v20-spotlight{margin-top:0!important;min-height:220px!important;max-height:250px!important;border:1px solid rgba(218,175,40,.45)!important;background:#111216!important}
+.tp-v20-spotlight-media{min-height:220px!important}
+.tp-v20-spotlight-media h2{font-size:1.55rem!important}
+.tp-v20-spotlight .p-7,.tp-v20-spotlight .md\:p-9{padding:20px!important}
+.tp-v20-spotlight button,.tp-v20-spotlight a{padding-top:9px!important;padding-bottom:9px!important;font-size:11px!important}
+
+/* Friendly dark search experience */
+.tp-v25-search-zone{padding-top:8px!important;padding-bottom:8px!important}
+.tp-v25-search-title{font-size:11px;font-weight:800;color:#e0b82f;letter-spacing:.04em;margin:0 0 7px 2px}
+.tp-v25-search-title span{font-size:16px;margin-right:5px}
+.tp-v23-housing-filter{
+ display:grid!important;
+ grid-template-columns:minmax(300px,1.8fr) repeat(4,minmax(135px,.75fr))!important;
+ gap:6px!important;padding:7px!important;
+ background:#121317!important;border:1px solid #303238!important;
+ border-radius:16px!important;box-shadow:0 12px 35px rgba(0,0,0,.32)!important;
+}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{
+ min-height:46px!important;background:#090a0c!important;color:#f5f5f5!important;
+ border:1px solid #292b30!important;border-radius:10px!important;padding:0 13px!important;
+ font-size:12px!important;transition:.2s ease!important;
+}
+.tp-v23-housing-filter input:focus,.tp-v23-housing-filter select:focus{
+ outline:none!important;border-color:#dcb72e!important;box-shadow:0 0 0 2px rgba(220,183,46,.12)!important
+}
+.tp-v23-housing-filter input::placeholder{color:#a5a7ad!important}
+.tp-v23-housing-filter select option{background:#101114!important;color:white!important}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+ .tp-v23-housing-filter>div:first-child{grid-column:1/-1!important}
+ .tp-v20-spotlight{max-height:none!important}
+}
+</style>
+
+
+<style id="tp-v26-final-corrections">
+.tp-v24-hero h1 .text-luxury-gold{font-size:inherit!important;line-height:inherit!important}
+/* Use the empty right side of hero instead of leaving a large blank area */
+.tp-v24-hero{
+  background:
+    radial-gradient(circle at 78% 42%,rgba(218,175,40,.16),transparent 28%),
+    linear-gradient(105deg,#090a0c 0%,#0d0e10 55%,#17140b 100%)!important;
+}
+.tp-v24-hero h1{max-width:1180px!important}
+
+/* Spotlight must show its full content and buttons */
+.tp-v20-spotlight{
+  min-height:285px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+.tp-v20-spotlight-media{min-height:285px!important}
+.tp-v20-spotlight > div:last-child{min-height:285px!important;overflow:visible!important}
+
+/* Complete search bar: search field + 4 filters + action button */
+.tp-v23-housing-filter{
+  grid-template-columns:minmax(280px,1.7fr) minmax(140px,.72fr) minmax(140px,.72fr) minmax(145px,.72fr) minmax(145px,.72fr) 110px!important;
+  align-items:stretch!important;
+}
+.tp-v23-housing-filter > .grid{
+  display:contents!important;
+}
+.tp-v26-search-button{
+  min-height:46px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#dfb92f!important;
+  color:#050505!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+  cursor:pointer!important;
+}
+.tp-v26-search-button:hover{filter:brightness(1.08)}
+
+/* Project details: left information + right media/download rail */
+.tp-v20-detail-grid{
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.72fr)!important;
+  align-items:start!important;
+}
+.tp-v20-detail-grid > aside{
+  display:block!important;
+  grid-column:2!important;
+  position:relative!important;
+}
+@media(max-width:900px){
+  .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+  .tp-v23-housing-filter > .grid{display:contents!important}
+  .tp-v26-search-button{grid-column:1/-1!important}
+  .tp-v20-detail-grid{grid-template-columns:1fr!important}
+  .tp-v20-detail-grid > aside{grid-column:1!important}
+}
+</style>
+
+
+<style id="tp-v27-first-view">
+.tp-v27-hero-title-row{
+  display:flex!important;align-items:center!important;gap:18px!important;flex-wrap:nowrap!important;
+}
+.tp-v27-hero-title-row h1{flex:0 1 auto!important;white-space:nowrap!important;margin:0!important}
+.tp-v27-browse-button{
+  flex:0 0 auto!important;background:#dfb92f!important;color:#050505!important;border:0!important;
+  border-radius:8px!important;padding:11px 18px!important;font-size:10px!important;font-weight:900!important;
+  text-transform:uppercase!important;letter-spacing:.05em!important;cursor:pointer!important;
+}
+.tp-v27-search-zone{margin-top:-18px!important;margin-bottom:10px!important}
+.tp-v27-search-zone .tp-v25-search-title{margin-bottom:6px!important}
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{flex-wrap:wrap!important}
+  .tp-v27-hero-title-row h1{white-space:normal!important}
+}
+</style>
+
+
+<style id="tp-v28-hero-tighten">
+.tp-v24-hero{padding-top:26px!important;padding-bottom:26px!important}
+.tp-v27-hero-title-row{gap:34px!important}
+.tp-v27-browse-button{
+  margin-left:8px!important;
+  box-shadow:0 0 0 0 rgba(223,185,47,.38);
+  animation:tpBrowsePremiumPulse 2.2s ease-in-out infinite!important;
+  transform-origin:center;
+}
+.tp-v27-browse-button:hover{
+  animation-play-state:paused!important;
+  transform:scale(1.07)!important;
+}
+@keyframes tpBrowsePremiumPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(223,185,47,.34)}
+  50%{transform:scale(1.045);box-shadow:0 0 0 8px rgba(223,185,47,0)}
+}
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:18px!important}
+  .tp-v27-browse-button{margin-left:0!important}
+}
+</style>
+
+
+<style id="tp-v29-true-first-view-fix">
+/* Compact hero after removing the pill */
+.tp-v24-hero{
+  padding-top:14px!important;
+  padding-bottom:14px!important;
+}
+.tp-v24-hero .space-y-4 > :not([hidden]) ~ :not([hidden]){
+  margin-top:8px!important;
+}
+.tp-v27-hero-title-row{gap:44px!important}
+.tp-v27-browse-button{margin-left:12px!important}
+
+/* Pull search and spotlight upward */
+.tp-v27-search-zone{
+  margin-top:-6px!important;
+  margin-bottom:4px!important;
+}
+.tp-v25-search-title{margin-bottom:4px!important}
+.tp-v23-housing-filter{min-height:54px!important}
+.tp-v23-housing-filter input,
+.tp-v23-housing-filter select,
+.tp-v26-search-button{min-height:44px!important}
+
+/* Make full spotlight visible and expose next section heading in first viewport */
+.tp-v20-spotlight{
+  margin-top:6px!important;
+  min-height:250px!important;
+  height:250px!important;
+}
+.tp-v20-spotlight-media,
+.tp-v20-spotlight > div:last-child{
+  min-height:250px!important;
+  height:250px!important;
+}
+.tp-v20-spotlight > div:last-child{
+  padding-top:18px!important;
+  padding-bottom:14px!important;
+}
+.tp-v20-spotlight h2{margin-top:6px!important;margin-bottom:6px!important}
+.tp-v20-spotlight p{margin-top:4px!important;margin-bottom:4px!important}
+
+/* Reduce the gap before Premium Featured Projects */
+.tp-v20-spotlight + section,
+.tp-v20-spotlight + div{margin-top:14px!important}
+
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:22px!important}
+}
+</style>
+
+
+<style id="tp-v30-spacing-fine-tune">
+/* Push Browse Properties a little farther right */
+.tp-v27-hero-title-row{gap:64px!important}
+.tp-v27-browse-button{margin-left:18px!important}
+
+/* Reduce gap between search/filter and spotlight */
+.tp-v27-search-zone{margin-bottom:-10px!important}
+.tp-v20-spotlight{margin-top:0!important}
+
+/* Reduce gap between spotlight and Premium Featured Projects */
+.tp-v20-spotlight + section,
+.tp-v20-spotlight + div{margin-top:2px!important}
+
+/* Also tighten common wrapper spacing immediately after spotlight */
+.tp-v20-spotlight{margin-bottom:0!important}
+
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:28px!important}
+  .tp-v27-browse-button{margin-left:4px!important}
+}
+</style>
+
+
+<style id="tp-v31-spotlight-controls">
+.tp-v20-spotlight{position:relative!important}
+.tp-v31-spot-arrow{
+  position:absolute!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:30!important;
+  width:38px!important;
+  height:58px!important;
+  border:1px solid rgba(223,185,47,.75)!important;
+  background:rgba(7,8,10,.72)!important;
+  color:#dfb92f!important;
+  border-radius:12px!important;
+  font-size:34px!important;
+  line-height:1!important;
+  font-weight:400!important;
+  cursor:pointer!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  backdrop-filter:blur(6px)!important;
+  transition:transform .2s ease,background .2s ease!important;
+}
+.tp-v31-spot-arrow:hover{
+  background:rgba(223,185,47,.18)!important;
+  transform:translateY(-50%) scale(1.08)!important;
+}
+.tp-v31-prev{left:10px!important}
+.tp-v31-next{right:10px!important}
+@media(max-width:700px){
+  .tp-v31-spot-arrow{width:32px!important;height:48px!important;font-size:28px!important}
+  .tp-v31-prev{left:6px!important}
+  .tp-v31-next{right:6px!important}
+}
+</style>
+
+
+<style id="tp-v37-clean-filter">
+/* Clean five-part live filter: no redundant Search or Sort control */
+.tp-v23-housing-filter{
+  display:grid!important;
+  grid-template-columns:minmax(280px,1.8fr) minmax(150px,.82fr) minmax(150px,.9fr) minmax(155px,.82fr) minmax(165px,.88fr)!important;
+  width:100%!important; max-width:none!important; gap:8px!important; padding:8px!important;
+  align-items:stretch!important; box-sizing:border-box!important;
+}
+.tp-v23-housing-filter > div:first-child,.tp-v23-housing-filter > .grid{min-width:0!important;width:100%!important}
+.tp-v23-housing-filter > .grid{display:contents!important}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{width:100%!important;min-width:0!important;height:46px!important}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+ .tp-v23-housing-filter > div:first-child{grid-column:1/-1!important}
+}
+@media(max-width:560px){.tp-v23-housing-filter{grid-template-columns:1fr!important}.tp-v23-housing-filter > div:first-child{grid-column:auto!important}}
+</style>
 </head>
 <body>
     <div id="root"></div>
@@ -275,19 +666,21 @@
 
         // --- SEARCH & FILTER COMPONENT ---
         function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
+            const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
+            const closeSuggestions = () => setSuggestionsOpen(false);
             return (
-                <div className="bg-luxury-card border border-neutral-800 p-6 rounded-xl space-y-4 lg:space-y-0 lg:flex lg:gap-4 items-center shadow-xl w-full">
-                    <div className="flex-1 min-w-[200px] relative z-[100]" onFocus={()=>window.__tpSearchOpen=true}>
-                        <input type="text" placeholder="Search project, location, city, developer..." className="w-full bg-luxury-bg border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-luxury-gold text-white" value={search} onChange={(e)=>setSearch(e.target.value)} />
-                        {search.trim() && <div className="absolute left-0 right-0 top-full mt-2 bg-[#111114] border border-neutral-700 rounded-lg shadow-2xl max-h-80 overflow-y-auto">{(()=>{
+                <div className="tp-v23-housing-filter bg-luxury-card border border-neutral-800 p-3 rounded-xl space-y-3 lg:space-y-0 lg:flex lg:gap-0 items-center shadow-xl w-full">
+                    <div className="flex-1 min-w-[200px] relative z-[100]" onFocus={()=>setSuggestionsOpen(true)}>
+                        <input type="text" placeholder="Search project, location, city, developer..." className="w-full bg-luxury-bg border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-luxury-gold text-white" value={search} onChange={(e)=>{setSearch(e.target.value);setSuggestionsOpen(true)}} />
+                        {search.trim() && suggestionsOpen && <div className="absolute left-0 right-0 top-full mt-2 bg-[#111114] border border-neutral-700 rounded-lg shadow-2xl max-h-80 overflow-y-auto">{(()=>{
                             const q=search.toLowerCase(), seen=new Set(), items=[];
                             const add=(type,label,detail)=>{if(label&&label.toLowerCase().includes(q)){const k=(type+label).toLowerCase();if(!seen.has(k)){seen.add(k);items.push({type,label,detail})}}};
                             listings.filter(p=>p.published!==false).forEach(p=>{add("Project",p.title,`${p.subLocality}, ${p.region}`);add("Location",p.subLocality,p.region);add("City",p.region,"All matching projects");add("Developer",p.developer,p.title);add("Address",p.address,p.title)});
-                            return items.slice(0,12).length ? items.slice(0,12).map((s,i)=><button type="button" key={i} onClick={()=>setSearch(s.label)} className="w-full text-left px-4 py-3 border-b border-neutral-800 last:border-0 hover:bg-neutral-900 flex gap-3"><span className="text-[9px] uppercase text-luxury-gold border border-luxury-gold/40 rounded px-1.5 py-0.5 h-fit min-w-[58px] text-center">{s.type}</span><span><strong className="block text-sm text-white">{s.label}</strong><small className="text-neutral-500">{s.detail}</small></span></button>) : <div className="px-4 py-4 text-sm text-neutral-500">No matching project or location found.</div>;
+                            return items.slice(0,12).length ? items.slice(0,12).map((s,i)=><button type="button" key={i} onClick={()=>{setSearch(s.label);setSuggestionsOpen(false)}} className="w-full text-left px-4 py-3 border-b border-neutral-800 last:border-0 hover:bg-neutral-900 flex gap-3"><span className="text-[9px] uppercase text-luxury-gold border border-luxury-gold/40 rounded px-1.5 py-0.5 h-fit min-w-[58px] text-center">{s.type}</span><span><strong className="block text-sm text-white">{s.label}</strong><small className="text-neutral-500">{s.detail}</small></span></button>) : <div className="px-4 py-4 text-sm text-neutral-500">No matching project or location found.</div>;
                         })()}</div>}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:flex lg:gap-3">
-                        <select 
+                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
                             className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
                             value={selectedRegion} 
                             onChange={(e) => { setSelectedRegion(e.target.value); setSelectedSubLocality(""); }}
@@ -296,7 +689,7 @@
                             {Object.keys(REGIONS).map(r => <option key={r} value={r}>{r}</option>)}
                         </select>
 
-                        <select 
+                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
                             className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-48"
                             value={selectedSubLocality} 
                             disabled={!selectedRegion}
@@ -306,7 +699,7 @@
                             {selectedRegion && REGIONS[selectedRegion].map(sub => <option key={sub} value={sub}>{sub}</option>)}
                         </select>
 
-                        <select 
+                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
                             className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-40"
                             value={selectedConfig} 
                             onChange={(e) => setSelectedConfig(e.target.value)}
@@ -315,7 +708,7 @@
                             {CONFIGURATIONS.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
 
-                        <select 
+                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
                             className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
                             value={selectedStatus} 
                             onChange={(e) => setSelectedStatus(e.target.value)}
@@ -514,7 +907,7 @@
                         <span className="text-neutral-800">|</span>
                         <a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-luxury-gold text-sm transition">
                             Instagram
-                        </a>
+                        </a><a href="tel:+917718847841" style={{color:"#e2bb32",textDecoration:"none",fontWeight:800,marginLeft:16,whiteSpace:"nowrap"}}>☎ +91 7718847841</a>
                     </div>
                 </nav>
             );
@@ -555,49 +948,33 @@
             };
 
             return (
-                <div className="space-y-12">
+                <div className="space-y-8">
+                    
                     {/* Hero Split Section */}
-                    <section className="max-w-7xl mx-auto px-6 lg:px-16 pt-12 pb-6 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                        <div className="lg:col-span-3 space-y-6 text-center lg:text-left">
-                            <span className="inline-block px-3 py-1 bg-neutral-900 border border-neutral-800 text-luxury-gold text-xs tracking-widest uppercase rounded-full font-bold">PREMIUM RESIDENTIAL PROPERTIES</span>
-                            <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-tight text-white">Find Your Dream Home with <span className="text-luxury-gold font-bold">Zero Brokerage</span></h1>
-                            <p className="text-luxury-textMuted max-w-xl mx-auto lg:mx-0 text-sm md:text-base font-light">Explore handpicked residential landmarks across Mumbai, Thane, Navi Mumbai, and Dombivli. Buy directly from top developers with absolute trust, clarity, and zero brokerage fees.</p>
-                            <div className="flex gap-4 justify-center lg:justify-start">
-                                <button onClick={() => setView('properties')} className="bg-luxury-gold hover:bg-luxury-goldHover text-black px-8 py-3 rounded-lg font-bold tracking-wider transition uppercase text-xs">Browse Properties</button>
+                    <section className="tp-v24-hero max-w-7xl mx-auto px-6 lg:px-10 py-4 rounded-2xl">
+                        <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
+                            
+                            <div className="tp-v27-hero-title-row">
+                                <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-tight text-white">Find Your Dream Home with <span className="text-luxury-gold font-bold">Zero Brokerage</span></h1>
+                                <button onClick={() => setView('properties')} className="tp-v27-browse-button">Browse Properties</button>
                             </div>
+                            <p className="text-luxury-textMuted max-w-xl mx-auto lg:mx-0 text-sm md:text-base font-light">Explore handpicked residential landmarks across Mumbai, Thane, Navi Mumbai, and Dombivli. Buy directly from top developers with absolute trust, clarity, and zero brokerage fees.</p>
                         </div>
 
-                        {/* Inline Home Booking Card Form */}
-                        <div className="lg:col-span-2 bg-luxury-card border border-neutral-800 p-6 rounded-2xl shadow-2xl space-y-4">
-                            <div className="text-center lg:text-left">
-                                <h3 className="text-lg font-bold text-white tracking-wide">BOOK A FREE SITE VISIT</h3>
-                                <p className="text-xs text-luxury-textMuted font-light">Get free pickup, developer pricing sheets, and direct tours.</p>
-                            </div>
-                            <form onSubmit={handleHomeForm} className="space-y-3 text-xs text-neutral-300">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <input type="text" placeholder="YOUR NAME *" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" value={hName} onChange={e => setHName(e.target.value)} required />
-                                    <input type="tel" placeholder="MOBILE NUMBER *" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" value={hPhone} onChange={e => setHPhone(e.target.value)} required />
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hLoc} onChange={e => {setHLoc(e.target.value);setHProject("");}}>{Object.keys(REGIONS).map(r => <option key={r} value={r}>LOCATION: {r}</option>)}</select>
-                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hProject} onChange={e => setHProject(e.target.value)}><option value="">SELECT PROJECT</option>{listings.filter(p => p.region === hLoc && p.published !== false).slice(0,30).map(p => <option key={p.id} value={p.title}>{p.title}</option>)}</select>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                    <input type="date" min={new Date().toISOString().split("T")[0]} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hDate} onChange={e => setHDate(e.target.value)} />
-                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hTime} onChange={e => setHTime(e.target.value)}><option value="">VISIT TIME</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
-                                    <select className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-luxury-textMuted" value={hVisitors} onChange={e => setHVisitors(e.target.value)}><option value="1">1 VISITOR</option><option value="2">2 VISITORS</option><option value="3">3 VISITORS</option><option value="4+">4+ VISITORS</option></select>
-                                </div>
-                                <textarea rows="2" placeholder="ANY SPECIAL REQUIREMENT? (OPTIONAL)" className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white resize-none" value={hMessage} onChange={e => setHMessage(e.target.value)}></textarea>
-                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 rounded font-bold uppercase tracking-widest transition shadow-lg mt-2">SCHEDULE FREE SITE VISIT</button>
-                            </form>
-                        </div>
+                        
                     </section>
+<section className="tp-v25-search-zone tp-v27-search-zone max-w-7xl mx-auto px-6">
+  <div className="tp-v25-search-title"><span>⌕</span> Search homes by location, project or budget</div>
+  <SearchFilterBar {...filterState} listings={listings} />
+</section>
+<TopSpotlight listings={listings} onOpenProject={onOpenProject} onOpenEnquiry={onOpenEnquiry} />
+
+
+
+
 
                     {/* Integrated Search Filters Layout */}
-                    <section id="search-section" className="px-6 lg:px-16 max-w-7xl mx-auto">
-                        <div className="mb-4"><h3 className="text-xs uppercase font-bold text-luxury-gold tracking-widest">FILTER REAL ESTATE INVENTORY</h3></div>
-                        <SearchFilterBar {...filterState} listings={listings} />
-                    </section>
+                    
 
                     {/* Featured Grid Layout */}
                     <section className="py-6 px-6 lg:px-16 max-w-7xl mx-auto">
@@ -707,7 +1084,7 @@
             const [floorPlanZoom, setFloorPlanZoom] = React.useState(1);
             React.useEffect(()=>{ setActiveFloorPlan(0); setFloorPlanOpen(false); setFloorPlanZoom(1); }, [activeConfig.configuration]);
             const similarProjects=listings.filter(x=>x.id!==p.id&&x.published!==false&&(x.subLocality===p.subLocality||x.configuration===p.configuration)).slice(0,4);
-            const recentProjects=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").map(id=>listings.find(x=>x.id===id)).filter(x=>x&&x.id!==p.id).slice(0,4);
+            const recentProjects=JSON.parse(localStorage.getItem("tp_recent_projects")||"[]").map(id=>listings.find(x=>String(x.id)===String(id))).filter(x=>x&&x.id!==p.id).slice(0,4);
             React.useEffect(() => {
                 window.scrollTo(0,0);
                 document.title = `${p.title} in ${p.subLocality} | Price, Floor Plan & Site Visit | TruePillar Realty`;
@@ -747,7 +1124,7 @@
                     <div className="flex justify-between gap-4"><button onClick={onBack} className="text-xs text-neutral-400 hover:text-luxury-gold">← Back to Properties</button><button onClick={share} className="border border-luxury-gold text-luxury-gold px-4 py-2 rounded text-xs font-bold uppercase">Share Project Link</button></div>
                     <section className="grid grid-cols-1 lg:grid-cols-5 gap-8">
                         <div className="lg:col-span-3 space-y-3">
-                            <div className="relative h-[320px] md:h-[480px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900">
+                            <div className="tp-v20-detail-image relative h-[320px] md:h-[480px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900">
                                 {p.images[activeImage] ? <img src={p.images[activeImage]} onClick={()=>setFullImageOpen(true)} className="w-full h-full object-cover cursor-zoom-in" title="Click to view full image" /> : <div className="w-full h-full flex items-center justify-center text-neutral-600">No project image uploaded</div>}{p.images[activeImage] && <MediaWatermark />}
                                 {p.images.length > 1 && <>
                                     <button type="button" onClick={()=>setActiveImage(i=>(i-1+p.images.length)%p.images.length)} className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 text-white text-2xl hover:bg-luxury-gold hover:text-black">‹</button>
@@ -755,7 +1132,7 @@
                                     <div className="absolute bottom-4 right-4 bg-black/70 px-3 py-1 rounded-full text-xs">{activeImage+1} / {p.images.length}</div>
                                 </>}
                             </div>
-                            <div className="flex gap-2 overflow-x-auto">{p.images.map((img,i)=><button key={i} onClick={()=>setActiveImage(i)} className={`min-w-[90px] h-20 rounded overflow-hidden border ${i===activeImage?'border-luxury-gold':'border-neutral-800'}`}><img src={img} className="w-full h-full object-cover"/></button>)}</div>
+                            <div className="flex gap-2 overflow-x-auto">{p.images.map((img,i)=><button key={i} onClick={()=>setActiveImage(i)} className={`min-w-[90px] h-20 rounded overflow-hidden border ${i===activeImage?'border-luxury-gold':'border-neutral-800'}`}><img src={img} className="tp-v20-detail-image w-full h-full object-cover"/></button>)}</div>
                         </div>
                         <div className="lg:col-span-2 bg-luxury-card border border-neutral-800 rounded-2xl p-6 h-fit space-y-5">
                             <div><span className="text-[10px] uppercase tracking-widest text-luxury-gold font-bold">{p.status}</span><h1 className="text-3xl font-semibold mt-2">{p.title}</h1><p className="text-sm text-neutral-400 mt-2">by {p.developer}</p><p className="text-sm text-neutral-400 mt-2">📍 {p.address}</p></div>
@@ -773,13 +1150,11 @@
                             </div>
                             {p.reraNumber && <div className="text-xs text-neutral-400">MahaRERA: <span className="text-white">{p.reraNumber}</span></div>}
                             <button onClick={()=>onOpenEnquiry(p)} className="w-full bg-luxury-gold text-black py-3 rounded font-bold uppercase text-xs">Book Free Site Visit</button>
-                                <a target="_blank" rel="noreferrer" href={`https://wa.me/917718847841?text=${encodeURIComponent("Hello TruePillar Realty, please send me today's latest price and best available offer for "+p.title+". "+projectLink(p))}`} className="block text-center w-full border border-luxury-gold text-luxury-gold py-3 rounded font-bold uppercase text-xs">Get Today's Best Price</a>
-                                <button type="button" onClick={()=>shareProjectSafe(p)} className="w-full border border-neutral-700 text-neutral-300 py-3 rounded font-bold uppercase text-xs">Share Project</button>
                             <a target="_blank" href={`https://wa.me/917718847841?text=${encodeURIComponent(`Hello TruePillar Realty, please send me complete details for ${p.title}. ${projectLink(p)}`)}`} className="block text-center border border-emerald-700 text-emerald-400 py-3 rounded font-bold uppercase text-xs">WhatsApp for Details</a>
                         </div>
                     </section>
-                    <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div className="lg:col-span-2 space-y-8">
+                    <section className="tp-v20-detail-grid grid grid-cols-1 lg:grid-cols-[1.35fr_.75fr] gap-5">
+                        <div className="space-y-8">
                             <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6">
                                 <h2 className="text-xl font-semibold mb-4">PROJECT OVERVIEW</h2>
                                 <div className={`relative ${overviewExpanded ? "" : "max-h-44 overflow-hidden"}`}>
@@ -865,6 +1240,8 @@
 
         // --- ADMIN / LEAD PANEL VIEW ---
         function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
+            const [spotlightSettings,setSpotlightSettings]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){return {}}});
+            const saveSpotlight=()=>{localStorage.setItem("tp_spotlight_v22",JSON.stringify(spotlightSettings));alert("Spotlight settings saved.");};
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
             const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', configurationsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
             const [isEditing, setIsEditing] = React.useState(false);
@@ -1241,52 +1618,93 @@
                             </div>
                         </div>
                     )}
-                </div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div></div>
             );
         }
 
         function SecureLoginGate({ onLoginSuccess }) {
+            const [mode, setMode] = React.useState("login");
             const [username, setUsername] = React.useState("");
             const [password, setPassword] = React.useState("");
-            const [error, setError] = React.useState(false);
+            const [currentPassword, setCurrentPassword] = React.useState("");
+            const [newPassword, setNewPassword] = React.useState("");
+            const [confirmPassword, setConfirmPassword] = React.useState("");
+            const [recoveryEmail, setRecoveryEmail] = React.useState("");
+            const [error, setError] = React.useState("");
+            const [success, setSuccess] = React.useState("");
+            const savedPassword = () => localStorage.getItem("tp_agent_password") || "truepillar2026";
 
             const executeAuthChallenge = (e) => {
-                e.preventDefault();
-                if (username === "admin" && password === "truepillar2026") {
-                    setError(false);
-                    onLoginSuccess();
-                } else {
-                    setError(true);
-                }
+                e.preventDefault(); setError(""); setSuccess("");
+                if (username === "admin" && password === savedPassword()) onLoginSuccess();
+                else setError("Invalid username or password.");
+            };
+            const changePassword = (e) => {
+                e.preventDefault(); setError(""); setSuccess("");
+                if (currentPassword !== savedPassword()) return setError("Current password is incorrect.");
+                if (newPassword.length < 6) return setError("New password must be at least 6 characters.");
+                if (newPassword !== confirmPassword) return setError("New passwords do not match.");
+                localStorage.setItem("tp_agent_password", newPassword);
+                setSuccess("Password changed successfully. You can now log in.");
+                setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); setMode("login");
+            };
+            const forgotPassword = (e) => {
+                e.preventDefault(); setError(""); setSuccess("");
+                if (recoveryEmail.trim().toLowerCase() !== "truepillarrealty@gmail.com") return setError("Enter the registered recovery email.");
+                localStorage.setItem("tp_agent_password", "truepillar2026");
+                setSuccess("Password reset to the default password: truepillar2026. Log in and use Change Password immediately.");
+                setRecoveryEmail(""); setMode("login");
             };
 
             return (
                 <div className="py-24 px-6 flex items-center justify-center">
                     <div className="bg-luxury-card border border-neutral-800 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
-                        <div className="text-center space-y-1">
-                            <h2 className="text-xl font-bold tracking-widest text-white uppercase">AGENT ACCESS PORTAL</h2>
-                            <p className="text-xs text-luxury-textMuted font-light">Enter credentials to review site bookings and buyer requests.</p>
-                        </div>
-                        {error && (
-                            <div className="bg-red-950/40 border border-red-900 text-red-400 text-xs p-3 rounded text-center font-medium tracking-wide">Invalid Password or Username Key.</div>
-                        )}
-                        <form onSubmit={executeAuthChallenge} className="space-y-4 text-xs text-neutral-300">
-                            <div>
-                                <label className="block text-neutral-400 mb-1">Username ID</label>
-                                <input type="text" placeholder="admin" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={username} onChange={e => setUsername(e.target.value)} required />
-                            </div>
-                            <div>
-                                <label className="block text-neutral-400 mb-1">Password Key Token</label>
-                                <input type="password" placeholder="••••••••" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={password} onChange={e => setPassword(e.target.value)} required />
-                            </div>
+                        <div className="text-center space-y-1"><h2 className="text-xl font-bold tracking-widest text-white uppercase">AGENT ACCESS PORTAL</h2><p className="text-xs text-luxury-textMuted font-light">Secure access to listings, bookings and buyer requests.</p></div>
+                        {error && <div className="bg-red-950/40 border border-red-900 text-red-400 text-xs p-3 rounded text-center">{error}</div>}
+                        {success && <div className="bg-emerald-950/40 border border-emerald-800 text-emerald-400 text-xs p-3 rounded text-center">{success}</div>}
+                        {mode === "login" && <form onSubmit={executeAuthChallenge} className="space-y-4 text-xs text-neutral-300">
+                            <div><label className="block text-neutral-400 mb-1">Username ID</label><input type="text" placeholder="admin" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={username} onChange={e=>setUsername(e.target.value)} required /></div>
+                            <div><label className="block text-neutral-400 mb-1">Password</label><input type="password" placeholder="••••••••" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={password} onChange={e=>setPassword(e.target.value)} required /></div>
                             <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3.5 font-bold uppercase tracking-widest transition rounded shadow-lg">Login to CRM Panel</button>
-                        </form>
+                            <div className="flex justify-between gap-3 pt-1"><button type="button" onClick={()=>{setMode("forgot");setError("");setSuccess("")}} className="text-luxury-gold hover:underline">Forgot Password?</button><button type="button" onClick={()=>{setMode("change");setError("");setSuccess("")}} className="text-luxury-gold hover:underline">Change Password</button></div>
+                        </form>}
+                        {mode === "change" && <form onSubmit={changePassword} className="space-y-4 text-xs text-neutral-300">
+                            <div><label className="block text-neutral-400 mb-1">Current Password</label><input type="password" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} required /></div>
+                            <div><label className="block text-neutral-400 mb-1">New Password</label><input type="password" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={newPassword} onChange={e=>setNewPassword(e.target.value)} required /></div>
+                            <div><label className="block text-neutral-400 mb-1">Confirm New Password</label><input type="password" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} required /></div>
+                            <button type="submit" className="w-full bg-luxury-gold text-black py-3.5 font-bold uppercase rounded">Update Password</button><button type="button" onClick={()=>{setMode("login");setError("")}} className="w-full text-neutral-400 hover:text-white">← Back to Login</button>
+                        </form>}
+                        {mode === "forgot" && <form onSubmit={forgotPassword} className="space-y-4 text-xs text-neutral-300">
+                            <p className="text-neutral-400 leading-5">Enter the registered recovery email to reset access.</p>
+                            <div><label className="block text-neutral-400 mb-1">Recovery Email</label><input type="email" placeholder="Registered email" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold outline-none" value={recoveryEmail} onChange={e=>setRecoveryEmail(e.target.value)} required /></div>
+                            <button type="submit" className="w-full bg-luxury-gold text-black py-3.5 font-bold uppercase rounded">Reset Password</button><button type="button" onClick={()=>{setMode("login");setError("")}} className="w-full text-neutral-400 hover:text-white">← Back to Login</button>
+                        </form>}
                     </div>
                 </div>
             );
         }
 
         // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
+        
+        function TopSpotlight({ listings=[], onOpenProject, onOpenEnquiry }) {
+            let settings={}; try{settings=JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){}
+            const ids=Array.isArray(settings.projectIds)?settings.projectIds.slice(0,5).filter(Boolean):[];
+            const chosen=ids.map(id=>listings.find(x=>String(x.id)===String(id))).filter(Boolean); const pool=chosen.length?chosen:listings.filter(x=>x.published!==false).slice(0,5);
+            const [slide,setSlide]=React.useState(0);
+            React.useEffect(()=>{if(pool.length<2)return;const timer=setInterval(()=>setSlide(x=>(x+1)%pool.length),15000);return()=>clearInterval(timer)},[pool.length]);
+            if(!pool.length)return null;
+            const project=pool[slide%pool.length], configs=projectConfigurations(project);
+            const video=((configs.find(c=>(c.sampleVideoLinks||[]).length)?.sampleVideoLinks)||[])[0]||(project.sampleVideoLinks||[])[0]||"";
+            const image=(project.images||[])[0]||project.image||"";
+            const price=settings.startingPrice||project.price||project.startingPrice||"";
+            return <section className="max-w-7xl mx-auto px-6 pt-4 pb-2"><div className="tp-v20-spotlight rounded-2xl overflow-hidden grid lg:grid-cols-[1.15fr_.85fr]">
+                <button type="button" className="tp-v31-spot-arrow tp-v31-prev" aria-label="Previous spotlight project" onClick={()=>setSlide((i)=>(i-1+pool.length)%pool.length)}>‹</button>
+                <button type="button" className="tp-v31-spot-arrow tp-v31-next" aria-label="Next spotlight project" onClick={()=>setSlide((i)=>(i+1)%pool.length)}>›</button>
+              <div className="tp-v20-spotlight-media min-h-[270px] relative">{image&&<img src={image} className="absolute inset-0 w-full h-full object-cover opacity-70"/>}<div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/15 to-black/90"></div><div className="absolute left-7 bottom-7 right-7"><div className="text-luxury-gold text-[10px] font-bold tracking-[.22em]">FEATURED SPOTLIGHT {pool.length>1?`${slide+1}/${pool.length}`:""}</div><h2 className="text-3xl font-black mt-2">{project.title}</h2><p className="text-sm text-gray-300 mt-2">{project.subLocality||project.locality||project.region||""}</p>{price&&<div className="text-luxury-gold text-xl font-black mt-3">Starting from {price}</div>}</div></div>
+              <div className="p-7 md:p-9 flex flex-col justify-center"><div className="text-luxury-gold text-[10px] font-bold tracking-[.22em]">PROJECT • VIDEO • OFFER</div><h3 className="text-2xl font-black mt-2">{settings.heading||"THIS WEEK'S PROPERTY SPOTLIGHT"}</h3><p className="text-sm text-gray-300 leading-6 mt-3">{settings.offerText||"Get the latest developer offer, verified inventory and priority site-visit assistance."}</p><p className="text-xs text-gray-400 leading-5 mt-3">{settings.benefits||"Zero brokerage • Verified pricing • Loan assistance • Pickup & drop for site visit"}</p><div className="grid sm:grid-cols-2 gap-3 mt-5"><button onClick={()=>onOpenProject(project)} className="bg-luxury-gold text-black font-bold py-3 rounded">VIEW PROJECT</button>{video&&<a href={video} target="_blank" rel="noopener noreferrer" className="border border-luxury-gold text-luxury-gold font-bold py-3 rounded text-center">▶ WATCH VIDEO</a>}<button onClick={()=>onOpenEnquiry(project)} className="sm:col-span-2 border border-white/20 py-3 rounded font-bold">GET LATEST OFFER / SCHEDULE VISIT</button></div>{pool.length>1&&<div className="flex gap-2 mt-5">{pool.map((_,i)=><button key={i} onClick={()=>setSlide(i)} className={`h-2 rounded-full ${i===slide?"w-7 bg-luxury-gold":"w-2 bg-white/30"}`}></button>)}</div>}</div>
+            </div></section>;
+        }
+
         function App() {
             const [view, setView] = React.useState('home');
             const [activeProject, setActiveProject] = React.useState(null);
@@ -1496,7 +1914,7 @@
                                 <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6 space-y-4 font-medium text-sm">
                                     <div>📍 Main Office Location: <span className="text-neutral-400 font-light block mt-0.5">Kharghar, Navi Mumbai, Maharashtra</span></div>
                                     <div>📞 Central Support Helpline: <span className="text-luxury-gold block mt-0.5">+91 7718847841</span></div>
-                                    <div>✉️ Business Email Address: <span className="text-luxury-gold font-mono block mt-0.5">sales@truepillar.in • salaj.jha@truepillar.in</span></div>
+                                    <div>✉️ Business Email Address: <span className="text-luxury-gold font-mono block mt-0.5">truepillarrealty@gmail.com • salaj.jha@truepillar.in</span></div>
                                 </div>
                             </div>
                         )}
@@ -1556,5 +1974,39 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+
+<script>
+document.addEventListener("click",function(e){
+ const trigger=e.target.closest("[data-tp-visit-trigger]");
+ if(trigger){
+   const panel=trigger.closest(".tp-v20-visit-panel");
+   if(panel){panel.classList.add("tp-v20-open");setTimeout(()=>panel.querySelector("input")?.focus(),50);}
+ }
+ const close=e.target.closest("[data-tp-visit-close]");
+ if(close){close.closest(".tp-v20-visit-panel")?.classList.remove("tp-v20-open");}
+});
+function tpV20CollapseVisit(){
+ const headings=[...document.querySelectorAll("h1,h2,h3")];
+ const heading=headings.find(x=>x.textContent.trim().toUpperCase().includes("BOOK A FREE SITE VISIT"));
+ if(!heading)return;
+ const panel=heading.closest("form")?.parentElement || heading.parentElement;
+ if(!panel || panel.classList.contains("tp-v20-visit-panel"))return;
+ panel.classList.add("tp-v20-visit-panel");
+ const children=[...panel.children];
+ children.forEach(el=>el.classList.add("tp-v20-visit-form"));
+ const btn=document.createElement("button");
+ btn.type="button";btn.setAttribute("data-tp-visit-trigger","");
+ btn.className="tp-v20-visit-trigger w-full bg-luxury-gold text-black font-bold py-4 px-6 rounded";
+ btn.textContent="SCHEDULE FREE SITE VISIT";
+ panel.insertBefore(btn,panel.firstChild);
+ const close=document.createElement("button");
+ close.type="button";close.setAttribute("data-tp-visit-close","");
+ close.className="tp-v20-visit-form w-full mt-2 border border-white/20 py-2 rounded text-xs";
+ close.textContent="CLOSE FORM";
+ panel.appendChild(close);
+}
+setTimeout(tpV20CollapseVisit,250);
+</script>
+
 </body>
 </html>
