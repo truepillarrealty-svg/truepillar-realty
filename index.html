@@ -18,6 +18,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -78,6 +82,44 @@
     <div id="root"></div>
 
     <script type="text/babel">
+        // --- FIREBASE CLOUD DATABASE + STORAGE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYGSK5KtmV-zK3ivYa3__4jI37sGm4NRA",
+            authDomain: "truepillar-realty.firebaseapp.com",
+            projectId: "truepillar-realty",
+            storageBucket: "truepillar-realty.firebasestorage.app",
+            messagingSenderId: "523826570330",
+            appId: "1:523826570330:web:b036d66d0fd9a7dc1ae463"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // Project media uploads use Cloudinary; Firestore remains the database.
+        const auth = firebase.auth();
+        const projectsCollection = db.collection("projects");
+        const leadsCollection = db.collection("leads");
+        const legacyCloudDoc = db.collection("appData").doc("truepillar");
+
+        const cleanForFirestore = (value) => JSON.parse(JSON.stringify(value, (key, val) => val === undefined ? null : val));
+
+        const CLOUDINARY_CLOUD_NAME = "he2l7oy3";
+        const CLOUDINARY_UPLOAD_PRESET = "truepillar_upload";
+
+        const uploadProjectFile = async (file, folder) => {
+            const resourceType = file.type.startsWith("video/") ? "video" : "auto";
+            const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+            const response = await fetch(endpoint, { method: "POST", body: formData });
+            const result = await response.json();
+
+            if (!response.ok || !result.secure_url) {
+                throw new Error(result.error?.message || "Cloudinary upload failed");
+            }
+            return result.secure_url;
+        };
+
         // --- CONSTANTS & GEOGRAPHICAL DATA MATRIX ---
         const REGIONS = {
             "Navi Mumbai": ["Kharghar", "Seawoods", "Nerul", "Vashi", "Sanpada", "Panvel", "Taloja", "Ulwe"],
@@ -109,7 +151,10 @@
         // --- PROJECT PAGE HELPERS ---
         const slugify = (text = "") => text.toLowerCase().trim().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
+        const IS_LOCAL_FILE = window.location.protocol === "file:";
+
         const getRouteFromPath = () => {
+            if (IS_LOCAL_FILE) return { type: "view", view: "home" };
             const path = window.location.pathname.replace(/\/+$/, "") || "/";
             if (path === "/") return { type: "view", view: "home" };
             if (path === "/properties") return { type: "view", view: "properties" };
@@ -746,23 +791,52 @@
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
             const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
             const [isEditing, setIsEditing] = React.useState(false);
+            const [uploadStatus, setUploadStatus] = React.useState("");
+            const [isUploading, setIsUploading] = React.useState(false);
 
-            const handleImageUpload = (e) => {
-                const files = Array.from(e.target.files || []);
+            const handleImageUpload = async (e) => {
+                const input = e.target;
+                const files = Array.from(input.files || []);
+                if (!files.length) return;
 
-                files.forEach(file => {
-                    const reader = new FileReader();
+                const invalid = files.find(file => !file.type.startsWith("image/"));
+                if (invalid) {
+                    alert("Please select image files only.");
+                    input.value = "";
+                    return;
+                }
 
-                    reader.onload = (ev) => {
-                        setFormData(prev => ({
+                setIsUploading(true);
+                setUploadStatus(`Uploading 0 of ${files.length} images...`);
+
+                try {
+                    const uploadedUrls = [];
+                    for (let i = 0; i < files.length; i++) {
+                        setUploadStatus(`Uploading ${i + 1} of ${files.length}: ${files[i].name}`);
+                        const url = await uploadProjectFile(files[i], "project-images");
+                        uploadedUrls.push(url);
+                    }
+
+                    setFormData(prev => {
+                        const currentImages = Array.isArray(prev.images) ? prev.images.filter(x => typeof x === "string" && x.startsWith("http")) : [];
+                        const mergedImages = [...currentImages, ...uploadedUrls];
+                        return {
                             ...prev,
-                            images: [...(prev.images || []), ev.target.result],
-                            image: ev.target.result
-                        }));
-                    };
+                            images: mergedImages,
+                            image: mergedImages[0] || prev.image || STOCK_IMAGES[0]
+                        };
+                    });
 
-                    reader.readAsDataURL(file);
-                });
+                    setUploadStatus(`✓ ${uploadedUrls.length} image${uploadedUrls.length === 1 ? "" : "s"} uploaded successfully. Now click ${isEditing ? "SAVE REVISIONS" : "ADD PROPERTY"}.`);
+                } catch(err) {
+                    console.error("Firebase Storage upload error:", err);
+                    const code = err && err.code ? ` (${err.code})` : "";
+                    setUploadStatus(`Upload failed${code}.`);
+                    alert(`Image upload failed${code}. Firebase Storage must be enabled and its Storage Rules must allow the logged-in admin to upload.`);
+                } finally {
+                    setIsUploading(false);
+                    input.value = "";
+                }
             };
 
             const removeImage = (index) => {
@@ -778,8 +852,8 @@
             };
 
 
-            const handleVideoUpload = (e) => Array.from(e.target.files || []).forEach(file => { if (file.size > 8 * 1024 * 1024) { alert("For this single-file website, please keep each video under 8 MB. Larger videos should use a hosted video link."); return; } const r=new FileReader(); r.onload=ev=>setFormData(prev=>({...prev,videos:[...(prev.videos||[]),ev.target.result]})); r.readAsDataURL(file); });
-            const handlePdfUpload = (e) => Array.from(e.target.files || []).forEach(file => { if (file.size > 4 * 1024 * 1024) { alert("Please keep each PDF under 4 MB for browser storage."); return; } const r=new FileReader(); r.onload=ev=>setFormData(prev=>({...prev,pdfs:[...(prev.pdfs||[]),{name:file.name,url:ev.target.result}]})); r.readAsDataURL(file); });
+            const handleVideoUpload = async (e) => { for (const file of Array.from(e.target.files || [])) { try { const url=await uploadProjectFile(file,"project-videos"); setFormData(prev=>({...prev,videos:[...(prev.videos||[]),url]})); } catch(err){ console.error(err); alert("Video upload failed. Check Firebase Storage setup/rules."); } } e.target.value=""; };
+            const handlePdfUpload = async (e) => { for (const file of Array.from(e.target.files || [])) { try { const url=await uploadProjectFile(file,"project-pdfs"); setFormData(prev=>({...prev,pdfs:[...(prev.pdfs||[]),{name:file.name,url}]})); } catch(err){ console.error(err); alert("PDF upload failed. Check Firebase Storage setup/rules."); } } e.target.value=""; };
 
             const handleAssetSubmit = (e) => {
                 e.preventDefault();
@@ -953,7 +1027,7 @@
         <input id="fp-area" placeholder="Carpet Area e.g. 750 sq.ft" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
         <input id="fp-price" placeholder="Price e.g. ₹1.32 Cr" className="bg-luxury-bg border border-neutral-800 p-3 rounded text-white text-sm"/>
     </div>
-    <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.target.files&&e.target.files[0];if(!file)return;if(file.size>2*1024*1024){alert("Please keep each floor plan image under 2 MB.");return;}const r=new FileReader();r.onload=()=>{const label=document.getElementById("fp-label").value.trim();const area=document.getElementById("fp-area").value.trim();const price=document.getElementById("fp-price").value.trim();if(!label){alert("Enter configuration first.");return;}setFormData({...formData,floorPlans:[...(formData.floorPlans||[]),{label,area,price,image:r.result}]});document.getElementById("fp-label").value="";document.getElementById("fp-area").value="";document.getElementById("fp-price").value="";e.target.value="";};r.readAsDataURL(file);}} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white"/>
+    <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.target.files&&e.target.files[0];if(!file)return;if(file.size>2*1024*1024){alert("Please keep each floor plan image under 2 MB.");return;}const label=document.getElementById("fp-label").value.trim();const area=document.getElementById("fp-area").value.trim();const price=document.getElementById("fp-price").value.trim();if(!label){alert("Enter configuration first.");return;}uploadProjectFile(file,"floor-plans").then(url=>{setFormData(prev=>({...prev,floorPlans:[...(prev.floorPlans||[]),{label,area,price,image:url}]}));document.getElementById("fp-label").value="";document.getElementById("fp-area").value="";document.getElementById("fp-price").value="";e.target.value="";}).catch(err=>{console.error(err);alert("Floor plan upload failed. Check Firebase Storage setup/rules.");});}} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white"/>
     <div className="space-y-2">{(formData.floorPlans||[]).map((plan,i)=><div key={i} className="flex items-center gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded"><img src={plan.image} className="w-16 h-16 object-contain bg-white rounded"/><div className="flex-1 text-xs"><b className="block text-white">{plan.label}</b><span className="text-neutral-500">{plan.area} {plan.price&&`• ${plan.price}`}</span></div><button type="button" onClick={()=>setFormData({...formData,floorPlans:formData.floorPlans.filter((_,x)=>x!==i)})} className="text-red-400 text-xs">Remove</button></div>)}</div>
     <p className="text-[10px] text-neutral-500">Enter details, then choose the floor-plan image from your device.</p>
 </div>
@@ -976,7 +1050,8 @@
 </div>
 <div className="space-y-3">
     <label className="block text-neutral-400 mb-1">Upload Multiple Project Images</label>
-    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
+    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} disabled={isUploading} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white disabled:opacity-50" />
+    {uploadStatus && <div className={`text-xs p-3 rounded border ${uploadStatus.startsWith("✓") ? "text-emerald-400 border-emerald-800 bg-emerald-950/30" : uploadStatus.startsWith("Upload failed") ? "text-red-400 border-red-800 bg-red-950/30" : "text-luxury-gold border-luxury-gold/30 bg-luxury-gold/5"}`}>{uploadStatus}</div>}
     <div className="flex flex-wrap gap-2">
         {(formData.images || []).map((img, index) => (
             <div key={index} className="relative">
@@ -1014,7 +1089,7 @@
     </div>
 </div>
 
-<button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black py-3 font-bold uppercase tracking-wider transition rounded shadow-lg mt-2">{isEditing ? 'Save Revisions' : 'Publish New Flat Listing'}</button>
+<button type="submit" disabled={isUploading} className="w-full bg-luxury-gold hover:bg-luxury-goldHover disabled:opacity-50 disabled:cursor-not-allowed text-black py-3 font-bold uppercase tracking-wider transition rounded shadow-lg mt-2">{isUploading ? "WAIT — UPLOADING FILES..." : (isEditing ? 'Save Revisions' : 'Publish New Flat Listing')}</button>
 
                                 </form>
                             </div>
@@ -1094,31 +1169,76 @@
             const [activeProject, setActiveProject] = React.useState(null);
             const [isAuthenticated, setIsAuthenticated] = React.useState(false);
             
-            const [listings, setListings] = React.useState(() => {
-                const local = localStorage.getItem('tp_listings_v3');
-                return (local ? JSON.parse(local) : compileInitialListings()).map(normalizeProject);
-            });
-            const [leads, setLeads] = React.useState(() => {
-                const local = localStorage.getItem('tp_leads_v3');
-                return local ? JSON.parse(local) : [];
-            });
+            const [listings, setListings] = React.useState([]);
+            const [leads, setLeads] = React.useState([]);
+            const [cloudReady, setCloudReady] = React.useState(false);
 
             const [search, setSearch] = React.useState("");
             const [selectedRegion, setSelectedRegion] = React.useState("");
             const [selectedSubLocality, setSelectedSubLocality] = React.useState("");
             const [selectedConfig, setSelectedConfig] = React.useState("");
             const [selectedStatus, setSelectedStatus] = React.useState("");
-
             const [activeEnquiryTarget, setActiveEnquiryTarget] = React.useState(null);
 
+            React.useEffect(() => {
+                let projectsLoaded = false;
+                let leadsLoaded = false;
+
+                const markReady = () => {
+                    if (projectsLoaded && leadsLoaded) setCloudReady(true);
+                };
+
+                const unsubscribeProjects = projectsCollection.onSnapshot(async snap => {
+                    if (snap.empty && !projectsLoaded) {
+                        try {
+                            const legacy = await legacyCloudDoc.get();
+                            const legacyListings = legacy.exists ? (legacy.data().listings || []) : [];
+                            if (legacyListings.length) {
+                                const batch = db.batch();
+                                legacyListings.forEach(item => {
+                                    const normalized = normalizeProject(item);
+                                    batch.set(projectsCollection.doc(String(normalized.id)), cleanForFirestore(normalized));
+                                });
+                                await batch.commit();
+                                return;
+                            }
+                        } catch (migrationError) {
+                            console.error("Legacy migration failed", migrationError);
+                        }
+                    }
+
+                    setListings(snap.docs.map(doc => normalizeProject({ ...doc.data(), id: doc.data().id || doc.id })));
+                    projectsLoaded = true;
+                    markReady();
+                }, err => {
+                    console.error("Project sync error", err);
+                    alert("Project cloud sync failed. Check Firestore rules.");
+                });
+
+                const unsubscribeLeads = leadsCollection.orderBy("createdAt", "desc").onSnapshot(snap => {
+                    setLeads(snap.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id })));
+                    leadsLoaded = true;
+                    markReady();
+                }, err => {
+                    console.error("Lead sync error", err);
+                    leadsLoaded = true;
+                    markReady();
+                });
+
+                return () => {
+                    unsubscribeProjects();
+                    unsubscribeLeads();
+                };
+            }, []);
 
             React.useEffect(() => {
+                if (IS_LOCAL_FILE) return;
                 const applyRoute = () => {
                     const route = getRouteFromPath();
                     if (route.type === "project") {
                         const found = listings.find(p => (p.slug || slugify(p.title)) === route.slug);
                         if (found) { setActiveProject(normalizeProject(found)); setView("project"); }
-                        else { setActiveProject(null); setView("properties"); }
+                        else if (cloudReady) { setActiveProject(null); setView("properties"); }
                     } else {
                         setActiveProject(null);
                         setView(route.view);
@@ -1127,34 +1247,52 @@
                 applyRoute();
                 window.addEventListener("popstate", applyRoute);
                 return () => window.removeEventListener("popstate", applyRoute);
-            }, [listings]);
+            }, [listings, cloudReady]);
 
             const navigateView = (nextView) => {
                 const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", admin: "/admin" };
                 setActiveProject(null);
                 setView(nextView);
-                window.history.pushState({ view: nextView }, "", paths[nextView] || "/");
+                if (!IS_LOCAL_FILE) window.history.pushState({ view: nextView }, "", paths[nextView] || "/");
                 window.scrollTo(0, 0);
             };
+
             const openProject = p => {
                 const n = normalizeProject(p);
                 setActiveProject(n);
                 setView("project");
-                navigateToProjectUrl(n);
-                window.scrollTo(0, 0);
-            };
-            const closeProject = () => {
-                setActiveProject(null);
-                setView("properties");
-                window.history.pushState({ view: "properties" }, "", "/properties");
+                if (!IS_LOCAL_FILE) navigateToProjectUrl(n);
                 window.scrollTo(0, 0);
             };
 
-            React.useEffect(() => {
-                try { localStorage.setItem('tp_listings_v3', JSON.stringify(listings)); }
-                catch (e) { console.warn('Project media is too large for browser storage.', e); }
-            }, [listings]);
-            React.useEffect(() => { localStorage.setItem('tp_leads_v3', JSON.stringify(leads)); }, [leads]);
+            const closeProject = () => {
+                setActiveProject(null);
+                setView("properties");
+                if (!IS_LOCAL_FILE) window.history.pushState({ view: "properties" }, "", "/properties");
+                window.scrollTo(0, 0);
+            };
+
+            const saveProject = async (project) => {
+                const normalized = normalizeProject(project);
+                await projectsCollection.doc(String(normalized.id)).set(cleanForFirestore(normalized), { merge: false });
+            };
+
+            const deleteProject = async (id) => {
+                await projectsCollection.doc(String(id)).delete();
+            };
+
+            const saveLead = async (lead) => {
+                const payload = cleanForFirestore({ ...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await leadsCollection.doc(String(lead.id)).set(payload);
+            };
+
+            const deleteLead = async (id) => {
+                await leadsCollection.doc(String(id)).delete();
+            };
+
+            const updateLeadStatus = async (id, status) => {
+                await leadsCollection.doc(String(id)).update({ status });
+            };
 
             const matchingFilteredListings = React.useMemo(() => {
                 return listings.filter((item) => {
@@ -1173,6 +1311,7 @@
             return (
                 <div className="bg-luxury-bg text-white min-h-screen flex flex-col justify-between">
                     <Navbar currentView={view} setView={navigateView} />
+                    {!cloudReady && <div className="fixed top-20 right-4 z-[999] bg-luxury-card border border-luxury-gold text-luxury-gold px-4 py-2 rounded-lg text-xs font-bold shadow-xl">CONNECTING TO CLOUD...</div>}
                     
                     <main className="flex-grow pb-16">
                         {view === 'home' && (
@@ -1182,7 +1321,7 @@
                                 onOpenEnquiry={setActiveEnquiryTarget}
                                 onOpenProject={openProject}
                                 filterState={filterPack} 
-                                onSubmitHomeLead={(newL) => setLeads([newL, ...leads])}
+                                onSubmitHomeLead={saveLead}
                             />
                         )}
                         {view === 'properties' && (
@@ -1244,11 +1383,11 @@
                                 <AdminDashboard 
                                     listings={listings}
                                     leads={leads}
-                                    onAdd={(newAsset) => setListings([newAsset, ...listings])}
-                                    onDelete={(id) => setListings(listings.filter(i => i.id !== id))}
-                                    onEdit={(updatedAsset) => setListings(listings.map(i => i.id === updatedAsset.id ? updatedAsset : i))}
-                                    onDeleteLead={(id) => setLeads(leads.filter(l => l.id !== id))}
-                                    onUpdateLeadStatus={(id, status) => setLeads(leads.map(l => l.id === id ? { ...l, status } : l))}
+                                    onAdd={saveProject}
+                                    onDelete={deleteProject}
+                                    onEdit={saveProject}
+                                    onDeleteLead={deleteLead}
+                                    onUpdateLeadStatus={updateLeadStatus}
                                     onLogout={() => setIsAuthenticated(false)}
                                 />
                             )
@@ -1283,7 +1422,7 @@
                         <EnquiryModal 
                             property={activeEnquiryTarget} 
                             onClose={() => setActiveEnquiryTarget(null)} 
-                            onSubmitLead={(newLead) => setLeads([newLead, ...leads])}
+                            onSubmitLead={saveLead}
                         />
                     )}
                 </div>
