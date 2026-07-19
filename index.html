@@ -468,6 +468,18 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 }
 @media(max-width:560px){.tp-v23-housing-filter{grid-template-columns:1fr!important}.tp-v23-housing-filter > div:first-child{grid-column:auto!important}}
 </style>
+
+
+<style id="tp-v38-admin-selects">
+.tp-v38-select{position:relative;width:100%}
+.tp-v38-select-button{width:100%;min-height:44px;background:#07080a;border:1px solid #262a31;border-radius:6px;color:#fff;padding:0 38px 0 12px;text-align:left;font-size:12px;line-height:1.2;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:border-color .18s ease,box-shadow .18s ease}
+.tp-v38-select-button:hover,.tp-v38-select-button:focus{outline:none;border-color:#d4af37;box-shadow:0 0 0 2px rgba(212,175,55,.12)}
+.tp-v38-select-button:after{content:"⌄";position:absolute;right:13px;color:#f0c94b;font-size:14px;pointer-events:none}
+.tp-v38-select-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:3000;max-height:220px;overflow:auto;background:#050507;border:1px solid #d4af37;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.7);padding:5px}
+.tp-v38-select-option{width:100%;display:block;text-align:left;border:0;background:transparent;color:#f8fafc;padding:10px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.tp-v38-select-option:hover,.tp-v38-select-option.tp-v38-active{background:#d4af37;color:#050505;font-weight:800}
+.tp-v38-select-option:focus{outline:1px solid rgba(212,175,55,.8);outline-offset:1px}
+</style>
 </head>
 <body>
     <div id="root"></div>
@@ -537,6 +549,44 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch"];
         const COMPANY_MAHARERA = "A031272401680";
         const AMENITIES_POOL = ["Premium Clubhouse", "Infinity Swimming Pool", "Modern Gymnasium", "24/7 Multi-tier Security", "High-Speed Elevators", "Grand Entrance Lobby", "Ample Car Parking", "Landscaped Gardens", "Kids Play Area", "100% Power Backup"];
+
+
+        function AdminSelect({ value, options, onChange, className = "", ariaLabel }) {
+            const [open, setOpen] = React.useState(false);
+            const rootRef = React.useRef(null);
+            React.useEffect(() => {
+                if (!open) return;
+                const handlePointer = (event) => {
+                    if (rootRef.current && !rootRef.current.contains(event.target)) setOpen(false);
+                };
+                document.addEventListener("mousedown", handlePointer);
+                return () => document.removeEventListener("mousedown", handlePointer);
+            }, [open]);
+            const selected = options.includes(value) ? value : (options[0] || "");
+            return (
+                <div ref={rootRef} className={`tp-v38-select ${className}`}>
+                    <button type="button" className="tp-v38-select-button" aria-label={ariaLabel} aria-expanded={open} onClick={() => setOpen(x => !x)}>
+                        <span>{selected}</span>
+                    </button>
+                    {open && (
+                        <div className="tp-v38-select-menu" role="listbox">
+                            {options.map(option => (
+                                <button
+                                    type="button"
+                                    key={option}
+                                    role="option"
+                                    aria-selected={option === selected}
+                                    className={`tp-v38-select-option ${option === selected ? "tp-v38-active" : ""}`}
+                                    onClick={() => { onChange(option); setOpen(false); }}
+                                >
+                                    {option}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
 
         const TITLE_PREFIXES = ["The Grand", "Elysian", "Pinnacle", "Aura", "Regency", "Signature", "Golden", "Skyline", "Emerald", "Marquis", "Palazzo", "Imperial", "Sapphire", "Royal", "Oasis", "Vista", "Serene", "Meridian"];
         const TITLE_SUFFIXES = ["Residences", "Towers", "Estates", "Heights", "Manor", "Crest", "Villas", "Gardens", "Gre Greens", "Bay", "Terraces", "Enclave", "Palace", "Courtyard"];
@@ -1428,29 +1478,21 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="block text-neutral-400 mb-1">City / Region</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.region} onChange={e => setFormData({...formData, region: e.target.value, subLocality: REGIONS[e.target.value][0]})}>
-                                                {Object.keys(REGIONS).map(r => <option key={r} value={r}>{r}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="City / Region" value={formData.region} options={Object.keys(REGIONS)} onChange={region => setFormData({...formData, region, subLocality: REGIONS[region][0]})} />
                                         </div>
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Locality Node</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.subLocality} onChange={e => setFormData({...formData, subLocality: e.target.value})}>
-                                                {REGIONS[formData.region].map(sub => <option key={sub} value={sub}>{sub}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="Locality Node" value={formData.subLocality} options={REGIONS[formData.region] || []} onChange={subLocality => setFormData({...formData, subLocality})} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Typology Configuration</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.configuration} onChange={e => setFormData({...formData, configuration: e.target.value})}>
-                                                {CONFIGURATIONS.map(c => <option key={c} value={c}>{c}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="Typology Configuration" value={formData.configuration} options={CONFIGURATIONS} onChange={configuration => setFormData({...formData, configuration})} />
                                         </div>
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Possession State</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
-                                                {DEVELOPMENT_STATUS.map(s => <option key={s} value={s}>{s}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="Possession State" value={formData.status} options={DEVELOPMENT_STATUS} onChange={status => setFormData({...formData, status})} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
