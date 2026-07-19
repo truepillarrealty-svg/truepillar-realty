@@ -1474,11 +1474,35 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="block text-neutral-400 mb-1">City / Region</label>
-                                            <AdminSelect ariaLabel="City / Region" value={formData.region} options={Object.keys(REGIONS)} onChange={region => setFormData({...formData, region, subLocality: REGIONS[region][0]})} />
+                                            <AdminSelect
+                                                ariaLabel="City / Region"
+                                                value={formData.region}
+                                                options={[...new Set([...Object.keys(REGIONS), formData.region].filter(Boolean))]}
+                                                onChange={region => setFormData({...formData, region, subLocality: (REGIONS[region] || [formData.subLocality || ""])[0]})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom city / region"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={Object.keys(REGIONS).includes(formData.region) ? "" : formData.region}
+                                                onChange={e => setFormData({...formData, region: e.target.value, subLocality: ""})}
+                                            />
                                         </div>
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Locality Node</label>
-                                            <AdminSelect ariaLabel="Locality Node" value={formData.subLocality} options={REGIONS[formData.region] || []} onChange={subLocality => setFormData({...formData, subLocality})} />
+                                            <AdminSelect
+                                                ariaLabel="Locality Node"
+                                                value={formData.subLocality}
+                                                options={[...new Set([...(REGIONS[formData.region] || []), formData.subLocality].filter(Boolean))]}
+                                                onChange={subLocality => setFormData({...formData, subLocality})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom locality / node"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={(REGIONS[formData.region] || []).includes(formData.subLocality) ? "" : formData.subLocality}
+                                                onChange={e => setFormData({...formData, subLocality: e.target.value})}
+                                            />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
