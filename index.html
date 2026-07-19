@@ -882,9 +882,17 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 : [];
             const visibleCardAmenities = cardAmenities.slice(0, 4);
             const hiddenAmenityCount = Math.max(0, cardAmenities.length - visibleCardAmenities.length);
-            const activeConfig=getActiveConfiguration(cardProject, selectedConfig);
+            const initialCardConfig = selectedConfig && projectMatchesConfiguration(cardProject, selectedConfig)
+                ? getActiveConfiguration(cardProject, selectedConfig).configuration
+                : (cardConfigurations[0]?.configuration || "");
+            const [cardSelectedConfig, setCardSelectedConfig] = React.useState(initialCardConfig);
+            const activeConfig=getActiveConfiguration(cardProject, cardSelectedConfig);
+            const activeConfigLabel = activeConfig.configuration || projectConfigSummary(cardProject);
+            const activeArea = activeConfig.carpetArea || projectAreaSummary(cardProject);
+            const activePrice = activeConfig.price || projectStartingPrice(cardProject);
             const [cardImage,setCardImage]=React.useState(0);
             React.useEffect(()=>{ if(cardProject.images.length<2)return; const timer=setInterval(()=>setCardImage(i=>(i+1)%cardProject.images.length),2800); return()=>clearInterval(timer); },[cardProject.id,cardProject.images.length]);
+            React.useEffect(()=>{ setCardSelectedConfig(initialCardConfig); }, [cardProject.id, initialCardConfig]);
             return (
                 <div className="bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
                     <div className="relative overflow-hidden h-64 bg-neutral-900">
@@ -893,33 +901,52 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             {cardProject.statusBadge && <span className="absolute top-3 left-3 z-30 bg-black/85 border border-luxury-gold text-luxury-gold text-[9px] font-bold uppercase px-2 py-1 rounded">{cardProject.statusBadge}</span>}
                             {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
                         <span className={`absolute ${cardProject.statusBadge ? "top-12" : "top-4"} left-4 z-20 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30`}>{property.status}</span>
-                        <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {selectedConfig && activeConfig.carpetArea ? activeConfig.carpetArea : projectAreaSummary(cardProject)}</span>
+                        <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {activeArea}</span>
                     </div>
                     <div className="p-7 flex-grow flex flex-col justify-between">
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{selectedConfig && projectMatchesConfiguration(cardProject, selectedConfig) ? activeConfig.configuration : projectConfigSummary(cardProject)}</span>
+                                <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{activeConfigLabel}</span>
                                 <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
                             </div>
-                            <button onClick={() => onOpenProject(property, selectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
+                            <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
                             <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-3">{property.address}</p>
                             <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
+                            {cardConfigurations.length > 1 && (
+                                <div className="mb-4 rounded-lg border border-neutral-900 bg-luxury-bg/70 p-2">
+                                    <div className="text-[9px] uppercase tracking-widest text-neutral-500 mb-2">Choose Configuration</div>
+                                    <div className="grid grid-cols-2 gap-1.5">
+                                        {cardConfigurations.map((config, index) => (
+                                            <button
+                                                type="button"
+                                                key={`${config.configuration}-${index}`}
+                                                onClick={(event) => { event.stopPropagation(); setCardSelectedConfig(config.configuration); }}
+                                                className={`text-left rounded border px-2 py-1.5 transition ${activeConfig.configuration === config.configuration ? "bg-luxury-gold text-black border-luxury-gold" : "border-neutral-800 text-white hover:border-luxury-gold"}`}
+                                            >
+                                                <b className="block text-[10px]">{config.configuration || "Configuration"}</b>
+                                                <span className={`block text-[9px] ${activeConfig.configuration === config.configuration ? "text-black/70" : "text-neutral-400"}`}>{config.carpetArea || "Area on request"}</span>
+                                                <span className={`block text-[10px] font-bold ${activeConfig.configuration === config.configuration ? "text-black" : "text-luxury-gold"}`}>{config.price || "Price on request"}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             
                             {cardAmenities.length > 0 && <div className="flex flex-wrap gap-1.5 mb-4">
                                 {visibleCardAmenities.map((am, index) => (
                                     <span key={index} className="text-[10px] bg-luxury-bg border border-neutral-900 text-neutral-400 px-2 py-0.5 rounded-md">{am}</span>
                                 ))}
                                 {hiddenAmenityCount > 0 && (
-                                    <button type="button" onClick={() => onOpenProject(property, selectedConfig)} className="text-[10px] bg-luxury-gold/10 border border-luxury-gold/40 text-luxury-gold px-2 py-0.5 rounded-md font-bold hover:bg-luxury-gold hover:text-black transition">
+                                    <button type="button" onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-[10px] bg-luxury-gold/10 border border-luxury-gold/40 text-luxury-gold px-2 py-0.5 rounded-md font-bold hover:bg-luxury-gold hover:text-black transition">
                                         +{hiddenAmenityCount} more
                                     </button>
                                 )}
                             </div>}
                         </div>
                         <div className="pt-4 border-t border-neutral-900 flex justify-between items-center mt-auto">
-                            <div><span className="text-2xl font-bold text-white tracking-tight">{property.price}</span></div>
+                            <div><span className="text-2xl font-bold text-white tracking-tight">{activePrice}</span><span className="block text-[10px] text-neutral-500">{activeConfigLabel} • {activeArea}</span></div>
                             <div className="grid grid-cols-2 gap-2 w-[238px]">
-                                <button onClick={() => onOpenProject(property, selectedConfig)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
+                                <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
                                 <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">Site Visit</button>
                                 {cardSampleVideo && <a href={cardSampleVideo} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="col-span-2 flex items-center justify-center border border-red-700 text-red-400 text-[10px] font-bold px-3 py-2 rounded uppercase whitespace-nowrap">▶ Watch Sample Flat Video</a>}
                             </div>
@@ -1873,9 +1900,10 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 window.scrollTo(0, 0);
             };
 
-            const openProject = p => {
+            const openProject = (p, config = "") => {
                 const n = normalizeProject(p);
                 setActiveProject(n);
+                setProjectConfigContext(config);
                 setView("project");
                 if (!IS_LOCAL_FILE) navigateToProjectUrl(n);
                 window.scrollTo(0, 0);
