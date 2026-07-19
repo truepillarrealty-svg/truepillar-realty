@@ -554,6 +554,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         function AdminSelect({ value, options, onChange, className = "", ariaLabel }) {
             const [open, setOpen] = React.useState(false);
             const rootRef = React.useRef(null);
+            const normalizedOptions = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
             React.useEffect(() => {
                 if (!open) return;
                 const handlePointer = (event) => {
@@ -562,24 +563,24 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 document.addEventListener("mousedown", handlePointer);
                 return () => document.removeEventListener("mousedown", handlePointer);
             }, [open]);
-            const selected = options.includes(value) ? value : (options[0] || "");
+            const selectedOption = normalizedOptions.find(option => option.value === value) || normalizedOptions[0] || { value: "", label: "" };
             return (
                 <div ref={rootRef} className={`tp-v38-select ${className}`}>
                     <button type="button" className="tp-v38-select-button" aria-label={ariaLabel} aria-expanded={open} onClick={() => setOpen(x => !x)}>
-                        <span>{selected}</span>
+                        <span>{selectedOption.label}</span>
                     </button>
                     {open && (
                         <div className="tp-v38-select-menu" role="listbox">
-                            {options.map(option => (
+                            {normalizedOptions.map(option => (
                                 <button
                                     type="button"
-                                    key={option}
+                                    key={option.value}
                                     role="option"
-                                    aria-selected={option === selected}
-                                    className={`tp-v38-select-option ${option === selected ? "tp-v38-active" : ""}`}
-                                    onClick={() => { onChange(option); setOpen(false); }}
+                                    aria-selected={option.value === selectedOption.value}
+                                    className={`tp-v38-select-option ${option.value === selectedOption.value ? "tp-v38-active" : ""}`}
+                                    onClick={() => { onChange(option.value); setOpen(false); }}
                                 >
-                                    {option}
+                                    {option.label}
                                 </button>
                             ))}
                         </div>
@@ -730,42 +731,37 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         })()}</div>}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:flex lg:gap-3">
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
-                            value={selectedRegion} 
-                            onChange={(e) => { setSelectedRegion(e.target.value); setSelectedSubLocality(""); }}
-                        >
-                            <option value="">All Cities / Regions</option>
-                            {Object.keys(REGIONS).map(r => <option key={r} value={r}>{r}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="City / Region filter"
+                            value={selectedRegion}
+                            options={[{ value: "", label: "All Cities / Regions" }, ...Object.keys(REGIONS).map(r => ({ value: r, label: r }))]}
+                            onChange={(region) => { closeSuggestions(); setSelectedRegion(region); setSelectedSubLocality(""); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-48"
-                            value={selectedSubLocality} 
-                            disabled={!selectedRegion}
-                            onChange={(e) => setSelectedSubLocality(e.target.value)}
-                        >
-                            <option value="">All Localities</option>
-                            {selectedRegion && REGIONS[selectedRegion].map(sub => <option key={sub} value={sub}>{sub}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-48"
+                            ariaLabel="Locality filter"
+                            value={selectedSubLocality}
+                            options={[{ value: "", label: "All Localities" }, ...(selectedRegion ? REGIONS[selectedRegion].map(sub => ({ value: sub, label: sub })) : [])]}
+                            onChange={(subLocality) => { closeSuggestions(); setSelectedSubLocality(subLocality); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-40"
-                            value={selectedConfig} 
-                            onChange={(e) => setSelectedConfig(e.target.value)}
-                        >
-                            <option value="">BHK Configuration</option>
-                            {CONFIGURATIONS.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-40"
+                            ariaLabel="BHK Configuration filter"
+                            value={selectedConfig}
+                            options={[{ value: "", label: "BHK Configuration" }, ...CONFIGURATIONS.map(c => ({ value: c, label: c }))]}
+                            onChange={(configuration) => { closeSuggestions(); setSelectedConfig(configuration); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
-                            value={selectedStatus} 
-                            onChange={(e) => setSelectedStatus(e.target.value)}
-                        >
-                            <option value="">Possession Status</option>
-                            {DEVELOPMENT_STATUS.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="Possession Status filter"
+                            value={selectedStatus}
+                            options={[{ value: "", label: "Possession Status" }, ...DEVELOPMENT_STATUS.map(status => ({ value: status, label: status }))]}
+                            onChange={(status) => { closeSuggestions(); setSelectedStatus(status); }}
+                        />
                     </div>
                 </div>
             );
