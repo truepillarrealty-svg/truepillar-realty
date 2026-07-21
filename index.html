@@ -14,16 +14,15 @@
     <meta property="og:description" content="Browse verified luxury listings across top localities. Connect directly with builders with zero brokerage fees.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80">
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js" defer></script>
-    <script src="https://cdn.tailwindcss.com" defer></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -48,14 +47,6 @@
         ::-webkit-scrollbar-track { background: #0A0A0C; }
         ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
-
-        /* Skip link (visually hidden until focused) */
-        .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-        .skip-link:focus{position:static;left:auto;width:auto;height:auto;padding:8px 12px;background:#ffffff;color:#050505;border-radius:6px;z-index:9999}
-
-        /* Visible focus styles for keyboard users */
-        :focus-visible{outline:3px solid rgba(212,175,55,0.95);outline-offset:2px}
-        a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(212,175,55,0.95);outline-offset:3px}
     </style>
 
     <link rel="canonical" href="https://truepillar.in/">
@@ -69,13 +60,6 @@
     <meta name="twitter:title" content="TruePillar Realty | Premium Homes & Zero Brokerage">
     <meta name="twitter:description" content="Explore verified residential projects across Navi Mumbai, Thane, Mumbai and Dombivli. Book a free site visit.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80">
-
-    <!-- Performance: preconnect commonly used origins -->
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preconnect" href="https://api.cloudinary.com" crossorigin>
-    <link rel="icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-
     <script type="application/ld+json">
     {
       "@context":"https://schema.org",
@@ -122,11 +106,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 <!-- rest of existing styles unchanged... -->
 </head>
 <body>
-    <a class="skip-link" href="#root">Skip to content</a>
-    <main id="root" role="main"></main>
-    <noscript>
-      <div style="background:#111;padding:16px;color:#fff;text-align:center;">This site requires JavaScript to run. Please enable JavaScript in your browser for the best experience.</div>
-    </noscript>
+    <div id="root"></div>
 
     <script type="text/babel">
         function playableVideoUrl(url) {
