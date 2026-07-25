@@ -59,7 +59,6 @@
     </style>
 
     <link rel="canonical" href="https://truepillar.in/">
-    <!-- Clean URLs: /project-name -->
     <meta name="author" content="TruePillar Realty">
     <meta name="theme-color" content="#0A0A0C">
     <meta name="format-detection" content="telephone=yes">
@@ -70,7 +69,6 @@
     <meta name="twitter:description" content="Explore verified residential projects across Navi Mumbai, Thane, Mumbai and Dombivli. Book a free site visit.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80">
 
-    <!-- Performance: preconnect commonly used origins -->
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://api.cloudinary.com" crossorigin>
     <link rel="icon" href="/favicon.ico">
@@ -182,33 +180,160 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         // ===== FORM SUBMISSION HANDLER WITH GOOGLE ADS CONVERSION REDIRECT =====
         const handleSiteVisitSubmission = async (formData) => {
             try {
-                // Clean data for Firestore
                 const cleanData = cleanForFirestore(formData);
-
-                // Save to leads collection
                 await leadsCollection.add({
                     ...cleanData,
                     timestamp: new Date(),
                     source: 'site_visit_form'
                 });
-
                 console.log("✅ Lead saved successfully to Firestore");
-
-                // REDIRECT TO CONFIRMATION PAGE FOR GOOGLE ADS CONVERSION TRACKING
-                // This is the crucial step for your Google Ads campaign
                 setTimeout(() => {
                     window.location.href = '/confirmation.html';
-                }, 500); // Small delay to ensure form submission is complete
-
+                }, 500);
             } catch (error) {
                 console.error("❌ Error submitting form:", error);
                 alert("Error submitting form. Please try again.");
             }
         };
-
-        // Export for use in your components
         window.handleSiteVisitSubmission = handleSiteVisitSubmission;
 
+        // ===== MAIN APP COMPONENT =====
+        function App() {
+            const [projects, setProjects] = React.useState([]);
+            const [selectedProject, setSelectedProject] = React.useState(null);
+            const [loading, setLoading] = React.useState(true);
+
+            React.useEffect(() => {
+                const unsubscribe = projectsCollection.onSnapshot(snapshot => {
+                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setProjects(data);
+                    setLoading(false);
+                });
+                return unsubscribe;
+            }, []);
+
+            if (loading) {
+                return <div className="min-h-screen bg-luxury-bg flex items-center justify-center"><p className="text-luxury-gold">Loading properties...</p></div>;
+            }
+
+            if (selectedProject) {
+                return <PropertyDetail project={selectedProject} onBack={() => setSelectedProject(null)} />;
+            }
+
+            return (
+                <div className="bg-luxury-bg min-h-screen">
+                    <Header />
+                    <Hero />
+                    <PropertyGrid projects={projects} onSelectProject={setSelectedProject} />
+                    <Footer />
+                </div>
+            );
+        }
+
+        function Header() {
+            return (
+                <header className="bg-luxury-card border-b border-luxury-gold border-opacity-20 py-4 px-6 sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto flex items-center justify-between">
+                        <h1 className="text-2xl text-luxury-gold font-bold">TruePillar Realty</h1>
+                        <nav className="hidden md:flex gap-6 text-luxury-textMuted">
+                            <a href="#" className="hover:text-luxury-gold">Properties</a>
+                            <a href="#" className="hover:text-luxury-gold">About</a>
+                            <a href="#" className="hover:text-luxury-gold">Contact</a>
+                        </nav>
+                    </div>
+                </header>
+            );
+        }
+
+        function Hero() {
+            return (
+                <div className="tp-v20-hero h-96 flex items-center justify-center px-4">
+                    <div className="text-center">
+                        <h2 className="text-5xl md:text-6xl text-luxury-gold mb-4">Premium Homes</h2>
+                        <p className="text-lg text-luxury-textMuted mb-6">Direct from builders. Zero brokerage. Transparent pricing.</p>
+                        <button className="bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 px-8 rounded-lg transition">
+                            Explore Properties
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function PropertyGrid({ projects, onSelectProject }) {
+            return (
+                <div className="max-w-7xl mx-auto px-6 py-12">
+                    <h2 className="text-3xl text-luxury-gold mb-8">Featured Properties</h2>
+                    <div className="tp-v20-property-grid grid gap-6">
+                        {projects.map(project => (
+                            <div key={project.id} className="tp-v20-spotlight rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition" onClick={() => onSelectProject(project)}>
+                                <div className="tp-v20-card-image bg-luxury-gold bg-opacity-10 h-40"></div>
+                                <div className="tp-v20-card-body p-4">
+                                    <h3 className="text-luxury-gold font-bold mb-2">{project.name || 'Property Name'}</h3>
+                                    <p className="text-luxury-textMuted text-sm mb-2">{project.location || 'Location'}</p>
+                                    <p className="text-luxury-gold font-bold">₹{project.price || 'Contact'}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function PropertyDetail({ project, onBack }) {
+            const [formData, setFormData] = React.useState({
+                name: '', phone: '', email: '', visitDate: '', requirements: ''
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                handleSiteVisitSubmission({ ...formData, projectId: project.id, projectName: project.name });
+            };
+
+            return (
+                <div className="bg-luxury-bg min-h-screen">
+                    <button onClick={onBack} className="bg-luxury-card text-luxury-gold px-6 py-3 m-6 rounded-lg">← Back</button>
+                    <div className="max-w-6xl mx-auto px-6 py-12">
+                        <div className="tp-v20-detail-grid grid mb-8">
+                            <div className="tp-v20-detail-image bg-luxury-gold bg-opacity-10 rounded-lg"></div>
+                            <div className="tp-v20-detail-side">
+                                <h1 className="text-4xl text-luxury-gold mb-4">{project.name}</h1>
+                                <p className="text-luxury-textMuted mb-4">{project.location}</p>
+                                <p className="text-2xl text-luxury-gold font-bold mb-6">₹{project.price}</p>
+                                <p className="text-luxury-textMuted mb-6">{project.description}</p>
+                            </div>
+                        </div>
+
+                        {/* SITE VISIT FORM */}
+                        <div className="tp-v20-visit-panel bg-luxury-card border border-luxury-gold border-opacity-30 rounded-lg p-8 max-w-lg">
+                            <h2 className="text-2xl text-luxury-gold mb-6">BOOK A FREE SITE VISIT</h2>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <input type="text" placeholder="Your Full Name *" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
+                                <input type="tel" placeholder="Phone / WhatsApp Number *" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
+                                <input type="email" placeholder="Email (Optional)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" />
+                                <input type="date" value={formData.visitDate} onChange={(e) => setFormData({...formData, visitDate: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white" required />
+                                <textarea placeholder="Any specific requirements? (Optional)" value={formData.requirements} onChange={(e) => setFormData({...formData, requirements: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted h-24"></textarea>
+                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 rounded-lg transition">
+                                    CONFIRM & BOOK FREE SITE VISIT
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer className="bg-luxury-card border-t border-luxury-gold border-opacity-20 py-8 px-6">
+                    <div className="max-w-7xl mx-auto text-center text-luxury-textMuted">
+                        <p>© 2026 TruePillar Realty. All rights reserved. | MahaRERA: A031272401680</p>
+                    </div>
+                </footer>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
