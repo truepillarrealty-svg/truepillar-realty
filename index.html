@@ -119,7 +119,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 }
 @media(max-width:640px){.tp-v20-property-grid{grid-template-columns:1fr!important}}
 </style>
-<!-- rest of existing styles unchanged... -->
 </head>
 <body>
     <a class="skip-link" href="#root">Skip to content</a>
@@ -154,7 +153,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // Project media uploads use Cloudinary; Firestore remains the database.
         const auth = firebase.auth();
         const projectsCollection = db.collection("projects");
         const leadsCollection = db.collection("leads");
@@ -181,7 +179,36 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             return result.secure_url;
         };
 
-        // ... rest of existing JS unchanged ...
+        // ===== FORM SUBMISSION HANDLER WITH GOOGLE ADS CONVERSION REDIRECT =====
+        const handleSiteVisitSubmission = async (formData) => {
+            try {
+                // Clean data for Firestore
+                const cleanData = cleanForFirestore(formData);
+
+                // Save to leads collection
+                await leadsCollection.add({
+                    ...cleanData,
+                    timestamp: new Date(),
+                    source: 'site_visit_form'
+                });
+
+                console.log("✅ Lead saved successfully to Firestore");
+
+                // REDIRECT TO CONFIRMATION PAGE FOR GOOGLE ADS CONVERSION TRACKING
+                // This is the crucial step for your Google Ads campaign
+                setTimeout(() => {
+                    window.location.href = '/confirmation.html';
+                }, 500); // Small delay to ensure form submission is complete
+
+            } catch (error) {
+                console.error("❌ Error submitting form:", error);
+                alert("Error submitting form. Please try again.");
+            }
+        };
+
+        // Export for use in your components
+        window.handleSiteVisitSubmission = handleSiteVisitSubmission;
+
     </script>
 </body>
 </html>
