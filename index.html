@@ -6,7 +6,7 @@
     
     <title>TruePillar Realty | Premium Homes in Navi Mumbai, Thane & Mumbai | Zero Brokerage</title>
     <meta name="description" content="Find your dream property with TruePillar Realty. Browse verified luxury 1, 2, 3 & 4 BHK apartments across Navi Mumbai, Thane, Mumbai, and Dombivli with absolute transparency and zero brokerage.">
-    <meta name="keywords" content="TruePillar Realty, buy flat in navi mumbai, flats in thane, properties in mumbai, dombivli real estate, zero brokerage real estate, premium apartments mumbai">
+    <meta name="keywords" content="TruePillar Realty, buy flat in navi mumbai, flats in thane, properties in mumbai, dombivli real estate, zero brokerage real estate, premium apartments mumbai, book property online">
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
@@ -14,16 +14,15 @@
     <meta property="og:description" content="Browse verified luxury listings across top localities. Connect directly with builders with zero brokerage fees.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80">
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js" defer></script>
-    <script src="https://cdn.tailwindcss.com" defer></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -48,17 +47,10 @@
         ::-webkit-scrollbar-track { background: #0A0A0C; }
         ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
-
-        /* Skip link (visually hidden until focused) */
-        .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-        .skip-link:focus{position:static;left:auto;width:auto;height:auto;padding:8px 12px;background:#ffffff;color:#050505;border-radius:6px;z-index:9999}
-
-        /* Visible focus styles for keyboard users */
-        :focus-visible{outline:3px solid rgba(212,175,55,0.95);outline-offset:2px}
-        a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(212,175,55,0.95);outline-offset:3px}
     </style>
 
     <link rel="canonical" href="https://truepillar.in/">
+    <!-- Clean URLs: /project-name -->
     <meta name="author" content="TruePillar Realty">
     <meta name="theme-color" content="#0A0A0C">
     <meta name="format-detection" content="telephone=yes">
@@ -68,12 +60,6 @@
     <meta name="twitter:title" content="TruePillar Realty | Premium Homes & Zero Brokerage">
     <meta name="twitter:description" content="Explore verified residential projects across Navi Mumbai, Thane, Mumbai and Dombivli. Book a free site visit.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80">
-
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preconnect" href="https://api.cloudinary.com" crossorigin>
-    <link rel="icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-
     <script type="application/ld+json">
     {
       "@context":"https://schema.org",
@@ -119,11 +105,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 </style>
 </head>
 <body>
-    <a class="skip-link" href="#root">Skip to content</a>
-    <main id="root" role="main"></main>
-    <noscript>
-      <div style="background:#111;padding:16px;color:#fff;text-align:center;">This site requires JavaScript to run. Please enable JavaScript in your browser for the best experience.</div>
-    </noscript>
+    <div id="root"></div>
 
     <script type="text/babel">
         function playableVideoUrl(url) {
@@ -151,6 +133,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        // Project media uploads use Cloudinary; Firestore remains the database.
         const auth = firebase.auth();
         const projectsCollection = db.collection("projects");
         const leadsCollection = db.collection("leads");
@@ -177,7 +160,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             return result.secure_url;
         };
 
-        // ===== FORM SUBMISSION HANDLER WITH GOOGLE ADS CONVERSION REDIRECT =====
+        // ===== FORM SUBMISSION HANDLER WITH GOOGLE ADS REDIRECT =====
         const handleSiteVisitSubmission = async (formData) => {
             try {
                 const cleanData = cleanForFirestore(formData);
@@ -186,19 +169,17 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     timestamp: new Date(),
                     source: 'site_visit_form'
                 });
-                console.log("✅ Lead saved successfully to Firestore");
-                setTimeout(() => {
-                    window.location.href = '/confirmation.html';
-                }, 500);
+                console.log("✅ Lead saved to Firestore");
+                setTimeout(() => { window.location.href = '/confirmation.html'; }, 500);
             } catch (error) {
-                console.error("❌ Error submitting form:", error);
+                console.error("❌ Error:", error);
                 alert("Error submitting form. Please try again.");
             }
         };
         window.handleSiteVisitSubmission = handleSiteVisitSubmission;
 
-        // ===== MAIN APP COMPONENT =====
-        function App() {
+        // ===== MAIN APP - RENDERS YOUR EXISTING APP HERE =====
+        function TruePillarApp() {
             const [projects, setProjects] = React.useState([]);
             const [selectedProject, setSelectedProject] = React.useState(null);
             const [loading, setLoading] = React.useState(true);
@@ -213,7 +194,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             }, []);
 
             if (loading) {
-                return <div className="min-h-screen bg-luxury-bg flex items-center justify-center"><p className="text-luxury-gold">Loading properties...</p></div>;
+                return <div className="min-h-screen bg-luxury-bg flex items-center justify-center"><p>Loading...</p></div>;
             }
 
             if (selectedProject) {
@@ -234,8 +215,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             return (
                 <header className="bg-luxury-card border-b border-luxury-gold border-opacity-20 py-4 px-6 sticky top-0 z-50">
                     <div className="max-w-7xl mx-auto flex items-center justify-between">
-                        <h1 className="text-2xl text-luxury-gold font-bold">TruePillar Realty</h1>
-                        <nav className="hidden md:flex gap-6 text-luxury-textMuted">
+                        <h1 className="text-2xl text-luxury-gold font-bold">TRUEPILLAR REALTY</h1>
+                        <nav className="hidden md:flex gap-6 text-luxury-textMuted text-sm">
                             <a href="#" className="hover:text-luxury-gold">Properties</a>
                             <a href="#" className="hover:text-luxury-gold">About</a>
                             <a href="#" className="hover:text-luxury-gold">Contact</a>
@@ -247,10 +228,10 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         function Hero() {
             return (
-                <div className="tp-v20-hero h-96 flex items-center justify-center px-4">
-                    <div className="text-center">
-                        <h2 className="text-5xl md:text-6xl text-luxury-gold mb-4">Premium Homes</h2>
-                        <p className="text-lg text-luxury-textMuted mb-6">Direct from builders. Zero brokerage. Transparent pricing.</p>
+                <div className="tp-v20-hero py-24 px-6">
+                    <div className="max-w-7xl mx-auto text-center">
+                        <h2 className="text-6xl text-luxury-gold mb-4">PREMIUM HOMES</h2>
+                        <p className="text-lg text-luxury-textMuted mb-8">Direct from builders. Zero brokerage. Transparent pricing.</p>
                         <button className="bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 px-8 rounded-lg transition">
                             Explore Properties
                         </button>
@@ -261,19 +242,23 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         function PropertyGrid({ projects, onSelectProject }) {
             return (
-                <div className="max-w-7xl mx-auto px-6 py-12">
-                    <h2 className="text-3xl text-luxury-gold mb-8">Featured Properties</h2>
+                <div className="max-w-7xl mx-auto px-6 py-16">
+                    <h2 className="text-4xl text-luxury-gold mb-12">FEATURED PROPERTIES</h2>
                     <div className="tp-v20-property-grid grid gap-6">
-                        {projects.map(project => (
-                            <div key={project.id} className="tp-v20-spotlight rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition" onClick={() => onSelectProject(project)}>
-                                <div className="tp-v20-card-image bg-luxury-gold bg-opacity-10 h-40"></div>
-                                <div className="tp-v20-card-body p-4">
-                                    <h3 className="text-luxury-gold font-bold mb-2">{project.name || 'Property Name'}</h3>
+                        {projects.length > 0 ? projects.map(project => (
+                            <div key={project.id} className="tp-v20-spotlight rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition" onClick={() => onSelectProject(project)}>
+                                <div className="tp-v20-card-image bg-gradient-to-br from-luxury-gold to-luxury-goldHover opacity-20 flex items-center justify-center">
+                                    {project.image && <img src={project.image} alt="" className="w-full h-full object-cover" />}
+                                </div>
+                                <div className="tp-v20-card-body">
+                                    <h3 className="text-luxury-gold font-bold mb-2 text-lg">{project.name || 'Property'}</h3>
                                     <p className="text-luxury-textMuted text-sm mb-2">{project.location || 'Location'}</p>
-                                    <p className="text-luxury-gold font-bold">₹{project.price || 'Contact'}</p>
+                                    <p className="text-luxury-gold font-bold text-base">₹{project.price || 'Contact'}</p>
                                 </div>
                             </div>
-                        ))}
+                        )) : (
+                            <p className="text-luxury-textMuted col-span-full text-center py-12">No properties available yet.</p>
+                        )}
                     </div>
                 </div>
             );
@@ -284,6 +269,11 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 name: '', phone: '', email: '', visitDate: '', requirements: ''
             });
 
+            const handleChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({ ...prev, [name]: value }));
+            };
+
             const handleSubmit = (e) => {
                 e.preventDefault();
                 handleSiteVisitSubmission({ ...formData, projectId: project.id, projectName: project.name });
@@ -291,27 +281,29 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
             return (
                 <div className="bg-luxury-bg min-h-screen">
-                    <button onClick={onBack} className="bg-luxury-card text-luxury-gold px-6 py-3 m-6 rounded-lg">← Back</button>
+                    <button onClick={onBack} className="text-luxury-gold px-6 py-3 m-6 hover:text-luxury-goldHover transition">← Back</button>
                     <div className="max-w-6xl mx-auto px-6 py-12">
-                        <div className="tp-v20-detail-grid grid mb-8">
-                            <div className="tp-v20-detail-image bg-luxury-gold bg-opacity-10 rounded-lg"></div>
+                        <div className="tp-v20-detail-grid grid gap-12 mb-12">
+                            <div className="tp-v20-detail-image bg-gradient-to-br from-luxury-gold to-luxury-goldHover opacity-20 rounded-lg flex items-center justify-center min-h-96">
+                                {project.image && <img src={project.image} alt={project.name} className="w-full h-full object-cover rounded-lg" />}
+                            </div>
                             <div className="tp-v20-detail-side">
-                                <h1 className="text-4xl text-luxury-gold mb-4">{project.name}</h1>
-                                <p className="text-luxury-textMuted mb-4">{project.location}</p>
-                                <p className="text-2xl text-luxury-gold font-bold mb-6">₹{project.price}</p>
-                                <p className="text-luxury-textMuted mb-6">{project.description}</p>
+                                <h1 className="text-5xl text-luxury-gold mb-4">{project.name}</h1>
+                                <p className="text-luxury-textMuted mb-4 text-lg">{project.location}</p>
+                                <p className="text-3xl text-luxury-gold font-bold mb-6">₹{project.price}</p>
+                                <p className="text-luxury-textMuted leading-relaxed">{project.description || 'Premium residential property with modern amenities.'}</p>
                             </div>
                         </div>
 
-                        {/* SITE VISIT FORM */}
+                        {/* SITE VISIT FORM WITH REDIRECT */}
                         <div className="tp-v20-visit-panel bg-luxury-card border border-luxury-gold border-opacity-30 rounded-lg p-8 max-w-lg">
-                            <h2 className="text-2xl text-luxury-gold mb-6">BOOK A FREE SITE VISIT</h2>
+                            <h2 className="text-2xl text-luxury-gold mb-6 font-bold">BOOK A FREE SITE VISIT</h2>
                             <form onSubmit={handleSubmit} className="space-y-4">
-                                <input type="text" placeholder="Your Full Name *" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
-                                <input type="tel" placeholder="Phone / WhatsApp Number *" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
-                                <input type="email" placeholder="Email (Optional)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" />
-                                <input type="date" value={formData.visitDate} onChange={(e) => setFormData({...formData, visitDate: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white" required />
-                                <textarea placeholder="Any specific requirements? (Optional)" value={formData.requirements} onChange={(e) => setFormData({...formData, requirements: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted h-24"></textarea>
+                                <input type="text" name="name" placeholder="Your Full Name *" value={formData.name} onChange={handleChange} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
+                                <input type="tel" name="phone" placeholder="Phone / WhatsApp Number *" value={formData.phone} onChange={handleChange} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" required />
+                                <input type="email" name="email" placeholder="Email (Optional)" value={formData.email} onChange={handleChange} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted" />
+                                <input type="date" name="visitDate" value={formData.visitDate} onChange={handleChange} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white" required />
+                                <textarea name="requirements" placeholder="Any specific requirements? (Optional)" value={formData.requirements} onChange={handleChange} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-4 py-3 rounded text-white placeholder-luxury-textMuted h-24"></textarea>
                                 <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 rounded-lg transition">
                                     CONFIRM & BOOK FREE SITE VISIT
                                 </button>
@@ -324,16 +316,17 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         function Footer() {
             return (
-                <footer className="bg-luxury-card border-t border-luxury-gold border-opacity-20 py-8 px-6">
+                <footer className="bg-luxury-card border-t border-luxury-gold border-opacity-20 py-12 px-6 mt-20">
                     <div className="max-w-7xl mx-auto text-center text-luxury-textMuted">
-                        <p>© 2026 TruePillar Realty. All rights reserved. | MahaRERA: A031272401680</p>
+                        <p>© 2026 TruePillar Realty. All rights reserved.</p>
+                        <p className="text-sm mt-2">MahaRERA Registration: A031272401680</p>
                     </div>
                 </footer>
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(<TruePillarApp />);
     </script>
 </body>
 </html>
