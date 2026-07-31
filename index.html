@@ -102,6 +102,404 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 }
 @media(max-width:640px){.tp-v20-property-grid{grid-template-columns:1fr!important}}
 </style>
+
+
+<style id="tp-v21-force">
+@media(min-width:1024px){
+ .tp-v20-property-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ .tp-v20-property-grid > *{font-size:.92em}
+ .tp-v20-property-grid img{max-height:205px!important;object-fit:cover}
+ .tp-v20-detail-grid{grid-template-columns:minmax(0,1.35fr) minmax(340px,.75fr)!important}
+ .tp-v20-detail-image{max-height:420px!important;object-fit:cover}
+}
+</style>
+
+<style id="tp-v22">
+.tp-v22-filter{background:#fff!important;border-radius:14px!important;padding:8px!important;box-shadow:0 14px 45px rgba(0,0,0,.3)!important}
+.tp-v22-filter input,.tp-v22-filter select{background:#fff!important;color:#111!important;border-color:#e5e7eb!important;min-height:48px!important}.tp-v22-filter input::placeholder{color:#6b7280!important}.tp-v22-filter option{color:#111;background:#fff}
+@media(min-width:1024px){.tp-v20-hero h1{font-size:clamp(2.8rem,5vw,5.5rem)!important;line-height:.92!important}.tp-v20-spotlight{min-height:300px}}
+</style>
+<style id="tp-v23-final-fixes">
+@media(min-width:1024px){
+  .tp-v23-hero-title{font-size:clamp(2.25rem,3.6vw,4rem)!important;white-space:nowrap!important;line-height:1!important}
+}
+.tp-v23-housing-filter{
+  background:#ffffff!important;
+  border:1px solid #e5e7eb!important;
+  border-radius:16px!important;
+  padding:10px!important;
+  box-shadow:0 16px 45px rgba(0,0,0,.28)!important;
+  gap:0!important;
+}
+.tp-v23-housing-filter input,
+.tp-v23-housing-filter select{
+  background:#ffffff!important;
+  color:#111827!important;
+  border:0!important;
+  border-right:1px solid #e5e7eb!important;
+  border-radius:0!important;
+  min-height:52px!important;
+}
+.tp-v23-housing-filter input::placeholder{color:#6b7280!important}
+.tp-v23-housing-filter select option{background:#fff!important;color:#111!important}
+.tp-v23-housing-filter > *:first-child{border-radius:10px 0 0 10px!important}
+.tp-v23-housing-filter > *:last-child{border-right:0!important;border-radius:0 10px 10px 0!important}
+@media(max-width:767px){
+  .tp-v23-housing-filter{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+  .tp-v23-housing-filter input,.tp-v23-housing-filter select{border:1px solid #e5e7eb!important;border-radius:10px!important}
+  .tp-v23-hero-title{font-size:2.25rem!important}
+}
+</style>
+
+
+<style id="tp-v24-final">
+.tp-v24-hero{background:radial-gradient(circle at 82% 35%,rgba(218,175,40,.10),transparent 38%),linear-gradient(90deg,#090a0c,#0d0e10)}
+.tp-v24-hero h1{font-size:clamp(2rem,3.15vw,3.65rem)!important;line-height:.98!important;max-width:none!important;margin-top:8px!important}
+.tp-v24-hero p{margin-top:10px!important}
+.tp-v24-filter-wrap{position:relative;z-index:30}
+.tp-v23-housing-filter{
+ display:grid!important;
+ grid-template-columns:minmax(280px,1.7fr) repeat(4,minmax(140px,.8fr))!important;
+ gap:0!important;
+ padding:5px!important;
+ background:#111216!important;
+ border:1px solid #2b2d31!important;
+ border-radius:14px!important;
+ box-shadow:0 16px 42px rgba(0,0,0,.35)!important;
+ overflow:visible!important;
+}
+.tp-v23-housing-filter>div,.tp-v23-housing-filter>select{min-width:0!important}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{
+ background:#111216!important;color:#f5f5f5!important;border:0!important;
+ border-right:1px solid #303238!important;border-radius:0!important;
+ min-height:48px!important;padding-left:14px!important;
+}
+.tp-v23-housing-filter input::placeholder{color:#9ca3af!important}
+.tp-v23-housing-filter select option{background:#111216!important;color:#fff!important}
+.tp-v20-spotlight{margin-top:8px!important}
+@media(min-width:1024px){
+ .tp-v24-hero{min-height:0!important}
+ .tp-v20-spotlight{min-height:255px!important}
+ .tp-v20-spotlight-media{min-height:255px!important}
+}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important;gap:5px!important}
+ .tp-v23-housing-filter>div:first-child{grid-column:1/-1}
+ .tp-v23-housing-filter input,.tp-v23-housing-filter select{border:1px solid #303238!important;border-radius:8px!important}
+}
+</style>
+
+
+<style id="tp-v25-ui">
+/* Opening screen: intentionally compact so hero + spotlight + search are visible */
+.tp-v24-hero{padding-top:14px!important;padding-bottom:14px!important;min-height:0!important}
+.tp-v24-hero > div > span{font-size:9px!important}
+.tp-v24-hero h1{font-size:clamp(1.75rem,2.65vw,3rem)!important;line-height:1!important;margin:6px 0!important}
+.tp-v24-hero p{font-size:12px!important;line-height:1.5!important;max-width:650px!important;margin:6px 0!important}
+.tp-v24-hero button{padding:9px 18px!important}
+
+/* Spotlight visible directly below hero */
+.tp-v20-spotlight{margin-top:0!important;min-height:220px!important;max-height:250px!important;border:1px solid rgba(218,175,40,.45)!important;background:#111216!important}
+.tp-v20-spotlight-media{min-height:220px!important}
+.tp-v20-spotlight-media h2{font-size:1.55rem!important}
+.tp-v20-spotlight .p-7,.tp-v20-spotlight .md\:p-9{padding:20px!important}
+.tp-v20-spotlight button,.tp-v20-spotlight a{padding-top:9px!important;padding-bottom:9px!important;font-size:11px!important}
+
+/* Friendly dark search experience */
+.tp-v25-search-zone{padding-top:8px!important;padding-bottom:8px!important}
+.tp-v25-search-title{font-size:11px;font-weight:800;color:#e0b82f;letter-spacing:.04em;margin:0 0 7px 2px}
+.tp-v25-search-title span{font-size:16px;margin-right:5px}
+.tp-v23-housing-filter{
+ display:grid!important;
+ grid-template-columns:minmax(300px,1.8fr) repeat(4,minmax(135px,.75fr))!important;
+ gap:6px!important;padding:7px!important;
+ background:#121317!important;border:1px solid #303238!important;
+ border-radius:16px!important;box-shadow:0 12px 35px rgba(0,0,0,.32)!important;
+}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{
+ min-height:46px!important;background:#090a0c!important;color:#f5f5f5!important;
+ border:1px solid #292b30!important;border-radius:10px!important;padding:0 13px!important;
+ font-size:12px!important;transition:.2s ease!important;
+}
+.tp-v23-housing-filter input:focus,.tp-v23-housing-filter select:focus{
+ outline:none!important;border-color:#dcb72e!important;box-shadow:0 0 0 2px rgba(220,183,46,.12)!important
+}
+.tp-v23-housing-filter input::placeholder{color:#a5a7ad!important}
+.tp-v23-housing-filter select option{background:#101114!important;color:white!important}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+ .tp-v23-housing-filter>div:first-child{grid-column:1/-1!important}
+ .tp-v20-spotlight{max-height:none!important}
+}
+</style>
+
+
+<style id="tp-v26-final-corrections">
+.tp-v24-hero h1 .text-luxury-gold{font-size:inherit!important;line-height:inherit!important}
+/* Use the empty right side of hero instead of leaving a large blank area */
+.tp-v24-hero{
+  background:
+    radial-gradient(circle at 78% 42%,rgba(218,175,40,.16),transparent 28%),
+    linear-gradient(105deg,#090a0c 0%,#0d0e10 55%,#17140b 100%)!important;
+}
+.tp-v24-hero h1{max-width:1180px!important}
+
+/* Spotlight must show its full content and buttons */
+.tp-v20-spotlight{
+  min-height:285px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+.tp-v20-spotlight-media{min-height:285px!important}
+.tp-v20-spotlight > div:last-child{min-height:285px!important;overflow:visible!important}
+
+/* Complete search bar: search field + 4 filters + action button */
+.tp-v23-housing-filter{
+  grid-template-columns:minmax(280px,1.7fr) minmax(140px,.72fr) minmax(140px,.72fr) minmax(145px,.72fr) minmax(145px,.72fr) 110px!important;
+  align-items:stretch!important;
+}
+.tp-v23-housing-filter > .grid{
+  display:contents!important;
+}
+.tp-v26-search-button{
+  min-height:46px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#dfb92f!important;
+  color:#050505!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+  cursor:pointer!important;
+}
+.tp-v26-search-button:hover{filter:brightness(1.08)}
+
+/* Project details: left information + right media/download rail */
+.tp-v20-detail-grid{
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.72fr)!important;
+  align-items:start!important;
+}
+.tp-v20-detail-grid > aside{
+  display:block!important;
+  grid-column:2!important;
+  position:relative!important;
+}
+@media(max-width:900px){
+  .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+  .tp-v23-housing-filter > .grid{display:contents!important}
+  .tp-v26-search-button{grid-column:1/-1!important}
+  .tp-v20-detail-grid{grid-template-columns:1fr!important}
+  .tp-v20-detail-grid > aside{grid-column:1!important}
+}
+</style>
+
+
+<style id="tp-v27-first-view">
+.tp-v27-hero-title-row{
+  display:flex!important;align-items:center!important;gap:18px!important;flex-wrap:nowrap!important;
+}
+.tp-v27-hero-title-row h1{flex:0 1 auto!important;white-space:nowrap!important;margin:0!important}
+.tp-v27-browse-button{
+  flex:0 0 auto!important;background:#dfb92f!important;color:#050505!important;border:0!important;
+  border-radius:8px!important;padding:11px 18px!important;font-size:10px!important;font-weight:900!important;
+  text-transform:uppercase!important;letter-spacing:.05em!important;cursor:pointer!important;
+}
+.tp-v27-search-zone{margin-top:-18px!important;margin-bottom:10px!important}
+.tp-v27-search-zone .tp-v25-search-title{margin-bottom:6px!important}
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{flex-wrap:wrap!important}
+  .tp-v27-hero-title-row h1{white-space:normal!important}
+}
+</style>
+
+
+<style id="tp-v28-hero-tighten">
+.tp-v24-hero{padding-top:26px!important;padding-bottom:26px!important}
+.tp-v27-hero-title-row{gap:34px!important}
+.tp-v27-browse-button{
+  margin-left:8px!important;
+  box-shadow:0 0 0 0 rgba(223,185,47,.38);
+  animation:tpBrowsePremiumPulse 2.2s ease-in-out infinite!important;
+  transform-origin:center;
+}
+.tp-v27-browse-button:hover{
+  animation-play-state:paused!important;
+  transform:scale(1.07)!important;
+}
+@keyframes tpBrowsePremiumPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(223,185,47,.34)}
+  50%{transform:scale(1.045);box-shadow:0 0 0 8px rgba(223,185,47,0)}
+}
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:18px!important}
+  .tp-v27-browse-button{margin-left:0!important}
+}
+</style>
+
+
+<style id="tp-v29-true-first-view-fix">
+/* Compact hero after removing the pill */
+.tp-v24-hero{
+  padding-top:14px!important;
+  padding-bottom:14px!important;
+}
+.tp-v24-hero .space-y-4 > :not([hidden]) ~ :not([hidden]){
+  margin-top:8px!important;
+}
+.tp-v27-hero-title-row{gap:44px!important}
+.tp-v27-browse-button{margin-left:12px!important}
+
+/* Pull search and spotlight upward */
+.tp-v27-search-zone{
+  margin-top:-6px!important;
+  margin-bottom:4px!important;
+}
+.tp-v25-search-title{margin-bottom:4px!important}
+.tp-v23-housing-filter{min-height:54px!important}
+.tp-v23-housing-filter input,
+.tp-v23-housing-filter select,
+.tp-v26-search-button{min-height:44px!important}
+
+/* Make full spotlight visible and expose next section heading in first viewport */
+.tp-v20-spotlight{
+  margin-top:6px!important;
+  min-height:250px!important;
+  height:250px!important;
+}
+.tp-v20-spotlight-media,
+.tp-v20-spotlight > div:last-child{
+  min-height:250px!important;
+  height:250px!important;
+}
+.tp-v20-spotlight > div:last-child{
+  padding-top:18px!important;
+  padding-bottom:14px!important;
+}
+.tp-v20-spotlight h2{margin-top:6px!important;margin-bottom:6px!important}
+.tp-v20-spotlight p{margin-top:4px!important;margin-bottom:4px!important}
+
+/* Reduce the gap before Premium Featured Projects */
+.tp-v20-spotlight + section,
+.tp-v20-spotlight + div{margin-top:14px!important}
+
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:22px!important}
+}
+</style>
+
+
+<style id="tp-v30-spacing-fine-tune">
+/* Push Browse Properties a little farther right */
+.tp-v27-hero-title-row{gap:64px!important}
+.tp-v27-browse-button{margin-left:18px!important}
+
+/* Reduce gap between search/filter and spotlight */
+.tp-v27-search-zone{margin-bottom:-10px!important}
+.tp-v20-spotlight{margin-top:0!important}
+
+/* Reduce gap between spotlight and Premium Featured Projects */
+.tp-v20-spotlight + section,
+.tp-v20-spotlight + div{margin-top:2px!important}
+
+/* Also tighten common wrapper spacing immediately after spotlight */
+.tp-v20-spotlight{margin-bottom:0!important}
+
+@media(max-width:1100px){
+  .tp-v27-hero-title-row{gap:28px!important}
+  .tp-v27-browse-button{margin-left:4px!important}
+}
+</style>
+
+
+<style id="tp-v31-spotlight-controls">
+.tp-v20-spotlight{position:relative!important}
+.tp-v31-spot-arrow{
+  position:absolute!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:30!important;
+  width:38px!important;
+  height:58px!important;
+  border:1px solid rgba(223,185,47,.75)!important;
+  background:rgba(7,8,10,.72)!important;
+  color:#dfb92f!important;
+  border-radius:12px!important;
+  font-size:34px!important;
+  line-height:1!important;
+  font-weight:400!important;
+  cursor:pointer!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  backdrop-filter:blur(6px)!important;
+  transition:transform .2s ease,background .2s ease!important;
+}
+.tp-v31-spot-arrow:hover{
+  background:rgba(223,185,47,.18)!important;
+  transform:translateY(-50%) scale(1.08)!important;
+}
+.tp-v31-prev{left:10px!important}
+.tp-v31-next{right:10px!important}
+@media(max-width:700px){
+  .tp-v31-spot-arrow{width:32px!important;height:48px!important;font-size:28px!important}
+  .tp-v31-prev{left:6px!important}
+  .tp-v31-next{right:6px!important}
+}
+</style>
+
+
+<style id="tp-v37-clean-filter">
+/* Clean five-part live filter: no redundant Search or Sort control */
+.tp-v23-housing-filter{
+  display:grid!important;
+  grid-template-columns:minmax(280px,1.8fr) minmax(150px,.82fr) minmax(150px,.9fr) minmax(155px,.82fr) minmax(165px,.88fr)!important;
+  width:100%!important; max-width:none!important; gap:8px!important; padding:8px!important;
+  align-items:stretch!important; box-sizing:border-box!important;
+}
+.tp-v23-housing-filter > div:first-child,.tp-v23-housing-filter > .grid{min-width:0!important;width:100%!important}
+.tp-v23-housing-filter > .grid{display:contents!important}
+.tp-v23-housing-filter input,.tp-v23-housing-filter select{width:100%!important;min-width:0!important;height:46px!important}
+@media(max-width:900px){
+ .tp-v23-housing-filter{grid-template-columns:1fr 1fr!important}
+ .tp-v23-housing-filter > div:first-child{grid-column:1/-1!important}
+}
+@media(max-width:560px){.tp-v23-housing-filter{grid-template-columns:1fr!important}.tp-v23-housing-filter > div:first-child{grid-column:auto!important}}
+</style>
+
+
+<style id="tp-v38-admin-selects">
+.tp-v38-select{position:relative;width:100%}
+.tp-v38-select-button{width:100%;min-height:44px;background:#07080a;border:1px solid #262a31;border-radius:6px;color:#fff;padding:0 38px 0 12px;text-align:left;font-size:12px;line-height:1.2;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:border-color .18s ease,box-shadow .18s ease}
+.tp-v38-select-button:hover,.tp-v38-select-button:focus{outline:none;border-color:#d4af37;box-shadow:0 0 0 2px rgba(212,175,55,.12)}
+.tp-v38-select-button:after{content:"⌄";position:absolute;right:13px;color:#f0c94b;font-size:14px;pointer-events:none}
+.tp-v38-select-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:3000;max-height:220px;overflow:auto;background:#050507;border:1px solid #d4af37;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.7);padding:5px}
+.tp-v38-select-option{width:100%;display:block;text-align:left;border:0;background:transparent;color:#f8fafc;padding:10px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.tp-v38-select-option:hover,.tp-v38-select-option.tp-v38-active{background:#d4af37;color:#050505;font-weight:800}
+.tp-v38-select-option:focus{outline:1px solid rgba(212,175,55,.8);outline-offset:1px}
+</style>
+
+<style id="tp-v39-premium-upgrade">
+.tp-v39-nav{position:sticky!important;top:0!important;background:rgba(7,8,10,.58)!important;border-bottom:1px solid rgba(255,255,255,.08)!important;backdrop-filter:blur(18px)!important;box-shadow:0 14px 45px rgba(0,0,0,.28)!important}
+.tp-v39-nav button{position:relative}.tp-v39-nav button:after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:#d4af37;transition:right .25s ease}.tp-v39-nav button:hover:after{right:0}
+.tp-v39-hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;margin-top:-1px;isolation:isolate;background:#050506}
+.tp-v39-hero-media,.tp-v39-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3;transform:scale(1.05);animation:tpHeroZoom 18s ease-in-out infinite alternate}
+.tp-v39-hero:before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.52),rgba(0,0,0,.28)),radial-gradient(circle at 72% 45%,rgba(212,175,55,.2),transparent 34%)}
+.tp-v39-hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,10,12,.08),#0a0a0c 98%)}
+@keyframes tpHeroZoom{from{transform:scale(1.03)}to{transform:scale(1.13)}}
+.tp-v39-eyebrow{display:inline-flex;gap:10px;align-items:center;border:1px solid rgba(212,175,55,.34);background:rgba(10,10,12,.45);padding:9px 13px;border-radius:999px;color:#f0d675;font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;backdrop-filter:blur(10px)}
+.tp-v39-title{font-size:clamp(3rem,7vw,7.8rem)!important;line-height:.88!important;letter-spacing:-.07em!important;text-transform:none!important;text-shadow:0 24px 80px rgba(0,0,0,.7)}
+.tp-v39-subtitle{max-width:760px;color:#d8d9dd;font-size:clamp(1rem,1.4vw,1.28rem);line-height:1.8;font-weight:300}
+.tp-v39-cta{display:flex;flex-wrap:wrap;gap:12px}.tp-v39-cta button,.tp-v39-cta a{border-radius:999px;padding:14px 20px;font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;transition:transform .2s ease,box-shadow .2s ease}.tp-v39-cta button:hover,.tp-v39-cta a:hover{transform:translateY(-2px);box-shadow:0 14px 35px rgba(212,175,55,.18)}
+.tp-v39-search-float{position:relative;margin-top:-105px;z-index:20}.tp-v39-glass{background:rgba(13,14,18,.54)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:24px!important;box-shadow:0 28px 90px rgba(0,0,0,.55)!important;backdrop-filter:blur(22px)!important}.tp-v39-glass .tp-v23-housing-filter{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+.tp-v39-search-extra{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}.tp-v39-search-extra input,.tp-v39-search-extra select{background:rgba(5,6,8,.74);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff;min-height:44px;padding:0 12px;font-size:12px}
+.tp-v39-section{padding:72px 24px}.tp-v39-panel{background:linear-gradient(145deg,rgba(22,23,27,.92),rgba(8,9,11,.92));border:1px solid rgba(255,255,255,.08);border-radius:28px;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.tp-v39-trust{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;overflow:hidden}.tp-v39-stat{padding:24px 18px;background:rgba(255,255,255,.035);text-align:center}.tp-v39-stat b{display:block;color:#d4af37;font-size:clamp(1.35rem,2vw,2.2rem)}.tp-v39-stat span{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#a8adb7}
+.tp-v39-home-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.tp-v39-mini-card{min-height:185px;border-radius:24px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 55px rgba(0,0,0,.24);transition:.25s ease}.tp-v39-mini-card:hover{transform:translateY(-6px);border-color:rgba(212,175,55,.45)}
+.tp-v39-property-list-head{position:sticky;top:86px;z-index:25;background:rgba(10,10,12,.74);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px;box-shadow:0 18px 55px rgba(0,0,0,.28)}
+.tp-v39-card-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}.tp-v39-card-actions a,.tp-v39-card-actions button{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 4px;font-size:9px;font-weight:900;text-align:center;color:#e5e7eb;background:rgba(255,255,255,.04)}
+@media(max-width:900px){.tp-v39-title{font-size:3rem!important}.tp-v39-search-float{margin-top:-70px}.tp-v39-search-extra{grid-template-columns:1fr}.tp-v39-trust{grid-template-columns:repeat(2,1fr)}.tp-v39-home-grid{grid-template-columns:1fr}.tp-v39-hero{min-height:88vh}.tp-v39-card-actions{grid-template-columns:repeat(2,1fr)}}
+</style>
+
 </head>
 <body>
     <div id="root"></div>
@@ -184,6 +582,51 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         const CONFIGURATIONS = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK / Penthouse"];
         const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch"];
+        const COMPANY_MAHARERA = "A031272401680";
+        const AMENITIES_POOL = ["Premium Clubhouse", "Infinity Swimming Pool", "Modern Gymnasium", "24/7 Multi-tier Security", "High-Speed Elevators", "Grand Entrance Lobby", "Ample Car Parking", "Landscaped Gardens", "Kids Play Area", "100% Power Backup"];
+
+
+        function AdminSelect({ value, options, onChange, className = "", ariaLabel }) {
+            const [open, setOpen] = React.useState(false);
+            const rootRef = React.useRef(null);
+            const normalizedOptions = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
+            React.useEffect(() => {
+                if (!open) return;
+                const handlePointer = (event) => {
+                    if (rootRef.current && !rootRef.current.contains(event.target)) setOpen(false);
+                };
+                document.addEventListener("mousedown", handlePointer);
+                return () => document.removeEventListener("mousedown", handlePointer);
+            }, [open]);
+            const selectedOption = normalizedOptions.find(option => option.value === value) || normalizedOptions[0] || { value: "", label: "" };
+            return (
+                <div ref={rootRef} className={`tp-v38-select ${className}`}>
+                    <button type="button" className="tp-v38-select-button" aria-label={ariaLabel} aria-expanded={open} onClick={() => setOpen(x => !x)}>
+                        <span>{selectedOption.label}</span>
+                    </button>
+                    {open && (
+                        <div className="tp-v38-select-menu" role="listbox">
+                            {normalizedOptions.map(option => (
+                                <button
+                                    type="button"
+                                    key={option.value}
+                                    role="option"
+                                    aria-selected={option.value === selectedOption.value}
+                                    className={`tp-v38-select-option ${option.value === selectedOption.value ? "tp-v38-active" : ""}`}
+                                    onClick={() => { onChange(option.value); setOpen(false); }}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const TITLE_PREFIXES = ["The Grand", "Elysian", "Pinnacle", "Aura", "Regency", "Signature", "Golden", "Skyline", "Emerald", "Marquis", "Palazzo", "Imperial", "Sapphire", "Royal", "Oasis", "Vista", "Serene", "Meridian"];
+        const TITLE_SUFFIXES = ["Residences", "Towers", "Estates", "Heights", "Manor", "Crest", "Villas", "Gardens", "Gre Greens", "Bay", "Terraces", "Enclave", "Palace", "Courtyard"];
+        
         const STOCK_IMAGES = [
             "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
@@ -203,8 +646,72 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     setProjects(data.length > 0 ? data : generateDemoProjects());
                     setLoading(false);
                 });
-                return unsubscribe;
-            }, []);
+            }
+            return listings;
+        };
+
+        // --- SEARCH & FILTER COMPONENT ---
+        function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
+            const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
+            const closeSuggestions = () => setSuggestionsOpen(false);
+            return (
+                <div className="tp-v23-housing-filter bg-luxury-card border border-neutral-800 p-3 rounded-xl space-y-3 lg:space-y-0 lg:flex lg:gap-0 items-center shadow-xl w-full">
+                    <div className="flex-1 min-w-[200px] relative z-[100]" onFocus={()=>setSuggestionsOpen(true)}>
+                        <input type="text" placeholder="Search project, location, city, developer..." className="w-full bg-luxury-bg border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-luxury-gold text-white" value={search} onChange={(e)=>{setSearch(e.target.value);setSuggestionsOpen(true)}} />
+                        {search.trim() && suggestionsOpen && <div className="absolute left-0 right-0 top-full mt-2 bg-[#111114] border border-neutral-700 rounded-lg shadow-2xl max-h-80 overflow-y-auto">{(()=>{
+                            const q=search.toLowerCase(), seen=new Set(), items=[];
+                            const add=(type,label,detail)=>{if(label&&label.toLowerCase().includes(q)){const k=(type+label).toLowerCase();if(!seen.has(k)){seen.add(k);items.push({type,label,detail})}}};
+                            listings.filter(p=>p.published!==false).forEach(p=>{add("Project",p.title,`${p.subLocality}, ${p.region}`);add("Location",p.subLocality,p.region);add("City",p.region,"All matching projects");add("Developer",p.developer,p.title);add("Address",p.address,p.title)});
+                            return items.slice(0,12).length ? items.slice(0,12).map((s,i)=><button type="button" key={i} onClick={()=>{setSearch(s.label);setSuggestionsOpen(false)}} className="w-full text-left px-4 py-3 border-b border-neutral-800 last:border-0 hover:bg-neutral-900 flex gap-3"><span className="text-[9px] uppercase text-luxury-gold border border-luxury-gold/40 rounded px-1.5 py-0.5 h-fit min-w-[58px] text-center">{s.type}</span><span><strong className="block text-sm text-white">{s.label}</strong><small className="text-neutral-500">{s.detail}</small></span></button>) : <div className="px-4 py-4 text-sm text-neutral-500">No matching project or location found.</div>;
+                        })()}</div>}
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:flex lg:gap-3">
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="City / Region filter"
+                            value={selectedRegion}
+                            options={[{ value: "", label: "All Cities / Regions" }, ...Object.keys(REGIONS).map(r => ({ value: r, label: r }))]}
+                            onChange={(region) => { closeSuggestions(); setSelectedRegion(region); setSelectedSubLocality(""); }}
+                        />
+
+                        <AdminSelect
+                            className="lg:w-48"
+                            ariaLabel="Locality filter"
+                            value={selectedSubLocality}
+                            options={[{ value: "", label: "All Localities" }, ...(selectedRegion ? REGIONS[selectedRegion].map(sub => ({ value: sub, label: sub })) : [])]}
+                            onChange={(subLocality) => { closeSuggestions(); setSelectedSubLocality(subLocality); }}
+                        />
+
+                        <AdminSelect
+                            className="lg:w-40"
+                            ariaLabel="BHK Configuration filter"
+                            value={selectedConfig}
+                            options={[{ value: "", label: "BHK Configuration" }, ...CONFIGURATIONS.map(c => ({ value: c, label: c }))]}
+                            onChange={(configuration) => { closeSuggestions(); setSelectedConfig(configuration); }}
+                        />
+
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="Possession Status filter"
+                            value={selectedStatus}
+                            options={[{ value: "", label: "Possession Status" }, ...DEVELOPMENT_STATUS.map(status => ({ value: status, label: status }))]}
+                            onChange={(status) => { closeSuggestions(); setSelectedStatus(status); }}
+                        />
+                    </div>
+                </div>
+            );
+        }
+
+        // --- ENQUIRY MODAL / SITE VISIT POPUP ---
+        function EnquiryModal({ property, onClose, onSubmitLead, formTitle = "Book a Free Site Visit" }) {
+            const [name, setName] = React.useState("");
+            const [phone, setPhone] = React.useState("");
+            const [email, setEmail] = React.useState("");
+            const [date, setDate] = React.useState("");
+            const [notes, setNotes] = React.useState("");
+            const [visitTime, setVisitTime] = React.useState("");
+            const [pickup, setPickup] = React.useState("");
+            const [visitors, setVisitors] = React.useState("1");
 
             const generateDemoProjects = () => {
                 const demos = [];
@@ -232,22 +739,186 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 return <PropertyDetailView project={selectedProject} onBack={() => setSelectedProject(null)} />;
             }
 
+        function PropertyCard({ property, onOpenEnquiry, onOpenProject, selectedConfig="" }) {
+            const cardProject=normalizeProject(property);
+            const cardConfigurations = projectConfigurations(cardProject);
+            // Card video must come only from the current configuration media saved in Admin.
+            // Do not fall back to legacy project-level links, because removed old videos can otherwise reappear.
+            const cardSampleVideo = (
+                (cardConfigurations.find(c => Array.isArray(c.sampleVideoLinks) && c.sampleVideoLinks.filter(link => String(link || "").trim()).length)?.sampleVideoLinks || [])
+                    .find(link => String(link || "").trim())
+                || ""
+            );
+            const cardAmenities = Array.isArray(property.amenities)
+                ? property.amenities.filter(am => String(am || "").trim())
+                : [];
+            const visibleCardAmenities = cardAmenities.slice(0, 4);
+            const hiddenAmenityCount = Math.max(0, cardAmenities.length - visibleCardAmenities.length);
+            const initialCardConfig = selectedConfig && projectMatchesConfiguration(cardProject, selectedConfig)
+                ? getActiveConfiguration(cardProject, selectedConfig).configuration
+                : (cardConfigurations[0]?.configuration || "");
+            const [cardSelectedConfig, setCardSelectedConfig] = React.useState(initialCardConfig);
+            const activeConfig=getActiveConfiguration(cardProject, cardSelectedConfig);
+            const activeConfigLabel = activeConfig.configuration || projectConfigSummary(cardProject);
+            const activeArea = activeConfig.carpetArea || projectAreaSummary(cardProject);
+            const activePrice = activeConfig.price || projectStartingPrice(cardProject);
+            const [cardImage,setCardImage]=React.useState(0);
+            React.useEffect(()=>{ if(cardProject.images.length<2)return; const timer=setInterval(()=>setCardImage(i=>(i+1)%cardProject.images.length),2800); return()=>clearInterval(timer); },[cardProject.id,cardProject.images.length]);
+            React.useEffect(()=>{ setCardSelectedConfig(initialCardConfig); }, [cardProject.id, initialCardConfig]);
             return (
-                <div className="bg-luxury-bg min-h-screen">
-                    <Navbar />
-                    <Hero />
-                    <PropertyGridView projects={projects} onSelectProject={setSelectedProject} />
-                    <Footer />
+                <div className="bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
+                    <div className="relative overflow-hidden h-64 bg-neutral-900">
+                        <img src={cardProject.images[cardImage] || property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                            <MediaWatermark compact={true} />
+                            <span className="absolute top-3 left-3 z-30 bg-luxury-gold text-black text-[9px] font-black uppercase px-2 py-1 rounded-full shadow-xl">Featured</span>
+                            {cardProject.statusBadge && <span className="absolute top-3 right-3 z-30 bg-black/85 border border-luxury-gold text-luxury-gold text-[9px] font-bold uppercase px-2 py-1 rounded">{cardProject.statusBadge}</span>}
+                            <span className="absolute top-12 left-3 z-30 bg-black/75 border border-white/15 text-white text-[9px] font-black uppercase px-2 py-1 rounded-full">Luxury</span>
+                            <div className="absolute bottom-3 left-3 z-30 h-10 w-10 rounded-full bg-white/90 text-black flex items-center justify-center text-[10px] font-black border border-luxury-gold shadow-xl">{String(cardProject.developer||'TP').slice(0,2).toUpperCase()}</div>
+                            {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
+                        <span className="absolute top-12 right-3 z-20 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30">{property.status}</span>
+                        <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {activeArea}</span>
+                    </div>
+                    <div className="p-7 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{activeConfigLabel}</span>
+                                <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
+                            </div>
+                            <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
+                            <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-2">{property.address}</p>
+                            {cardProject.reraNumber && <div className="text-[10px] text-emerald-400 mb-3">RERA: {cardProject.reraNumber}</div>}
+                            <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
+                            {cardConfigurations.length > 1 && (
+                                <div className="mb-4 rounded-lg border border-neutral-900 bg-luxury-bg/70 p-2">
+                                    <div className="text-[9px] uppercase tracking-widest text-neutral-500 mb-2">Choose Configuration</div>
+                                    <div className="grid grid-cols-2 gap-1.5">
+                                        {cardConfigurations.map((config, index) => (
+                                            <button
+                                                type="button"
+                                                key={`${config.configuration}-${index}`}
+                                                onClick={(event) => { event.stopPropagation(); setCardSelectedConfig(config.configuration); }}
+                                                className={`text-left rounded border px-2 py-1.5 transition ${activeConfig.configuration === config.configuration ? "bg-luxury-gold text-black border-luxury-gold" : "border-neutral-800 text-white hover:border-luxury-gold"}`}
+                                            >
+                                                <b className="block text-[10px]">{config.configuration || "Configuration"}</b>
+                                                <span className={`block text-[9px] ${activeConfig.configuration === config.configuration ? "text-black/70" : "text-neutral-400"}`}>{config.carpetArea || "Area on request"}</span>
+                                                <span className={`block text-[10px] font-bold ${activeConfig.configuration === config.configuration ? "text-black" : "text-luxury-gold"}`}>{config.price || "Price on request"}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {cardAmenities.length > 0 && <div className="flex flex-wrap gap-1.5 mb-4">
+                                {visibleCardAmenities.map((am, index) => (
+                                    <span key={index} className="text-[10px] bg-luxury-bg border border-neutral-900 text-neutral-400 px-2 py-0.5 rounded-md">{am}</span>
+                                ))}
+                                {hiddenAmenityCount > 0 && (
+                                    <button type="button" onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-[10px] bg-luxury-gold/10 border border-luxury-gold/40 text-luxury-gold px-2 py-0.5 rounded-md font-bold hover:bg-luxury-gold hover:text-black transition">
+                                        +{hiddenAmenityCount} more
+                                    </button>
+                                )}
+                            </div>}
+                        </div>
+                        <div className="pt-4 border-t border-neutral-900 flex justify-between items-center mt-auto">
+                            <div><span className="text-2xl font-bold text-white tracking-tight">{activePrice}</span><span className="block text-[10px] text-neutral-500">{activeConfigLabel} • {activeArea}</span></div>
+                            <div className="grid grid-cols-2 gap-2 w-[238px]">
+                                <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
+                                <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">Site Visit</button>
+                                {cardSampleVideo && <a href={cardSampleVideo} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="col-span-2 flex items-center justify-center border border-red-700 text-red-400 text-[10px] font-bold px-3 py-2 rounded uppercase whitespace-nowrap">▶ Watch Sample Flat Video</a>}
+                            </div>
+                            <div className="tp-v39-card-actions col-span-2">
+                                <a href={`https://wa.me/917718847841?text=${encodeURIComponent('I am interested in '+cardProject.title+' - '+activeConfigLabel+' '+activePrice)}`} target="_blank" rel="noreferrer">WhatsApp</a>
+                                <a href="tel:+917718847841">Call</a>
+                                <button type="button">Compare</button>
+                                <button type="button">♡ Save</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }
 
-        function Navbar() {
+
+
+        const DEFAULT_HERO_SLIDES = [{
+            enabled: true,
+            title: "Live Above Ordinary",
+            subtitle: "Premium zero-brokerage homes across Navi Mumbai, Mumbai, Thane and Dombivli with verified pricing, RERA clarity and concierge site visits.",
+            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85",
+            video: "",
+            primaryCta: "Browse Properties",
+            secondaryCta: "Contact Us",
+            tertiaryCta: "Book Site Visit"
+        }];
+
+        const getHeroSlides = () => {
+            try {
+                const saved = JSON.parse(localStorage.getItem("tp_hero_slides_v39") || "[]");
+                const usable = Array.isArray(saved) ? saved.filter(slide => slide && slide.enabled !== false) : [];
+                return usable.length ? usable : DEFAULT_HERO_SLIDES;
+            } catch(e) { return DEFAULT_HERO_SLIDES; }
+        };
+
+        function TrustStrip({ totalCount = 0 }) {
+            const stats = [
+                ["8+", "Years Experience"],
+                [`${Math.max(totalCount, 25)}+`, "Verified Projects"],
+                ["40+", "Partner Developers"],
+                ["1200+", "Happy Families"],
+                ["0%", "Brokerage"],
+                ["100%", "RERA Checked"]
+            ];
+            return <section className="max-w-7xl mx-auto px-6 -mt-2 relative z-10"><div className="tp-v39-panel tp-v39-trust">{stats.map(([value,label])=><div key={label} className="tp-v39-stat"><b>{value}</b><span>{label}</span></div>)}</div></section>;
+        }
+
+        function PremiumHomeSections({ listings = [], setView }) {
+            const developers = [...new Set(listings.map(p => p.developer).filter(Boolean))].slice(0, 8);
+            const locations = [...new Set(listings.map(p => p.subLocality || p.region).filter(Boolean))].slice(0, 8);
+            const blocks = [
+                ["New Launches", "Fresh developer inventory with launch offers and early-buyer pricing."],
+                ["Luxury Collection", "Handpicked residences with premium amenities, views and lifestyle clubs."],
+                ["Investment Projects", "Growth corridors across Kharghar, Panvel, Ulwe, Thane and Dombivli."],
+                ["Commercial", "Office and retail opportunities for yield-focused buyers."]
+            ];
+            return <section className="tp-v39-section max-w-7xl mx-auto space-y-10">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"><div><span className="text-luxury-gold text-xs font-black tracking-[.22em] uppercase">Curated Marketplace</span><h2 className="text-3xl md:text-5xl mt-3">Explore premium property collections</h2></div><button onClick={()=>setView('properties')} className="bg-luxury-gold text-black px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">View All Properties</button></div>
+                <div className="tp-v39-home-grid">{blocks.map(([title,text])=><div key={title} className="tp-v39-mini-card"><div className="text-luxury-gold text-xs font-black uppercase tracking-widest">{title}</div><p className="text-neutral-300 text-sm leading-6 mt-5">{text}</p><div className="mt-6 text-xs text-neutral-500">Verified • Zero Brokerage • Site Visit</div></div>)}</div>
+                <div className="grid lg:grid-cols-3 gap-6">
+                    <div className="tp-v39-panel p-7"><h3 className="text-xl mb-4">Top Developers</h3><div className="flex flex-wrap gap-2">{(developers.length?developers:["Lodha","Godrej Properties","Hiranandani","Arihant","Paradise Group"]).map(x=><span key={x} className="border border-white/10 rounded-full px-3 py-2 text-xs text-neutral-300">{x}</span>)}</div></div>
+                    <div className="tp-v39-panel p-7"><h3 className="text-xl mb-4">Featured Locations</h3><div className="flex flex-wrap gap-2">{(locations.length?locations:["Kharghar","Taloja","Panvel","Ulwe","Thane","Dombivli"]).map(x=><span key={x} className="border border-luxury-gold/30 rounded-full px-3 py-2 text-xs text-luxury-gold">{x}</span>)}</div></div>
+                    <div className="tp-v39-panel p-7"><h3 className="text-xl mb-3">Why TruePillar</h3><p className="text-sm text-neutral-300 leading-6">MahaRERA registered guidance, developer-direct pricing, zero brokerage, site visit coordination, loan support and transparent inventory checks.</p></div>
+                </div>
+                <div className="grid md:grid-cols-3 gap-6">{["The team explained pricing clearly and arranged a smooth site visit.","We compared multiple configurations without brokerage pressure.","RERA and floor-plan clarity helped us decide faster."].map((quote,i)=><div key={i} className="tp-v39-panel p-6"><div className="text-luxury-gold mb-3">★★★★★</div><p className="text-sm text-neutral-300 leading-6">“{quote}”</p><b className="block mt-5 text-xs uppercase tracking-widest">Verified Buyer</b></div>)}</div>
+            </section>;
+        }
+
+        // --- NAVIGATION BAR ---
+        function Navbar({ currentView, setView }) {
+            const navLabels = {
+                'home': 'HOME',
+                'properties': 'PROPERTIES',
+                'about': 'ABOUT US',
+                'contact': 'CONTACT US',
+                'admin': '🔒 Agent Login'
+            };
+
             return (
-                <nav className="sticky top-0 z-50 bg-luxury-card border-b border-neutral-900 px-6 lg:px-16 py-4 flex justify-between items-center">
-                    <div>
-                        <h1 className="text-2xl font-bold text-luxury-gold">TRUEPILLAR REALTY</h1>
-                        <p className="text-xs text-luxury-textMuted tracking-wider">Trust • Transparency • Zero Brokerage</p>
+                <nav className="tp-v39-nav sticky top-0 z-40 border-b border-neutral-900 bg-luxury-bg/95 backdrop-blur px-6 lg:px-16 py-4 flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div className="cursor-pointer text-center md:text-left" onClick={() => setView('home')}>
+                        <span className="text-xl font-bold tracking-widest text-white">TRUEPILLAR <span className="text-luxury-gold">REALTY</span></span>
+                        <div className="text-[10px] tracking-widest text-luxury-textMuted uppercase block font-semibold">Trust • Transparency • Zero Brokerage</div>
+                    </div>
+                    
+                    <div className="flex flex-wrap justify-center gap-7 text-sm tracking-wider uppercase font-bold">
+                        {['home', 'properties', 'about', 'contact', 'admin'].map((viewId) => (
+                            <button 
+                                key={viewId} 
+                                onClick={() => setView(viewId)} 
+                                className={`hover:text-luxury-gold transition duration-200 ${currentView === viewId ? 'text-luxury-gold font-bold border-b border-luxury-gold/50' : 'text-neutral-400'}`}
+                            >
+                                {navLabels[viewId]}
+                            </button>
+                        ))}
                     </div>
                     <div className="flex gap-8 text-sm font-semibold">
                         <a href="#" className="text-luxury-textMuted hover:text-luxury-gold transition">Properties</a>
@@ -258,16 +929,125 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             );
         }
 
-        function Hero() {
+        // --- HOME SCREEN VIEW ---
+        function Home({ setView, listings, totalCount = 0, onOpenEnquiry, onOpenProject, filterState, onSubmitHomeLead }) {
+            const [hName, setHName] = React.useState("");
+            const [hPhone, setHPhone] = React.useState("");
+            const [hLoc, setHLoc] = React.useState("Navi Mumbai");
+            const [hProject, setHProject] = React.useState("");
+            const [hDate, setHDate] = React.useState("");
+            const [hTime, setHTime] = React.useState("");
+            const [hVisitors, setHVisitors] = React.useState("1");
+            const [hMessage, setHMessage] = React.useState("");
+
+            const handleHomeForm = (e) => {
+                e.preventDefault();
+                const newLead = {
+                    id: Date.now(),
+                    timestamp: new Date().toLocaleString(),
+                    clientName: hName,
+                    clientPhone: hPhone,
+                    clientEmail: "N/A (Home Form)",
+                    assetTitle: `Home Page Quick Booking`,
+                    assetLocation: hLoc,
+                    clientNotes: `Preferred Project: ${hProject || "Not specified"}. Preferred Date: ${hDate || "Not specified"}. Preferred Time: ${hTime || "Not specified"}. Visitors: ${hVisitors}. Message: ${hMessage || "None"}.`,
+                    status: "New Lead"
+                };
+                onSubmitHomeLead(newLead);
+                
+                const customMsg = `Hello TruePillar Realty, my name is ${hName}. I would like to schedule a free site visit in ${hLoc}${hProject ? ` for ${hProject}` : ""}. Preferred date: ${hDate || "Flexible"}. Preferred time: ${hTime || "Flexible"}. Visitors: ${hVisitors}. ${hMessage}`;
+                window.open(`https://wa.me/917718847841?text=${encodeURIComponent(customMsg)}`, '_blank');
+                
+                setHName("");
+                setHPhone("");
+                alert("Site Visit Request Logged! We are launching your chat connection now.");
+            };
+
+            const heroSlide = getHeroSlides()[0] || DEFAULT_HERO_SLIDES[0];
+            const visibleTotal = totalCount || listings.length;
+
             return (
-                <div className="tp-v20-hero py-24 px-6">
-                    <div className="max-w-7xl mx-auto text-center">
-                        <h2 className="text-6xl md:text-7xl font-bold text-luxury-gold mb-6">PREMIUM HOMES</h2>
-                        <p className="text-xl text-luxury-textMuted mb-10">Direct from builders. Zero brokerage. Transparent pricing.</p>
-                        <button className="bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 px-8 rounded-lg transition text-lg">
-                            Explore Properties
-                        </button>
+                <div className="space-y-0">
+                    <section className="tp-v39-hero px-6 lg:px-16">
+                        {heroSlide.video ? (
+                            <video className="tp-v39-hero-video" src={heroSlide.video} autoPlay muted loop playsInline poster={heroSlide.image || DEFAULT_HERO_SLIDES[0].image}></video>
+                        ) : (
+                            <img className="tp-v39-hero-media" src={heroSlide.image || DEFAULT_HERO_SLIDES[0].image} alt="TruePillar premium real estate hero" />
+                        )}
+                        <div className="max-w-7xl mx-auto w-full pt-24 pb-40">
+                            <div className="max-w-5xl space-y-7">
+                                <span className="tp-v39-eyebrow">MahaRERA A031272401680 • Zero Brokerage</span>
+                                <h1 className="tp-v39-title text-white">{heroSlide.title || "Live Above Ordinary"}</h1>
+                                <p className="tp-v39-subtitle">{heroSlide.subtitle || DEFAULT_HERO_SLIDES[0].subtitle}</p>
+                                <div className="tp-v39-cta">
+                                    <button onClick={() => setView('properties')} className="bg-luxury-gold text-black">{heroSlide.primaryCta || "Browse Properties"}</button>
+                                    <button onClick={() => setView('contact')} className="border border-white/25 text-white bg-white/5">{heroSlide.secondaryCta || "Contact Us"}</button>
+                                    <button onClick={() => onOpenEnquiry({title:"General Site Visit",subLocality:"Multiple Locations",region:"MMR",carpetArea:"Flexible",status:"New Enquiry"})} className="border border-luxury-gold/60 text-luxury-gold bg-black/20">{heroSlide.tertiaryCta || "Book Site Visit"}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="tp-v39-search-float max-w-7xl mx-auto px-6">
+                        <div className="tp-v39-glass p-4 md:p-6">
+                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                                <div><div className="text-luxury-gold text-xs font-black tracking-[.2em] uppercase">Floating Property Search</div><p className="text-xs text-neutral-300 mt-1">Search by project, location, budget, configuration and possession.</p></div>
+                                <button onClick={() => setView('properties')} className="bg-luxury-gold text-black px-5 py-3 rounded-full text-xs font-black uppercase">Search Properties</button>
+                            </div>
+                            <SearchFilterBar {...filterState} listings={listings} />
+                            <div className="tp-v39-search-extra">
+                                <input type="text" placeholder="Budget e.g. ₹1 Cr - ₹2 Cr" />
+                                <select><option>Property Type</option><option>Residential</option><option>Commercial</option><option>Luxury</option></select>
+                                <button type="button" onClick={() => setView('properties')} className="rounded-xl border border-luxury-gold/50 text-luxury-gold text-xs font-black uppercase tracking-widest">Advanced Filters</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <TrustStrip totalCount={visibleTotal || listings.length} />
+                    <TopSpotlight listings={listings} onOpenProject={onOpenProject} onOpenEnquiry={onOpenEnquiry} />
+
+                    <section className="py-16 px-6 lg:px-16 max-w-7xl mx-auto">
+                        <div className="flex justify-between items-end mb-8 border-b border-neutral-900 pb-4">
+                            <h2 className="text-xl md:text-3xl font-light tracking-wider">Premium Featured <span className="text-luxury-gold font-medium">Projects</span></h2>
+                            <button onClick={() => setView('properties')} className="text-xs text-luxury-gold font-bold tracking-wider uppercase hover:underline">View All Flats ({visibleTotal || listings.length}) &rarr;</button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
+                            {listings.slice(0, 6).map(p => <PropertyCard key={p.id} property={p} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} selectedConfig={filterState.selectedConfig} />)}
+                        </div>
+                    </section>
+
+                    <PremiumHomeSections listings={listings} setView={setView} />
+                </div>
+            );
+        }
+
+        // --- PROPERTIES CATALOGUE VIEW ---
+        function Properties({ listings, onOpenEnquiry, onOpenProject, filterState }) {
+            return (
+                <div className="bg-luxury-bg text-white min-h-screen py-12 px-6 lg:px-16 max-w-7xl mx-auto space-y-8">
+                    <div className="tp-v39-property-list-head">
+                        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                            <div>
+                                <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Verified Listings</span>
+                                <h1 className="text-3xl font-light tracking-wider mt-1">Available Properties & <span className="text-luxury-gold font-semibold">Apartments</span></h1>
+                                <div className="text-xs text-neutral-400 font-light mt-2">Showing {listings.length} matches found across database nodes.</div>
+                            </div>
+                            <div className="flex gap-2 text-[10px] uppercase font-black">
+                                <button className="border border-luxury-gold text-luxury-gold rounded-full px-4 py-2">Grid</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">List</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">Sort: Featured</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">Map View</button>
+                            </div>
+                        </div>
+                        <div className="mt-5"><SearchFilterBar {...filterState} listings={listings} /></div>
                     </div>
+                    {listings.length === 0 ? (
+                        <div className="text-center py-20 border border-dashed border-neutral-800 rounded-xl text-neutral-500 text-sm">No properties match your filter selections. Try altering your choices.</div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
+                            {listings.map((property) => <PropertyCard key={property.id} property={property} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} selectedConfig={filterState.selectedConfig} />)}
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -298,8 +1078,100 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             );
         }
 
-        function PropertyDetailView({ project, onBack }) {
-            const [formData, setFormData] = React.useState({ name: '', phone: '', email: '', date: '', message: '' });
+        // --- ADMIN / LEAD PANEL VIEW ---
+        function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
+            const [spotlightSettings,setSpotlightSettings]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){return {}}});
+            const saveSpotlight=()=>{localStorage.setItem("tp_spotlight_v22",JSON.stringify(spotlightSettings));alert("Spotlight settings saved.");};
+            const [heroSlides,setHeroSlides]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_hero_slides_v39")||"[]")}catch(e){return []}});
+            const activeHeroSlide = heroSlides[0] || DEFAULT_HERO_SLIDES[0];
+            const updateHeroSlide=(patch)=>setHeroSlides(prev=>[{...(prev[0]||DEFAULT_HERO_SLIDES[0]),...patch},...prev.slice(1)]);
+            const saveHeroSlides=()=>{localStorage.setItem("tp_hero_slides_v39",JSON.stringify(heroSlides.length?heroSlides:[activeHeroSlide]));alert("Hero Manager saved. Refresh the homepage to see local CMS changes.");};
+            const deleteHeroSlide=()=>setHeroSlides([{...DEFAULT_HERO_SLIDES[0],enabled:false,image:"",video:""}]);
+            const uploadHeroFile=(file,type)=>{if(!file)return;const reader=new FileReader();reader.onload=()=>updateHeroSlide({[type]:reader.result});reader.readAsDataURL(file);};
+            const [activeSubTab, setActiveSubTab] = React.useState("leads");
+            const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', configurationsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
+            const [isEditing, setIsEditing] = React.useState(false);
+            const [uploadStatus, setUploadStatus] = React.useState("");
+            const [isUploading, setIsUploading] = React.useState(false);
+            const [mediaConfigIndex, setMediaConfigIndex] = React.useState("");
+            const [configMediaDrafts, setConfigMediaDrafts] = React.useState({});
+
+            const parsedConfigurations = () => lines(formData.configurationsText || "").map(row => {
+                const parts = row.split("|").map(x => x.trim());
+                const name = parts[0] || "";
+                const existing = (formData.configurations || []).find(c => String(c.configuration||"").toLowerCase() === name.toLowerCase()) || {};
+                return { ...existing, configuration:name, carpetArea:parts[1]||"", price:parts.slice(2).join("|").trim()||"", sampleVideoLinks:existing.sampleVideoLinks||[], highlightVideoLinks:existing.highlightVideoLinks||[], floorPlans:existing.floorPlans||[] };
+            }).filter(x=>x.configuration||x.carpetArea||x.price);
+
+            const updateConfigMedia = (configIndex, patch) => {
+                const i = Number(configIndex);
+                if (!Number.isInteger(i)) return;
+                setConfigMediaDrafts(prev => ({
+                    ...prev,
+                    [i]: {...(prev[i] || {}), ...patch}
+                }));
+            };
+
+            const selectedMediaBase = mediaConfigIndex === "" ? null : parsedConfigurations()[Number(mediaConfigIndex)] || null;
+            const selectedMediaConfig = selectedMediaBase ? {...selectedMediaBase, ...(configMediaDrafts[Number(mediaConfigIndex)] || {})} : null;
+
+            const handleImageUpload = async (e) => {
+                const input = e.target;
+                const files = Array.from(input.files || []);
+                if (!files.length) return;
+
+                const invalid = files.find(file => !file.type.startsWith("image/"));
+                if (invalid) {
+                    alert("Please select image files only.");
+                    input.value = "";
+                    return;
+                }
+
+                setIsUploading(true);
+                setUploadStatus(`Uploading 0 of ${files.length} images...`);
+
+                try {
+                    const uploadedUrls = [];
+                    for (let i = 0; i < files.length; i++) {
+                        setUploadStatus(`Uploading ${i + 1} of ${files.length}: ${files[i].name}`);
+                        const url = await uploadProjectFile(files[i], "project-images");
+                        uploadedUrls.push(url);
+                    }
+
+                    setFormData(prev => {
+                        const currentImages = Array.isArray(prev.images) ? prev.images.filter(x => typeof x === "string" && x.startsWith("http")) : [];
+                        const mergedImages = [...currentImages, ...uploadedUrls];
+                        return {
+                            ...prev,
+                            images: mergedImages,
+                            image: mergedImages[0] || prev.image || STOCK_IMAGES[0]
+                        };
+                    });
+
+                    setUploadStatus(`✓ ${uploadedUrls.length} image${uploadedUrls.length === 1 ? "" : "s"} uploaded successfully. Now click ${isEditing ? "SAVE REVISIONS" : "ADD PROPERTY"}.`);
+                } catch(err) {
+                    console.error("Firebase Storage upload error:", err);
+                    const code = err && err.code ? ` (${err.code})` : "";
+                    setUploadStatus(`Upload failed${code}.`);
+                    alert(`Image upload failed${code}. Firebase Storage must be enabled and its Storage Rules must allow the logged-in admin to upload.`);
+                } finally {
+                    setIsUploading(false);
+                    input.value = "";
+                }
+            };
+
+            const removeImage = (index) => {
+                setFormData(prev => {
+                    const updated = prev.images.filter((_, i) => i !== index);
+
+                    return {
+                        ...prev,
+                        images: updated,
+                        image: updated[0] || STOCK_IMAGES[0]
+                    };
+                });
+            };
+
 
             const handleSubmit = (e) => {
                 e.preventDefault();
@@ -307,12 +1179,270 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             };
 
             return (
-                <div className="bg-luxury-bg min-h-screen">
-                    <button onClick={onBack} className="text-luxury-gold px-6 py-3 m-4 hover:text-luxury-goldHover transition text-lg">← Back to Properties</button>
-                    <div className="max-w-7xl mx-auto px-6 py-12">
-                        <div className="tp-v20-detail-grid grid gap-12 mb-12">
-                            <div className="tp-v20-detail-image relative rounded-lg overflow-hidden bg-neutral-900">
-                                <img src={project.image} alt={project.name} className="w-full h-96 object-cover" />
+                <div className="py-8 px-6 lg:px-16 max-w-7xl mx-auto space-y-8 animate-fadeIn">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-neutral-800 pb-6 gap-4">
+                        <div>
+                            <span className="text-[10px] tracking-widest text-emerald-400 font-bold bg-emerald-950/40 border border-emerald-900 px-2.5 py-1 rounded-full uppercase">Secure Console</span>
+                            <h1 className="text-2xl font-medium tracking-wider text-white mt-2">TruePillar Realty <span className="text-luxury-gold">Lead & CRM Dashboard</span></h1>
+                        </div>
+                        <div className="flex gap-3">
+                            <button onClick={() => setActiveSubTab("leads")} className={`px-4 py-2 text-xs font-bold rounded uppercase tracking-wider transition ${activeSubTab === 'leads' ? 'bg-luxury-gold text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'}`}>Leads & Bookings ({leads.length})</button>
+                            <button onClick={() => setActiveSubTab("inventory")} className={`px-4 py-2 text-xs font-bold rounded uppercase tracking-wider transition ${activeSubTab === 'inventory' ? 'bg-luxury-gold text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'}`}>Manage Inventory ({listings.length})</button>
+                            <button onClick={onLogout} className="bg-red-950/40 hover:bg-red-900/60 border border-red-900 text-red-400 text-xs font-bold px-4 py-2 rounded transition uppercase tracking-wider">Logout</button>
+                        </div>
+                    </div>
+
+                    {activeSubTab === "leads" ? (
+                        <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6 shadow-xl space-y-4">
+                            <h2 className="text-lg font-medium text-white border-b border-neutral-900 pb-3">Customer Site Visit & Enquiry Leads</h2>
+                            {leads.length === 0 ? (
+                                <div className="text-center py-16 text-neutral-500 font-light text-sm border border-dashed border-neutral-900 rounded-lg">No lead records found. New client bookings will show up here instantly.</div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-xs text-neutral-300">
+                                        <thead>
+                                            <tr className="border-b border-neutral-800 text-neutral-400 font-semibold tracking-wide uppercase">
+                                                <th className="py-3 px-2">Client Details</th><th className="py-3 px-2">Project / Location</th><th className="py-3 px-2">Customer Request Note</th><th className="py-3 px-2">Lead Status</th><th className="py-3 px-2 text-right">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {leads.map(lead => (
+                                                <tr key={lead.id} className="border-b border-neutral-900/60 hover:bg-neutral-900/20">
+                                                    <td className="py-4 px-2 space-y-1">
+                                                        <div className="text-neutral-500 text-[10px] font-mono">{lead.timestamp}</div>
+                                                        <div className="font-bold text-white text-sm">{lead.clientName}</div>
+                                                        <div className="text-luxury-gold font-medium text-sm select-all">{lead.clientPhone}</div>
+                                                        <div className="text-neutral-400 text-[11px] font-mono select-all">{lead.clientEmail}</div>
+                                                    </td>
+                                                    <td className="py-4 px-2">
+                                                        <div className="font-semibold text-white text-sm">{lead.assetTitle}</div>
+                                                        <div className="text-neutral-400 text-[11px]">{lead.assetLocation}</div>
+                                                    </td>
+                                                    <td className="py-4 px-2 max-w-xs text-neutral-400 font-light leading-relaxed italic">{lead.clientNotes}</td>
+                                                    <td className="py-4 px-2">
+                                                        <select 
+                                                            value={lead.status} 
+                                                            className={`bg-luxury-bg border text-[10px] uppercase tracking-wider font-bold rounded p-1.5 focus:outline-none ${lead.status === 'Followed Up' ? 'border-emerald-500 text-emerald-400' : 'border-amber-500 text-amber-400'}`}
+                                                            onChange={(e) => onUpdateLeadStatus(lead.id, e.target.value)}
+                                                        >
+                                                            <option value="New Lead">🔴 New Lead</option>
+                                                            <option value="Followed Up">🟢 Followed Up</option>
+                                                        </select>
+                                                    </td>
+                                                    <td className="py-4 px-2 text-right">
+                                                        <button className="text-red-400 hover:text-red-300 font-medium text-[11px] hover:underline" onClick={() => onDeleteLead(lead.id)}>Delete</button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                            <div className="bg-luxury-card p-6 border border-neutral-800 rounded-xl h-fit shadow-xl">
+                                <h2 className="text-lg mb-4 text-white font-medium border-b border-neutral-900 pb-2">{isEditing ? 'Modify Property Flat' : 'Add New Property Flat'}</h2>
+                                <form onSubmit={handleAssetSubmit} className="space-y-4 text-xs text-neutral-300">
+                                    <div>
+                                        <label className="block text-neutral-400 mb-1">Project Name</label>
+                                        <input type="text" placeholder="e.g., Elysian Crest" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">City / Region</label>
+                                            <AdminSelect
+                                                ariaLabel="City / Region"
+                                                value={formData.region}
+                                                options={[...new Set([...Object.keys(REGIONS), formData.region].filter(Boolean))]}
+                                                onChange={region => setFormData({...formData, region, subLocality: (REGIONS[region] || [formData.subLocality || ""])[0]})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom city / region"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={Object.keys(REGIONS).includes(formData.region) ? "" : formData.region}
+                                                onChange={e => setFormData({...formData, region: e.target.value, subLocality: ""})}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Locality Node</label>
+                                            <AdminSelect
+                                                ariaLabel="Locality Node"
+                                                value={formData.subLocality}
+                                                options={[...new Set([...(REGIONS[formData.region] || []), formData.subLocality].filter(Boolean))]}
+                                                onChange={subLocality => setFormData({...formData, subLocality})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom locality / node"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={(REGIONS[formData.region] || []).includes(formData.subLocality) ? "" : formData.subLocality}
+                                                onChange={e => setFormData({...formData, subLocality: e.target.value})}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Typology Configuration</label>
+                                            <AdminSelect ariaLabel="Typology Configuration" value={formData.configuration} options={CONFIGURATIONS} onChange={configuration => setFormData({...formData, configuration})} />
+                                        </div>
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Possession State</label>
+                                            <AdminSelect ariaLabel="Possession State" value={formData.status} options={DEVELOPMENT_STATUS} onChange={status => setFormData({...formData, status})} />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Total Price (e.g. ₹1.40 Cr)</label>
+                                            <input type="text" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required />
+                                        </div>
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Carpet Area Size</label>
+                                            <input type="text" placeholder="e.g., 1050 Sq. Ft." className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.carpetArea} onChange={e => setFormData({...formData, carpetArea: e.target.value})} required />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Possession Date</label>
+                                            <input type="text" placeholder="e.g., Ready / Dec 2027" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.possession} onChange={e => setFormData({...formData, possession: e.target.value})} required />
+                                        </div>
+                                        <div>
+                                            <label className="block text-neutral-400 mb-1">Image URL LINK</label>
+                                            <input type="text" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-neutral-400 text-[11px]" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-neutral-400 mb-1">Full Detailed Address</label>
+                                        <input type="text" placeholder="Sector 20, Near Central Park..." className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} required />
+                                    </div>
+                                    <div>
+                                        <label className="block text-neutral-400 mb-1">Amenities (Commas separated)</label>
+                                        <input type="text" placeholder="Clubhouse, Swimming Pool, Gym" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.amenities.toString()} onChange={e => setFormData({...formData, amenities: e.target.value})} required />
+                                    </div>
+                                    
+
+<div className="border-t border-neutral-800 pt-4 space-y-4">
+    <h3 className="text-luxury-gold font-bold uppercase tracking-wider">Complete Project Page</h3>
+    <div className="grid grid-cols-2 gap-2">
+        <div><label className="block text-neutral-400 mb-1">Developer</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.developer||''} onChange={e=>setFormData({...formData,developer:e.target.value})}/></div>
+        <div><label className="block text-neutral-400 mb-1">MahaRERA Number</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.reraNumber||''} onChange={e=>setFormData({...formData,reraNumber:e.target.value})}/></div>
+    </div>
+    <div><label className="block text-neutral-400 mb-1">Project URL Slug</label><input placeholder="auto-created-from-name" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.slug||''} onChange={e=>setFormData({...formData,slug:slugify(e.target.value)})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Detailed Description</label><textarea rows="5" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.description||''} onChange={e=>setFormData({...formData,description:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Highlights — one per line</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.highlights||''} onChange={e=>setFormData({...formData,highlights:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Project Configurations — one per line: BHK | Carpet Area | Price</label><textarea rows="5" placeholder={'1 BHK | 450 Sq. Ft. | ₹55 Lakhs\n2 BHK | 750 Sq. Ft. | ₹95 Lakhs'} className="w-full bg-luxury-bg border border-luxury-gold/40 p-3 rounded text-white" value={formData.configurationsText||''} onChange={e=>setFormData({...formData,configurationsText:e.target.value})}/><p className="text-[10px] text-neutral-500 mt-1">Add all configurations of this project here. BHK filters will match any row.</p></div>
+    <div className="bg-luxury-bg border border-luxury-gold/40 rounded-xl p-4 space-y-4">
+    <div>
+        <label className="block text-luxury-gold font-bold mb-2">CONFIGURATION-SPECIFIC MEDIA</label>
+        <select value={mediaConfigIndex} onChange={e=>setMediaConfigIndex(String(e.target.value))} className="w-full bg-luxury-card border border-luxury-gold/50 p-3 rounded text-white">
+            <option value="">Select BHK configuration</option>
+            {parsedConfigurations().map((c,i)=><option key={i} value={String(i)}>{c.configuration} — {c.carpetArea} — {c.price}</option>)}
+        </select>
+        <p className="text-[10px] text-neutral-500 mt-2">Select 1 BHK, 2 BHK, 3 BHK etc. Then add only that configuration's floor plans and videos.</p>
+    </div>
+
+    {selectedMediaConfig && <div className="space-y-4">
+        <div>
+            <label className="block text-neutral-400 mb-1">{selectedMediaConfig.configuration} Sample Flat Video Links</label>
+            <textarea rows="3" placeholder="One YouTube / Instagram / Facebook link per line" className="w-full bg-luxury-card border border-neutral-800 p-3 rounded text-white" value={(selectedMediaConfig.sampleVideoLinks||[]).join('\n')} onChange={e=>{ const nextLinks=lines(e.target.value); updateConfigMedia(mediaConfigIndex,{sampleVideoLinks:nextLinks}); }}></textarea>
+        </div>
+<div className="space-y-2">
+            <label className="block text-neutral-400">{selectedMediaConfig.configuration} Floor Plans</label>
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={async e=>{
+                const files=Array.from(e.target.files||[]);
+                if(!files.length)return;
+                setIsUploading(true);
+                try{
+                    const added=[];
+                    for(const file of files){
+                        if(file.size>5*1024*1024){ alert(file.name+" is above 5 MB and was skipped."); continue; }
+                        setUploadStatus(`Uploading ${selectedMediaConfig.configuration} floor plan: ${file.name}`);
+                        const url=await uploadProjectFile(file,"floor-plans");
+                        added.push({label:selectedMediaConfig.configuration,area:selectedMediaConfig.carpetArea,price:selectedMediaConfig.price,image:url});
+                    }
+                    updateConfigMedia(mediaConfigIndex,{floorPlans:[...(selectedMediaConfig.floorPlans||[]),...added]});
+                    setUploadStatus(`✓ ${added.length} ${selectedMediaConfig.configuration} floor plan(s) uploaded.`);
+                }catch(err){console.error(err);setUploadStatus("Upload failed: "+(err.message||"Please check Cloudinary preset."));}
+                finally{setIsUploading(false);e.target.value="";}
+            }} disabled={isUploading} className="w-full bg-luxury-card border border-neutral-800 p-2 rounded text-xs text-white disabled:opacity-50"/>
+            <div className="space-y-2">{(selectedMediaConfig.floorPlans||[]).map((plan,i)=><div key={i} className="flex items-center gap-3 bg-luxury-card border border-neutral-800 p-2 rounded"><img src={plan.image} className="w-16 h-16 object-contain bg-white rounded"/><div className="flex-1 text-xs"><b className="block text-white">{selectedMediaConfig.configuration}</b><span className="text-neutral-500">{selectedMediaConfig.carpetArea} • {selectedMediaConfig.price}</span></div><button type="button" onClick={()=>updateConfigMedia(mediaConfigIndex,{floorPlans:selectedMediaConfig.floorPlans.filter((_,x)=>x!==i)})} className="text-red-400 text-xs">Remove</button></div>)}</div>
+        </div>
+    </div>}
+</div>
+
+<div><label className="block text-neutral-400 mb-1">Specifications — Name | Detail</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.specificationsText||''} onChange={e=>setFormData({...formData,specificationsText:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">Location Advantages — Place | 5 min</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.locationAdvantagesText||''} onChange={e=>setFormData({...formData,locationAdvantagesText:e.target.value})}/></div>
+    <div><label className="block text-neutral-400 mb-1">FAQs — Question | Answer</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.faqsText||''} onChange={e=>setFormData({...formData,faqsText:e.target.value})}/></div>
+    <label className="flex items-center gap-2"><input type="checkbox" checked={formData.published!==false} onChange={e=>setFormData({...formData,published:e.target.checked})}/> Published on website</label>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Project Highlight Video Links</label>
+    <textarea rows="4" placeholder={"Paste one link per line\nYouTube, Instagram or Facebook"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={(formData.highlightVideoLinks||[]).join('\n')} onChange={e=>setFormData({...formData,highlightVideoLinks:lines(e.target.value)})}></textarea>
+    <p className="text-[10px] text-neutral-500">These appear in the Project Highlight Videos section on the detail page.</p>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Google Maps Project Link</label>
+    <input value={formData.mapLink||''} onChange={e=>setFormData({...formData,mapLink:e.target.value})} placeholder="Paste Google Maps share link" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"/>
+</div>
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Nearby Places</label>
+    <textarea rows="4" value={(formData.nearbyPlaces||[]).map(x=>`${x.label} | ${x.value}`).join('\n')} onChange={e=>setFormData({...formData,nearbyPlaces:pairs(e.target.value)})} placeholder={"One per line:\nMetro Station | 5 min\nHospital | 7 min"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"></textarea>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Project Status Badge</label>
+    <select value={formData.statusBadge||''} onChange={e=>setFormData({...formData,statusBadge:e.target.value})} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"><option value="">No Badge</option><option>New Launch</option><option>Ready to Move</option><option>Near Possession</option><option>Limited Inventory</option><option>Price Updated Today</option></select>
+</div>
+<div className="space-y-3">
+    <button type="button" onClick={async()=>{const msg=`${formData.title||"Project"}\n📍 ${formData.subLocality||""}, ${formData.region||""}\n🏠 ${formData.configuration||""}\n💰 ${formData.price||""}\n📅 Possession: ${formData.possession||""}`;try{await navigator.clipboard.writeText(msg);alert("WhatsApp-ready project summary copied.");}catch(e){alert(msg);}}} className="w-full border border-emerald-700 text-emerald-400 p-3 rounded font-bold">Copy WhatsApp-Ready Project Summary</button>
+</div>
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Upload Multiple Project Images</label>
+    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} disabled={isUploading} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white disabled:opacity-50" />
+    {uploadStatus && <div className={`text-xs p-3 rounded border ${uploadStatus.startsWith("✓") ? "text-emerald-400 border-emerald-800 bg-emerald-950/30" : uploadStatus.startsWith("Upload failed") ? "text-red-400 border-red-800 bg-red-950/30" : "text-luxury-gold border-luxury-gold/30 bg-luxury-gold/5"}`}>{uploadStatus}</div>}
+    <div className="flex flex-wrap gap-2">
+        {(formData.images || []).map((img, index) => (
+            <div key={index} className="relative">
+                <img src={img} className="w-20 h-20 object-cover rounded border border-neutral-700" />
+                <button type="button" onClick={() => removeImage(index)} className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 rounded-full text-[10px]">×</button>
+            </div>
+        ))}
+    </div>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Upload Project Videos</label>
+    <input type="file" accept="video/mp4,video/webm,video/quicktime" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
+    <div className="space-y-2">
+        {(formData.videos || []).map((video, index) => (
+            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
+                <video src={playableVideoUrl(video)} className="w-24 h-16 object-cover rounded bg-black" controls />
+                <span className="text-[11px] text-neutral-400 flex-1">Project Video {index + 1}</span>
+                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, videos: formData.videos.filter((_, i) => i !== index)})}>Remove</button>
+            </div>
+        ))}
+    </div>
+</div>
+
+<div className="space-y-3">
+    <label className="block text-neutral-400 mb-1">Upload PDFs / Brochures / Cost Sheets</label>
+    <input type="file" accept="application/pdf" multiple onChange={handlePdfUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
+    <div className="space-y-2">
+        {(formData.pdfs || []).map((pdf, index) => (
+            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
+                <span className="text-[11px] text-neutral-300 truncate flex-1">📄 {pdf.name || `PDF ${index + 1}`}</span>
+                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, pdfs: formData.pdfs.filter((_, i) => i !== index)})}>Remove</button>
+            </div>
+        ))}
+    </div>
+</div>
+
+<button type="submit" disabled={isUploading} className="w-full bg-luxury-gold hover:bg-luxury-goldHover disabled:opacity-50 disabled:cursor-not-allowed text-black py-3 font-bold uppercase tracking-wider transition rounded shadow-lg mt-2">{isUploading ? "WAIT — UPLOADING FILES..." : (isEditing ? 'Save Revisions' : 'Publish New Flat Listing')}</button>
+
+                                </form>
                             </div>
                             <div className="tp-v20-detail-side">
                                 <h1 className="text-5xl font-bold text-luxury-gold mb-4">{project.name}</h1>
@@ -325,6 +1455,45 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                 </div>
                             </div>
                         </div>
+                    )}
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HERO MANAGER</h3><p className="text-xs text-gray-400 mt-1">Upload image/video, change titles/buttons, enable or delete the cinematic hero. Saves to local CMS storage without changing Firestore data.</p><div className="grid md:grid-cols-2 gap-3 mt-4"><input value={activeHeroSlide.title||""} onChange={e=>updateHeroSlide({title:e.target.value})} placeholder="Hero title" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.subtitle||""} onChange={e=>updateHeroSlide({subtitle:e.target.value})} placeholder="Hero subtitle" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.primaryCta||""} onChange={e=>updateHeroSlide({primaryCta:e.target.value})} placeholder="Primary CTA" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.secondaryCta||""} onChange={e=>updateHeroSlide({secondaryCta:e.target.value})} placeholder="Secondary CTA" className="bg-black border border-white/20 rounded p-3"/><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Image<input type="file" accept="image/*" onChange={e=>uploadHeroFile(e.target.files?.[0],"image")} className="block mt-2 text-white"/></label><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Video<input type="file" accept="video/*" onChange={e=>uploadHeroFile(e.target.files?.[0],"video")} className="block mt-2 text-white"/></label><label className="flex items-center gap-2 bg-black border border-white/20 rounded p-3 text-xs"><input type="checkbox" checked={activeHeroSlide.enabled!==false} onChange={e=>updateHeroSlide({enabled:e.target.checked})}/> Enable Hero</label><input type="datetime-local" value={activeHeroSlide.schedule||""} onChange={e=>updateHeroSlide({schedule:e.target.value})} className="bg-black border border-white/20 rounded p-3"/></div><div className="grid md:grid-cols-3 gap-3 mt-4"><button type="button" onClick={()=>setHeroSlides(prev=>[...prev.slice(1),prev[0]||DEFAULT_HERO_SLIDES[0]])} className="border border-white/20 rounded py-3">Reorder Hero</button><button type="button" onClick={deleteHeroSlide} className="border border-red-800 text-red-400 rounded py-3">Delete Hero</button><button type="button" onClick={saveHeroSlides} className="bg-luxury-gold text-black font-black rounded py-3">SAVE HERO MANAGER</button></div></div></div>
+            );
+        }
+
+        function SecureLoginGate({ onLoginSuccess }) {
+            const [mode, setMode] = React.useState("login");
+            const [username, setUsername] = React.useState("");
+            const [password, setPassword] = React.useState("");
+            const [currentPassword, setCurrentPassword] = React.useState("");
+            const [newPassword, setNewPassword] = React.useState("");
+            const [confirmPassword, setConfirmPassword] = React.useState("");
+            const [recoveryEmail, setRecoveryEmail] = React.useState("");
+            const [error, setError] = React.useState("");
+            const [success, setSuccess] = React.useState("");
+            const savedPassword = () => localStorage.getItem("tp_agent_password") || "truepillar2026";
+
+            const executeAuthChallenge = (e) => {
+                e.preventDefault(); setError(""); setSuccess("");
+                if (username === "admin" && password === savedPassword()) onLoginSuccess();
+                else setError("Invalid username or password.");
+            };
+            const changePassword = (e) => {
+                e.preventDefault(); setError(""); setSuccess("");
+                if (currentPassword !== savedPassword()) return setError("Current password is incorrect.");
+                if (newPassword.length < 6) return setError("New password must be at least 6 characters.");
+                if (newPassword !== confirmPassword) return setError("New passwords do not match.");
+                localStorage.setItem("tp_agent_password", newPassword);
+                setSuccess("Password changed successfully. You can now log in.");
+                setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); setMode("login");
+            };
+            const forgotPassword = (e) => {
+                e.preventDefault(); setError(""); setSuccess("");
+                if (recoveryEmail.trim().toLowerCase() !== "truepillarrealty@gmail.com") return setError("Enter the registered recovery email.");
+                localStorage.setItem("tp_agent_password", "truepillar2026");
+                setSuccess("Password reset to the default password: truepillar2026. Log in and use Change Password immediately.");
+                setRecoveryEmail(""); setMode("login");
+            };
 
                         <div className="tp-v20-visit-panel bg-luxury-card border border-luxury-gold border-opacity-40 rounded-lg p-8 max-w-2xl">
                             <h2 className="text-3xl font-bold text-luxury-gold mb-8">BOOK A FREE SITE VISIT</h2>
@@ -346,14 +1515,296 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             );
         }
 
-        function Footer() {
+        // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
+        
+        function TopSpotlight({ listings=[], onOpenProject, onOpenEnquiry }) {
+            let settings={}; try{settings=JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){}
+            const ids=Array.isArray(settings.projectIds)?settings.projectIds.slice(0,5).filter(Boolean):[];
+            const chosen=ids.map(id=>listings.find(x=>String(x.id)===String(id))).filter(Boolean); const pool=chosen.length?chosen:listings.filter(x=>x.published!==false).slice(0,5);
+            const [slide,setSlide]=React.useState(0);
+            React.useEffect(()=>{if(pool.length<2)return;const timer=setInterval(()=>setSlide(x=>(x+1)%pool.length),15000);return()=>clearInterval(timer)},[pool.length]);
+            if(!pool.length)return null;
+            const project=pool[slide%pool.length], configs=projectConfigurations(project);
+            const video=((configs.find(c=>(c.sampleVideoLinks||[]).length)?.sampleVideoLinks)||[])[0]||(project.sampleVideoLinks||[])[0]||"";
+            const image=(project.images||[])[0]||project.image||"";
+            const price=settings.startingPrice||project.price||project.startingPrice||"";
+            return <section className="max-w-7xl mx-auto px-6 pt-4 pb-2"><div className="tp-v20-spotlight rounded-2xl overflow-hidden grid lg:grid-cols-[1.15fr_.85fr]">
+                <button type="button" className="tp-v31-spot-arrow tp-v31-prev" aria-label="Previous spotlight project" onClick={()=>setSlide((i)=>(i-1+pool.length)%pool.length)}>‹</button>
+                <button type="button" className="tp-v31-spot-arrow tp-v31-next" aria-label="Next spotlight project" onClick={()=>setSlide((i)=>(i+1)%pool.length)}>›</button>
+              <div className="tp-v20-spotlight-media min-h-[270px] relative">{image&&<img src={image} className="absolute inset-0 w-full h-full object-cover opacity-70"/>}<div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/15 to-black/90"></div><div className="absolute left-7 bottom-7 right-7"><div className="text-luxury-gold text-[10px] font-bold tracking-[.22em]">FEATURED SPOTLIGHT {pool.length>1?`${slide+1}/${pool.length}`:""}</div><h2 className="text-3xl font-black mt-2">{project.title}</h2><p className="text-sm text-gray-300 mt-2">{project.subLocality||project.locality||project.region||""}</p>{price&&<div className="text-luxury-gold text-xl font-black mt-3">Starting from {price}</div>}</div></div>
+              <div className="p-7 md:p-9 flex flex-col justify-center"><div className="text-luxury-gold text-[10px] font-bold tracking-[.22em]">PROJECT • VIDEO • OFFER</div><h3 className="text-2xl font-black mt-2">{settings.heading||"THIS WEEK'S PROPERTY SPOTLIGHT"}</h3><p className="text-sm text-gray-300 leading-6 mt-3">{settings.offerText||"Get the latest developer offer, verified inventory and priority site-visit assistance."}</p><p className="text-xs text-gray-400 leading-5 mt-3">{settings.benefits||"Zero brokerage • Verified pricing • Loan assistance • Pickup & drop for site visit"}</p><div className="grid sm:grid-cols-2 gap-3 mt-5"><button onClick={()=>onOpenProject(project)} className="bg-luxury-gold text-black font-bold py-3 rounded">VIEW PROJECT</button>{video&&<a href={video} target="_blank" rel="noopener noreferrer" className="border border-luxury-gold text-luxury-gold font-bold py-3 rounded text-center">▶ WATCH VIDEO</a>}<button onClick={()=>onOpenEnquiry(project)} className="sm:col-span-2 border border-white/20 py-3 rounded font-bold">GET LATEST OFFER / SCHEDULE VISIT</button></div>{pool.length>1&&<div className="flex gap-2 mt-5">{pool.map((_,i)=><button key={i} onClick={()=>setSlide(i)} className={`h-2 rounded-full ${i===slide?"w-7 bg-luxury-gold":"w-2 bg-white/30"}`}></button>)}</div>}</div>
+            </div></section>;
+        }
+
+        function App() {
+            const [view, setView] = React.useState('home');
+            const [activeProject, setActiveProject] = React.useState(null);
+            const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+            
+            const [listings, setListings] = React.useState([]);
+            const [leads, setLeads] = React.useState([]);
+            const [cloudReady, setCloudReady] = React.useState(false);
+
+            const [search, setSearch] = React.useState("");
+            const [selectedRegion, setSelectedRegion] = React.useState("");
+            const [selectedSubLocality, setSelectedSubLocality] = React.useState("");
+            const [selectedConfig, setSelectedConfig] = React.useState("");
+            const [projectConfigContext, setProjectConfigContext] = React.useState("");
+            const [selectedStatus, setSelectedStatus] = React.useState("");
+            const [activeEnquiryTarget, setActiveEnquiryTarget] = React.useState(null);
+
+            React.useEffect(() => {
+                let projectsLoaded = false;
+                let leadsLoaded = false;
+
+                const markReady = () => {
+                    if (projectsLoaded && leadsLoaded) setCloudReady(true);
+                };
+
+                const unsubscribeProjects = projectsCollection.onSnapshot(async snap => {
+                    if (snap.empty && !projectsLoaded) {
+                        try {
+                            const legacy = await legacyCloudDoc.get();
+                            const legacyListings = legacy.exists ? (legacy.data().listings || []) : [];
+                            if (legacyListings.length) {
+                                const batch = db.batch();
+                                legacyListings.forEach(item => {
+                                    const normalized = normalizeProject(item);
+                                    batch.set(projectsCollection.doc(String(normalized.id)), cleanForFirestore(normalized));
+                                });
+                                await batch.commit();
+                                return;
+                            }
+                        } catch (migrationError) {
+                            console.error("Legacy migration failed", migrationError);
+                        }
+                    }
+
+                    setListings(snap.docs.map(doc => normalizeProject({ ...doc.data(), id: doc.data().id || doc.id })));
+                    projectsLoaded = true;
+                    markReady();
+                }, err => {
+                    console.error("Project sync error", err);
+                    alert("Project cloud sync failed. Check Firestore rules.");
+                });
+
+                const unsubscribeLeads = leadsCollection.orderBy("createdAt", "desc").onSnapshot(snap => {
+                    setLeads(snap.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id })));
+                    leadsLoaded = true;
+                    markReady();
+                }, err => {
+                    console.error("Lead sync error", err);
+                    leadsLoaded = true;
+                    markReady();
+                });
+
+                return () => {
+                    unsubscribeProjects();
+                    unsubscribeLeads();
+                };
+            }, []);
+
+            React.useEffect(() => {
+                if (IS_LOCAL_FILE) return;
+                const applyRoute = () => {
+                    const route = getRouteFromPath();
+                    if (route.type === "project") {
+                        const found = listings.find(p => (p.slug || slugify(p.title)) === route.slug);
+                        if (found) { setActiveProject(normalizeProject(found)); setView("project"); }
+                        else if (cloudReady) { setActiveProject(null); setView("properties"); }
+                    } else {
+                        setActiveProject(null);
+                        setView(route.view);
+                    }
+                };
+                applyRoute();
+                window.addEventListener("popstate", applyRoute);
+                return () => window.removeEventListener("popstate", applyRoute);
+            }, [listings, cloudReady]);
+
+            const navigateView = (nextView) => {
+                const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", admin: "/admin" };
+                setActiveProject(null);
+                setView(nextView);
+                if (!IS_LOCAL_FILE) window.history.pushState({ view: nextView }, "", paths[nextView] || "/");
+                window.scrollTo(0, 0);
+            };
+
+            const openProject = (p, config = "") => {
+                const n = normalizeProject(p);
+                setActiveProject(n);
+                setProjectConfigContext(config);
+                setView("project");
+                if (!IS_LOCAL_FILE) navigateToProjectUrl(n);
+                window.scrollTo(0, 0);
+            };
+
+            const closeProject = () => {
+                setActiveProject(null);
+                setView("properties");
+                if (!IS_LOCAL_FILE) window.history.pushState({ view: "properties" }, "", "/properties");
+                window.scrollTo(0, 0);
+            };
+
+            const saveProject = async (project) => {
+                const normalized = normalizeProject(project);
+                await projectsCollection.doc(String(normalized.id)).set(cleanForFirestore(normalized), { merge: false });
+            };
+
+            const deleteProject = async (id) => {
+                await projectsCollection.doc(String(id)).delete();
+            };
+
+            const saveLead = async (lead) => {
+                const payload = cleanForFirestore({ ...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await leadsCollection.doc(String(lead.id)).set(payload);
+            };
+
+            const deleteLead = async (id) => {
+                await leadsCollection.doc(String(id)).delete();
+            };
+
+            const updateLeadStatus = async (id, status) => {
+                await leadsCollection.doc(String(id)).update({ status });
+            };
+
+            const matchingFilteredListings = React.useMemo(() => {
+                return listings.filter((item) => {
+                    if (item.published === false) return false;
+                    const searchText = [item.title,item.address,item.subLocality,item.region,item.developer,item.configuration,projectConfigSummary(item),item.status,item.reraNumber].filter(Boolean).join(" ").toLowerCase();
+                    const matchedSearch = searchText.includes(search.toLowerCase());
+                    const matchedRegion = selectedRegion === "" || item.region === selectedRegion;
+                    const matchedSub = selectedSubLocality === "" || item.subLocality === selectedSubLocality;
+                    const matchedConfig = projectMatchesConfiguration(item, selectedConfig);
+                    const matchedStatus = selectedStatus === "" || item.status === selectedStatus;
+                    return matchedSearch && matchedRegion && matchedSub && matchedConfig && matchedStatus;
+                });
+            }, [listings, search, selectedRegion, selectedSubLocality, selectedConfig, selectedStatus]);
+            const filterPack = { search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus };
+
             return (
-                <footer className="bg-luxury-card border-t border-neutral-900 py-12 px-6 mt-20">
-                    <div className="max-w-7xl mx-auto text-center">
-                        <p className="text-luxury-textMuted mb-2">© 2026 TruePillar Realty. All rights reserved.</p>
-                        <p className="text-sm text-luxury-textMuted">MahaRERA Registration: A031272401680 | Direct from Builders | Zero Brokerage</p>
+                <div className="bg-luxury-bg text-white min-h-screen flex flex-col justify-between">
+                    <Navbar currentView={view} setView={navigateView} />
+                    {!cloudReady && <div className="fixed top-20 right-4 z-[999] bg-luxury-card border border-luxury-gold text-luxury-gold px-4 py-2 rounded-lg text-xs font-bold shadow-xl">CONNECTING TO CLOUD...</div>}
+                    
+                    <main className="flex-grow pb-16">
+                        {view === 'home' && (
+                            <Home 
+                                setView={navigateView} 
+                                listings={matchingFilteredListings} 
+                                totalCount={listings.filter(p=>p.published!==false).length}
+                                onOpenEnquiry={setActiveEnquiryTarget}
+                                onOpenProject={openProject}
+                                filterState={filterPack} 
+                                onSubmitHomeLead={saveLead}
+                            />
+                        )}
+                        {view === 'properties' && (
+                            <Properties 
+                                listings={matchingFilteredListings} 
+                                onOpenEnquiry={setActiveEnquiryTarget}
+                                onOpenProject={openProject}
+                                filterState={filterPack} 
+                            />
+                        )}
+                        {view === 'project' && activeProject && <ProjectDetail property={activeProject} onBack={closeProject} onOpenEnquiry={setActiveEnquiryTarget} listings={listings} onOpenProject={openProject} selectedConfig={projectConfigContext} />}
+                        {view === 'about' && (
+                            <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
+                                <div>
+                                    <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest block mb-1">Who We Are</span>
+                                    <h1 className='text-3xl text-white font-medium tracking-wide mb-4'>About TruePillar Realty</h1><div className="mt-5 inline-flex items-center gap-3 bg-luxury-card border border-neutral-800 rounded-lg px-4 py-3 text-sm"><span className="text-neutral-400">MAHARERA REGISTRATION NO.</span><strong className="text-luxury-gold">A031272401680</strong></div>
+                                    <p className="text-sm md:text-base text-neutral-300">TruePillar Realty is a premium property consultancy firm specializing in handpicked luxury homes, under-construction residential marvels, and modern apartments across the Mumbai Metropolitan Region. Built upon the three core pillars of **Trust, Transparency, and Value**, we help modern families discover their dream spaces without navigating confusing, opaque market channels.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="bg-luxury-card border border-neutral-800 p-6 rounded-xl space-y-2">
+                                        <div className="text-2xl text-luxury-gold font-bold">01</div>
+                                        <h4 className="text-white font-semibold text-sm uppercase tracking-wide">Direct Developer Access</h4>
+                                        <p className="text-xs text-neutral-400 font-light leading-relaxed">We source and index our inventories straight from trusted builders. This ensures early access to prime inventory, high-floor allocations, and accurate launch discount plans.</p>
+                                    </div>
+                                    <div className="bg-luxury-card border border-neutral-800 p-6 rounded-xl space-y-2">
+                                        <div className="text-2xl text-luxury-gold font-bold">02</div>
+                                        <h4 className="text-white font-semibold text-sm uppercase tracking-wide">Absolute Zero Brokerage</h4>
+                                        <p className="text-xs text-neutral-400 font-light leading-relaxed">We stand strictly against traditional transactional markups and middleman premiums. Our consultation and matching guidance services are 100% free for home buyers.</p>
+                                    </div>
+                                    <div className="bg-luxury-card border border-neutral-800 p-6 rounded-xl space-y-2">
+                                        <div className="text-2xl text-luxury-gold font-bold">03</div>
+                                        <h4 className="text-white font-semibold text-sm uppercase tracking-wide">MahaRERA Compliance</h4>
+                                        <p className="text-xs text-neutral-400 font-light leading-relaxed">Every residential space on our platform is cross-referenced with authorized state metrics, carpet measurements, and real-time possession timelines for absolute piece of mind.</p>
+                                    </div>
+                                </div>
+
+                                <div className="bg-luxury-card border border-neutral-800 rounded-xl p-8 space-y-4">
+                                    <h3 className="text-lg font-medium text-white tracking-wide">Our Mission Statement</h3>
+                                    <p className="text-xs md:text-sm text-neutral-400 leading-relaxed font-light">"Our goal is simple: to make property buying standard, streamlined, and stress-free. Whether you are looking for an affordable 1 BHK startup layout in Dombivli, a spacious family 2 BHK on Thane's Ghodbunder high road, a modern 3 BHK lifestyle tower flat in Kharghar, or an elite penthouse overlooking Mumbai's iconic skyline—TruePillar Realty equips you with verified facts, real prices, and complimentary guided site vehicles to turn your real estate milestones into safe, rewarding realities."</p>
+                                </div>
+                            </div>
+                        )}
+                        {view === 'contact' && (
+                            <div className='py-16 px-6 max-w-3xl mx-auto font-light text-neutral-300 space-y-6'>
+                                <h1 className='text-3xl text-white font-medium mb-4 tracking-wide'>Get In Touch With Us</h1>
+                                <p className="text-sm text-neutral-400">Have questions about an upcoming premium luxury project or want to plan a family visit to a site location? Reach out to us directly through any channel below.</p>
+                                <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6 space-y-4 font-medium text-sm">
+                                    <div>📍 Main Office Location: <span className="text-neutral-400 font-light block mt-0.5">Kharghar, Navi Mumbai, Maharashtra</span></div>
+                                    <div>📞 Central Support Helpline: <span className="text-luxury-gold block mt-0.5">+91 7718847841</span></div>
+                                    <div>✉️ Business Email Address: <span className="text-luxury-gold font-mono block mt-0.5">truepillarrealty@gmail.com • salaj.jha@truepillar.in</span></div>
+                                </div>
+                            </div>
+                        )}
+                        {view === 'admin' && (
+                            !isAuthenticated ? (
+                                <SecureLoginGate onLoginSuccess={() => setIsAuthenticated(true)} />
+                            ) : (
+                                <AdminDashboard 
+                                    listings={listings}
+                                    leads={leads}
+                                    onAdd={saveProject}
+                                    onDelete={deleteProject}
+                                    onEdit={saveProject}
+                                    onDeleteLead={deleteLead}
+                                    onUpdateLeadStatus={updateLeadStatus}
+                                    onLogout={() => setIsAuthenticated(false)}
+                                />
+                            )
+                        )}
+                    </main>
+
+                    <div className="fixed bottom-3 left-3 right-3 z-50 grid grid-cols-4 gap-2 md:hidden">
+                        <a href="https://wa.me/917718847841" className="bg-emerald-600 text-white text-center py-3 rounded-full text-[10px] font-black">WhatsApp</a>
+                        <a href="tel:+917718847841" className="bg-luxury-gold text-black text-center py-3 rounded-full text-[10px] font-black">Call</a>
+                        <button onClick={()=>setActiveEnquiryTarget({title:"General Site Visit",subLocality:"Multiple Locations",region:"MMR",carpetArea:"Flexible",status:"New Enquiry"})} className="bg-white text-black py-3 rounded-full text-[10px] font-black">Enquiry</button>
+                        <button onClick={()=>navigator.share?navigator.share({title:'TruePillar Realty',url:location.href}):navigator.clipboard?.writeText(location.href)} className="bg-black/80 border border-white/20 text-white py-3 rounded-full text-[10px] font-black">Share</button>
                     </div>
-                </footer>
+
+                    <footer className="border-t border-neutral-900 bg-[#08090b] py-16 px-6 lg:px-16 text-xs text-luxury-textMuted">
+                        <div className="max-w-7xl mx-auto space-y-10">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+                                <div className="space-y-4 md:col-span-2">
+                                    <h4 className="text-white font-bold tracking-wider uppercase text-lg">TruePillar <span className="text-luxury-gold">Realty</span></h4>
+                                    <p className="font-light leading-relaxed max-w-md">Premium real estate advisory across Mumbai Metropolitan micro-markets with verified developer inventory, zero brokerage, RERA clarity and concierge site visits.</p>
+                                    <div className="inline-flex items-center gap-3 bg-luxury-card border border-luxury-gold/30 rounded-full px-4 py-2 text-luxury-gold font-black">MAHARERA A031272401680</div>
+                                </div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Popular Locations</h4>{["Kharghar","Taloja","Panvel","Ulwe","Dombivli","Thane"].map(x=><div key={x}>↗ {x}</div>)}</div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Links</h4>{["Featured Projects","New Launches","Investment Guide","Privacy Policy","Terms"].map(x=><div key={x}>↗ {x}</div>)}</div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Connect</h4><div>📞 +91 7718847841</div><div>✉️ sales@truepillar.in</div><div>📍 Kharghar, Navi Mumbai</div><div><a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Instagram</a> • <a href="https://www.facebook.com/TruePillarRealty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Facebook</a></div></div>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-4 border-t border-white/10 pt-8">
+                                <div className="tp-v39-panel p-5"><b className="text-white">Newsletter</b><p className="mt-2">Get launch offers, price updates and investment insights.</p><div className="flex mt-4"><input placeholder="Email address" className="flex-1 bg-black border border-white/10 rounded-l px-3 py-3"/><button className="bg-luxury-gold text-black px-4 rounded-r font-black">Join</button></div></div>
+                                <div className="tp-v39-panel p-5"><b className="text-white">Google Reviews</b><div className="text-luxury-gold mt-2">★★★★★</div><p className="mt-2">Trusted guidance for verified site visits and transparent pricing.</p></div>
+                                <div className="tp-v39-panel p-5"><b className="text-white">Latest Blogs</b><p className="mt-2">Kharghar investment guide • Panvel growth corridor • Ready vs under-construction homes.</p></div>
+                            </div>
+                            <p className="text-neutral-600">© 2026 TruePillar Realty. All project details are indicative and subject to developer/RERA updates.</p>
+                        </div>
+                    </footer>
+
+                    {activeEnquiryTarget && (
+                        <EnquiryModal 
+                            property={activeEnquiryTarget} 
+                            onClose={() => setActiveEnquiryTarget(null)} 
+                            onSubmitLead={saveLead}
+                        />
+                    )}
+                </div>
             );
         }
 
