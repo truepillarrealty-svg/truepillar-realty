@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed | TruePillar Realty</title>
+    <meta name="robots" content="noindex, follow">
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <style>
+        body { background-color: #0A0A0C; color: white; font-family: system-ui, -apple-system, sans-serif; }
+        h1, h2 { font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.04em; }
+    </style>
+</head>
+<body>
+    <main id="root" role="main"></main>
+
+    <script type="text/babel">
+        const ConfirmationPage = () => {
+            React.useEffect(() => {
+                // Track conversion in Google Ads (if gtag is available)
+                if (window.gtag) {
+                    window.gtag('event', 'conversion', {
+                        'conversion_id': 'AW-YOUR_CONVERSION_ID', // Replace with your actual conversion ID
+                        'conversion_label': 'YOUR_CONVERSION_LABEL', // Replace with your actual conversion label
+                        'transaction_id': ''
+                    });
+                }
+            }, []);
+
+            return (
+                <div className="min-h-screen bg-gradient-to-b from-luxury-bg to-gray-900 flex items-center justify-center p-4">
+                    <div className="max-w-md w-full text-center">
+                        {/* Success Icon */}
+                        <div className="mb-6">
+                            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-900 rounded-full">
+                                <svg className="w-10 h-10 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        {/* Heading */}
+                        <h1 className="text-3xl font-bold mb-3 text-luxury-gold">
+                            Booking Confirmed!
+                        </h1>
+
+                        {/* Message */}
+                        <p className="text-lg text-luxury-textMuted mb-2">
+                            Thank you for your enquiry.
+                        </p>
+                        <p className="text-base text-luxury-textMuted mb-6">
+                            Our team will contact you shortly at the phone number you provided to schedule your free site visit.
+                        </p>
+
+                        {/* Details Box */}
+                        <div className="bg-luxury-card border border-luxury-gold border-opacity-30 rounded-lg p-6 mb-8 text-left">
+                            <h2 className="text-luxury-gold font-bold mb-3 text-sm">WHAT'S NEXT?</h2>
+                            <ul className="space-y-2 text-sm text-luxury-textMuted">
+                                <li className="flex items-start">
+                                    <span className="text-luxury-gold mr-3 font-bold">✓</span>
+                                    <span>You'll receive a call/WhatsApp confirmation</span>
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="text-luxury-gold mr-3 font-bold">✓</span>
+                                    <span>Schedule your preferred site visit date</span>
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="text-luxury-gold mr-3 font-bold">✓</span>
+                                    <span>Get exclusive project details & pricing</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* CTA Button */}
+                        <a 
+                            href="/" 
+                            className="inline-block w-full bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-3 px-6 rounded-lg transition duration-200"
+                        >
+                            Return to Homepage
+                        </a>
+
+                        {/* Support Contact */}
+                        <p className="text-xs text-luxury-textMuted mt-6">
+                            Need immediate assistance? Call us at <span className="text-luxury-gold font-bold">+91-7718847841</span>
+                        </p>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ConfirmationPage />);
+    </script>
+
+    <!-- React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Ads Conversion Tracking (optional) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-YOUR_GOOGLE_ADS_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-YOUR_GOOGLE_ADS_ID');
+    </script>
+</body>
+</html>
