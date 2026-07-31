@@ -775,6 +775,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             <span className="absolute top-12 left-3 z-30 bg-black/75 border border-white/15 text-white text-[9px] font-black uppercase px-2 py-1 rounded-full">Luxury</span>
                             <div className="absolute bottom-3 left-3 z-30 h-10 w-10 rounded-full bg-white/90 text-black flex items-center justify-center text-[10px] font-black border border-luxury-gold shadow-xl">{String(cardProject.developer||'TP').slice(0,2).toUpperCase()}</div>
                             {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
+                        <span className={`absolute ${cardProject.statusBadge ? "top-12" : "top-4"} left-4 z-20 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30`}>{property.status}</span>
                         <span className="absolute top-12 right-3 z-20 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30">{property.status}</span>
                         <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {activeArea}</span>
                     </div>
@@ -785,6 +786,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                 <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
                             </div>
                             <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
+                            <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-3">{property.address}</p>
                             <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-2">{property.address}</p>
                             {cardProject.reraNumber && <div className="text-[10px] text-emerald-400 mb-3">RERA: {cardProject.reraNumber}</div>}
                             <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
