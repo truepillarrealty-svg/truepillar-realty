@@ -468,6 +468,37 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 }
 @media(max-width:560px){.tp-v23-housing-filter{grid-template-columns:1fr!important}.tp-v23-housing-filter > div:first-child{grid-column:auto!important}}
 </style>
+
+
+<style id="tp-v38-admin-selects">
+.tp-v38-select{position:relative;width:100%}
+.tp-v38-select-button{width:100%;min-height:44px;background:#07080a;border:1px solid #262a31;border-radius:6px;color:#fff;padding:0 38px 0 12px;text-align:left;font-size:12px;line-height:1.2;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:border-color .18s ease,box-shadow .18s ease}
+.tp-v38-select-button:hover,.tp-v38-select-button:focus{outline:none;border-color:#d4af37;box-shadow:0 0 0 2px rgba(212,175,55,.12)}
+.tp-v38-select-button:after{content:"⌄";position:absolute;right:13px;color:#f0c94b;font-size:14px;pointer-events:none}
+.tp-v38-select-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:3000;max-height:220px;overflow:auto;background:#050507;border:1px solid #d4af37;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.7);padding:5px}
+.tp-v38-select-option{width:100%;display:block;text-align:left;border:0;background:transparent;color:#f8fafc;padding:10px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.tp-v38-select-option:hover,.tp-v38-select-option.tp-v38-active{background:#d4af37;color:#050505;font-weight:800}
+.tp-v38-select-option:focus{outline:1px solid rgba(212,175,55,.8);outline-offset:1px}
+</style>
+
+<style id="tp-v40-safe-premium">
+.tp-v40-premium-hero{position:relative!important;min-height:78vh!important;display:flex!important;align-items:center!important;overflow:hidden!important;background-size:cover!important;background-position:center!important;border:1px solid rgba(212,175,55,.28)!important;box-shadow:0 30px 100px rgba(0,0,0,.45)!important;isolation:isolate!important}
+.tp-v40-premium-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.56),rgba(0,0,0,.24)),radial-gradient(circle at 72% 42%,rgba(212,175,55,.18),transparent 34%)}
+.tp-v40-premium-hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(.72);transform:scale(1.04);animation:tpV40HeroZoom 18s ease-in-out infinite alternate}
+.tp-v40-premium-hero h1{font-size:clamp(2.6rem,5.5vw,6.2rem)!important;line-height:.94!important;letter-spacing:-.055em!important;text-transform:none!important;text-shadow:0 20px 70px rgba(0,0,0,.7)!important}
+.tp-v40-premium-hero p{font-size:clamp(1rem,1.35vw,1.2rem)!important;line-height:1.75!important;color:#d7d9df!important;max-width:760px!important}
+@keyframes tpV40HeroZoom{from{transform:scale(1.02)}to{transform:scale(1.10)}}
+.tp-v40-hero-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(212,175,55,.42);background:rgba(0,0,0,.38);backdrop-filter:blur(12px);border-radius:999px;padding:9px 13px;color:#f0d675;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
+.tp-v40-search-float{margin-top:-72px!important;position:relative!important;z-index:25!important}.tp-v40-search-float .tp-v23-housing-filter{background:rgba(13,14,18,.62)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:24px!important;box-shadow:0 26px 85px rgba(0,0,0,.52)!important;backdrop-filter:blur(20px)!important;padding:14px!important}
+.tp-v40-trust-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;border:1px solid rgba(255,255,255,.08);border-radius:26px;overflow:hidden;background:#111216;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.tp-v40-trust-grid div{padding:22px 12px;text-align:center;background:rgba(255,255,255,.035)}.tp-v40-trust-grid b{display:block;color:#d4af37;font-size:clamp(1.4rem,2vw,2.2rem)}.tp-v40-trust-grid span{font-size:10px;color:#a8adb7;text-transform:uppercase;letter-spacing:.12em}
+.tp-v40-section-card{border-radius:24px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:0 20px 65px rgba(0,0,0,.28);padding:24px;transition:.25s ease}.tp-v40-section-card:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.45)}
+.tp-v40-property-grid-card{border-radius:22px!important;box-shadow:0 22px 70px rgba(0,0,0,.32)!important}.tp-v40-property-grid-card:hover{transform:translateY(-4px);box-shadow:0 32px 90px rgba(0,0,0,.45)!important}.tp-v40-property-grid-card img{transition:transform .55s ease}.tp-v40-property-grid-card:hover img{transform:scale(1.06)}
+.tp-v40-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}.tp-v40-actions a,.tp-v40-actions button{border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:8px 4px;text-align:center;font-size:9px;font-weight:900;color:#e5e7eb;background:rgba(255,255,255,.04)}
+.tp-v40-sticky-list-head{position:sticky;top:82px;z-index:25;background:rgba(10,10,12,.78);border:1px solid rgba(255,255,255,.08);border-radius:22px;backdrop-filter:blur(16px);padding:16px;box-shadow:0 18px 55px rgba(0,0,0,.26)}
+@media(max-width:900px){.tp-v40-premium-hero{min-height:82vh!important}.tp-v40-search-float{margin-top:-48px!important}.tp-v40-trust-grid{grid-template-columns:repeat(2,1fr)}.tp-v40-actions{grid-template-columns:repeat(2,1fr)}}
+</style>
+
 </head>
 <body>
     <div id="root"></div>
@@ -537,6 +568,45 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch"];
         const COMPANY_MAHARERA = "A031272401680";
         const AMENITIES_POOL = ["Premium Clubhouse", "Infinity Swimming Pool", "Modern Gymnasium", "24/7 Multi-tier Security", "High-Speed Elevators", "Grand Entrance Lobby", "Ample Car Parking", "Landscaped Gardens", "Kids Play Area", "100% Power Backup"];
+
+
+        function AdminSelect({ value, options, onChange, className = "", ariaLabel }) {
+            const [open, setOpen] = React.useState(false);
+            const rootRef = React.useRef(null);
+            const normalizedOptions = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
+            React.useEffect(() => {
+                if (!open) return;
+                const handlePointer = (event) => {
+                    if (rootRef.current && !rootRef.current.contains(event.target)) setOpen(false);
+                };
+                document.addEventListener("mousedown", handlePointer);
+                return () => document.removeEventListener("mousedown", handlePointer);
+            }, [open]);
+            const selectedOption = normalizedOptions.find(option => option.value === value) || normalizedOptions[0] || { value: "", label: "" };
+            return (
+                <div ref={rootRef} className={`tp-v38-select ${className}`}>
+                    <button type="button" className="tp-v38-select-button" aria-label={ariaLabel} aria-expanded={open} onClick={() => setOpen(x => !x)}>
+                        <span>{selectedOption.label}</span>
+                    </button>
+                    {open && (
+                        <div className="tp-v38-select-menu" role="listbox">
+                            {normalizedOptions.map(option => (
+                                <button
+                                    type="button"
+                                    key={option.value}
+                                    role="option"
+                                    aria-selected={option.value === selectedOption.value}
+                                    className={`tp-v38-select-option ${option.value === selectedOption.value ? "tp-v38-active" : ""}`}
+                                    onClick={() => { onChange(option.value); setOpen(false); }}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
 
         const TITLE_PREFIXES = ["The Grand", "Elysian", "Pinnacle", "Aura", "Regency", "Signature", "Golden", "Skyline", "Emerald", "Marquis", "Palazzo", "Imperial", "Sapphire", "Royal", "Oasis", "Vista", "Serene", "Meridian"];
         const TITLE_SUFFIXES = ["Residences", "Towers", "Estates", "Heights", "Manor", "Crest", "Villas", "Gardens", "Gre Greens", "Bay", "Terraces", "Enclave", "Palace", "Courtyard"];
@@ -680,42 +750,37 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         })()}</div>}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:flex lg:gap-3">
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
-                            value={selectedRegion} 
-                            onChange={(e) => { setSelectedRegion(e.target.value); setSelectedSubLocality(""); }}
-                        >
-                            <option value="">All Cities / Regions</option>
-                            {Object.keys(REGIONS).map(r => <option key={r} value={r}>{r}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="City / Region filter"
+                            value={selectedRegion}
+                            options={[{ value: "", label: "All Cities / Regions" }, ...Object.keys(REGIONS).map(r => ({ value: r, label: r }))]}
+                            onChange={(region) => { closeSuggestions(); setSelectedRegion(region); setSelectedSubLocality(""); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-48"
-                            value={selectedSubLocality} 
-                            disabled={!selectedRegion}
-                            onChange={(e) => setSelectedSubLocality(e.target.value)}
-                        >
-                            <option value="">All Localities</option>
-                            {selectedRegion && REGIONS[selectedRegion].map(sub => <option key={sub} value={sub}>{sub}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-48"
+                            ariaLabel="Locality filter"
+                            value={selectedSubLocality}
+                            options={[{ value: "", label: "All Localities" }, ...(selectedRegion ? REGIONS[selectedRegion].map(sub => ({ value: sub, label: sub })) : [])]}
+                            onChange={(subLocality) => { closeSuggestions(); setSelectedSubLocality(subLocality); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-40"
-                            value={selectedConfig} 
-                            onChange={(e) => setSelectedConfig(e.target.value)}
-                        >
-                            <option value="">BHK Configuration</option>
-                            {CONFIGURATIONS.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-40"
+                            ariaLabel="BHK Configuration filter"
+                            value={selectedConfig}
+                            options={[{ value: "", label: "BHK Configuration" }, ...CONFIGURATIONS.map(c => ({ value: c, label: c }))]}
+                            onChange={(configuration) => { closeSuggestions(); setSelectedConfig(configuration); }}
+                        />
 
-                        <select onMouseDown={closeSuggestions} onFocus={closeSuggestions} 
-                            className="bg-luxury-bg border border-neutral-800 rounded-lg px-3 py-3 text-sm focus:border-luxury-gold text-luxury-textMuted lg:w-44"
-                            value={selectedStatus} 
-                            onChange={(e) => setSelectedStatus(e.target.value)}
-                        >
-                            <option value="">Possession Status</option>
-                            {DEVELOPMENT_STATUS.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                        <AdminSelect
+                            className="lg:w-44"
+                            ariaLabel="Possession Status filter"
+                            value={selectedStatus}
+                            options={[{ value: "", label: "Possession Status" }, ...DEVELOPMENT_STATUS.map(status => ({ value: status, label: status }))]}
+                            onChange={(status) => { closeSuggestions(); setSelectedStatus(status); }}
+                        />
                     </div>
                 </div>
             );
@@ -836,46 +901,79 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 : [];
             const visibleCardAmenities = cardAmenities.slice(0, 4);
             const hiddenAmenityCount = Math.max(0, cardAmenities.length - visibleCardAmenities.length);
-            const activeConfig=getActiveConfiguration(cardProject, selectedConfig);
+            const initialCardConfig = selectedConfig && projectMatchesConfiguration(cardProject, selectedConfig)
+                ? getActiveConfiguration(cardProject, selectedConfig).configuration
+                : (cardConfigurations[0]?.configuration || "");
+            const [cardSelectedConfig, setCardSelectedConfig] = React.useState(initialCardConfig);
+            const activeConfig=getActiveConfiguration(cardProject, cardSelectedConfig);
+            const activeConfigLabel = activeConfig.configuration || projectConfigSummary(cardProject);
+            const activeArea = activeConfig.carpetArea || projectAreaSummary(cardProject);
+            const activePrice = activeConfig.price || projectStartingPrice(cardProject);
             const [cardImage,setCardImage]=React.useState(0);
             React.useEffect(()=>{ if(cardProject.images.length<2)return; const timer=setInterval(()=>setCardImage(i=>(i+1)%cardProject.images.length),2800); return()=>clearInterval(timer); },[cardProject.id,cardProject.images.length]);
+            React.useEffect(()=>{ setCardSelectedConfig(initialCardConfig); }, [cardProject.id, initialCardConfig]);
             return (
-                <div className="bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
+                <div className="tp-v40-property-grid-card bg-luxury-card rounded-xl overflow-hidden border border-neutral-800 hover:border-luxury-gold/40 transition-all duration-300 group flex flex-col justify-between shadow-xl">
                     <div className="relative overflow-hidden h-64 bg-neutral-900">
                         <img src={cardProject.images[cardImage] || property.image} alt={property.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                             <MediaWatermark compact={true} />
                             {cardProject.statusBadge && <span className="absolute top-3 left-3 z-30 bg-black/85 border border-luxury-gold text-luxury-gold text-[9px] font-bold uppercase px-2 py-1 rounded">{cardProject.statusBadge}</span>}
                             {cardProject.images.length>1 && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">{cardProject.images.slice(0,8).map((_,i)=><span key={i} className={`w-1.5 h-1.5 rounded-full ${i===cardImage?'bg-luxury-gold':'bg-white/60'}`}></span>)}</div>}
                         <span className={`absolute ${cardProject.statusBadge ? "top-12" : "top-4"} left-4 z-20 px-3 py-1 text-[10px] tracking-widest uppercase rounded-full font-bold bg-black/80 text-luxury-gold border border-luxury-gold/30`}>{property.status}</span>
-                        <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {selectedConfig && activeConfig.carpetArea ? activeConfig.carpetArea : projectAreaSummary(cardProject)}</span>
+                        <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] rounded bg-neutral-900/90 text-white font-medium">📐 {activeArea}</span>
                     </div>
                     <div className="p-7 flex-grow flex flex-col justify-between">
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{selectedConfig && projectMatchesConfiguration(cardProject, selectedConfig) ? activeConfig.configuration : projectConfigSummary(cardProject)}</span>
+                                <span className="text-[11px] text-luxury-gold font-bold uppercase tracking-widest">{activeConfigLabel}</span>
                                 <span className="text-xs text-neutral-400 font-medium">📍 {property.subLocality}</span>
                             </div>
-                            <button onClick={() => onOpenProject(property, selectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
+                            <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-left w-full"><h3 className="text-xl font-bold text-white group-hover:text-luxury-gold transition mb-3">{property.title}</h3></button>
                             <p className="text-xs text-luxury-textMuted font-light line-clamp-2 mb-3">{property.address}</p>
                             <div className="text-xs text-neutral-400 font-light mb-4 flex items-center gap-1">🔑 Possession: <span className="text-white font-medium">{property.possession}</span></div>
+                            {cardConfigurations.length > 1 && (
+                                <div className="mb-4 rounded-lg border border-neutral-900 bg-luxury-bg/70 p-2">
+                                    <div className="text-[9px] uppercase tracking-widest text-neutral-500 mb-2">Choose Configuration</div>
+                                    <div className="grid grid-cols-2 gap-1.5">
+                                        {cardConfigurations.map((config, index) => (
+                                            <button
+                                                type="button"
+                                                key={`${config.configuration}-${index}`}
+                                                onClick={(event) => { event.stopPropagation(); setCardSelectedConfig(config.configuration); }}
+                                                className={`text-left rounded border px-2 py-1.5 transition ${activeConfig.configuration === config.configuration ? "bg-luxury-gold text-black border-luxury-gold" : "border-neutral-800 text-white hover:border-luxury-gold"}`}
+                                            >
+                                                <b className="block text-[10px]">{config.configuration || "Configuration"}</b>
+                                                <span className={`block text-[9px] ${activeConfig.configuration === config.configuration ? "text-black/70" : "text-neutral-400"}`}>{config.carpetArea || "Area on request"}</span>
+                                                <span className={`block text-[10px] font-bold ${activeConfig.configuration === config.configuration ? "text-black" : "text-luxury-gold"}`}>{config.price || "Price on request"}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             
                             {cardAmenities.length > 0 && <div className="flex flex-wrap gap-1.5 mb-4">
                                 {visibleCardAmenities.map((am, index) => (
                                     <span key={index} className="text-[10px] bg-luxury-bg border border-neutral-900 text-neutral-400 px-2 py-0.5 rounded-md">{am}</span>
                                 ))}
                                 {hiddenAmenityCount > 0 && (
-                                    <button type="button" onClick={() => onOpenProject(property, selectedConfig)} className="text-[10px] bg-luxury-gold/10 border border-luxury-gold/40 text-luxury-gold px-2 py-0.5 rounded-md font-bold hover:bg-luxury-gold hover:text-black transition">
+                                    <button type="button" onClick={() => onOpenProject(property, cardSelectedConfig)} className="text-[10px] bg-luxury-gold/10 border border-luxury-gold/40 text-luxury-gold px-2 py-0.5 rounded-md font-bold hover:bg-luxury-gold hover:text-black transition">
                                         +{hiddenAmenityCount} more
                                     </button>
                                 )}
                             </div>}
                         </div>
                         <div className="pt-4 border-t border-neutral-900 flex justify-between items-center mt-auto">
-                            <div><span className="text-2xl font-bold text-white tracking-tight">{property.price}</span></div>
+                            <div><span className="text-2xl font-bold text-white tracking-tight">{activePrice}</span><span className="block text-[10px] text-neutral-500">{activeConfigLabel} • {activeArea}</span></div>
                             <div className="grid grid-cols-2 gap-2 w-[238px]">
-                                <button onClick={() => onOpenProject(property, selectedConfig)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
+                                <button onClick={() => onOpenProject(property, cardSelectedConfig)} className="border border-luxury-gold text-luxury-gold text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">View Details</button>
                                 <button onClick={() => onOpenEnquiry(property)} className="bg-luxury-gold hover:bg-luxury-goldHover text-black text-[10px] font-bold px-2 py-2.5 rounded uppercase whitespace-nowrap">Site Visit</button>
                                 {cardSampleVideo && <a href={cardSampleVideo} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="col-span-2 flex items-center justify-center border border-red-700 text-red-400 text-[10px] font-bold px-3 py-2 rounded uppercase whitespace-nowrap">▶ Watch Sample Flat Video</a>}
+                            </div>
+                            <div className="tp-v40-actions">
+                                <a href={`https://wa.me/917718847841?text=${encodeURIComponent('I am interested in '+cardProject.title+' - '+activeConfigLabel+' '+activePrice)}`} target="_blank" rel="noreferrer">WhatsApp</a>
+                                <a href="tel:+917718847841">Call</a>
+                                <button type="button">Compare</button>
+                                <button type="button">♡ Save</button>
                             </div>
                         </div>
                     </div>
@@ -925,8 +1023,25 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             );
         }
 
+
+
+        const DEFAULT_HERO_SETTINGS = {
+            enabled: true,
+            title: "Find Your Dream Home with Zero Brokerage",
+            subtitle: "Explore handpicked residential landmarks across Mumbai, Thane, Navi Mumbai, and Dombivli. Buy directly from top developers with trust, clarity, and zero brokerage fees.",
+            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85",
+            video: "",
+            primaryCta: "Browse Properties",
+            secondaryCta: "Contact Us",
+            tertiaryCta: "Book Site Visit"
+        };
+        const loadHeroSettings = () => {
+            try { return { ...DEFAULT_HERO_SETTINGS, ...(JSON.parse(localStorage.getItem("tp_hero_settings_v40") || "{}") || {}) }; }
+            catch(e) { return DEFAULT_HERO_SETTINGS; }
+        };
+
         // --- HOME SCREEN VIEW ---
-        function Home({ setView, listings, onOpenEnquiry, onOpenProject, filterState, onSubmitHomeLead }) {
+        function Home({ setView, listings, totalCount = 0, onOpenEnquiry, onOpenProject, filterState, onSubmitHomeLead }) {
             const [hName, setHName] = React.useState("");
             const [hPhone, setHPhone] = React.useState("");
             const [hLoc, setHLoc] = React.useState("Navi Mumbai");
@@ -959,25 +1074,34 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 alert("Site Visit Request Logged! We are launching your chat connection now.");
             };
 
+            const heroSettings = loadHeroSettings();
+            const visibleTotal = totalCount || listings.length;
+
             return (
                 <div className="space-y-8">
                     
                     {/* Hero Split Section */}
-                    <section className="tp-v24-hero max-w-7xl mx-auto px-6 lg:px-10 py-4 rounded-2xl">
-                        <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
-                            
+                    <section className="tp-v24-hero tp-v40-premium-hero max-w-7xl mx-auto px-6 lg:px-10 py-4 rounded-2xl" style={{backgroundImage: heroSettings.video ? "none" : `url(${heroSettings.image || DEFAULT_HERO_SETTINGS.image})`}}>
+                        {heroSettings.video && <video src={heroSettings.video} autoPlay muted loop playsInline poster={heroSettings.image || DEFAULT_HERO_SETTINGS.image}></video>}
+                        <div className="lg:col-span-5 space-y-4 text-center lg:text-left relative z-10">
+                            <div className="tp-v40-hero-pill">MAHARERA A031272401680 • Zero Brokerage</div>
                             <div className="tp-v27-hero-title-row">
-                                <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-tight text-white">Find Your Dream Home with <span className="text-luxury-gold font-bold">Zero Brokerage</span></h1>
-                                <button onClick={() => setView('properties')} className="tp-v27-browse-button">Browse Properties</button>
+                                <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-tight text-white">{heroSettings.title || DEFAULT_HERO_SETTINGS.title}</h1>
+                                <button onClick={() => setView('properties')} className="tp-v27-browse-button">{heroSettings.primaryCta || "Browse Properties"}</button>
                             </div>
-                            <p className="text-luxury-textMuted max-w-xl mx-auto lg:mx-0 text-sm md:text-base font-light">Explore handpicked residential landmarks across Mumbai, Thane, Navi Mumbai, and Dombivli. Buy directly from top developers with absolute trust, clarity, and zero brokerage fees.</p>
+                            <p className="text-luxury-textMuted max-w-xl mx-auto lg:mx-0 text-sm md:text-base font-light">{heroSettings.subtitle || DEFAULT_HERO_SETTINGS.subtitle}</p>
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
+                                <button onClick={() => setView('contact')} className="border border-white/25 text-white bg-white/5 px-5 py-3 rounded-full text-xs font-black uppercase tracking-widest">{heroSettings.secondaryCta || "Contact Us"}</button>
+                                <button onClick={() => onOpenEnquiry({title:"General Site Visit",subLocality:"Multiple Locations",region:"MMR",carpetArea:"Flexible",status:"New Enquiry"})} className="border border-luxury-gold/60 text-luxury-gold bg-black/20 px-5 py-3 rounded-full text-xs font-black uppercase tracking-widest">{heroSettings.tertiaryCta || "Book Site Visit"}</button>
+                            </div>
                         </div>
-
-                        
                     </section>
-<section className="tp-v25-search-zone tp-v27-search-zone max-w-7xl mx-auto px-6">
+<section className="tp-v25-search-zone tp-v27-search-zone tp-v40-search-float max-w-7xl mx-auto px-6">
   <div className="tp-v25-search-title"><span>⌕</span> Search homes by location, project or budget</div>
   <SearchFilterBar {...filterState} listings={listings} />
+</section>
+<section className="max-w-7xl mx-auto px-6">
+  <div className="tp-v40-trust-grid">{[["8+","Years Experience"],[`${Math.max(visibleTotal,25)}+`,"Verified Projects"],["40+","Developers"],["1200+","Happy Families"],["0%","Brokerage"],["100%","RERA Checked"]].map(([value,label])=><div key={label}><b>{value}</b><span>{label}</span></div>)}</div>
 </section>
 <TopSpotlight listings={listings} onOpenProject={onOpenProject} onOpenEnquiry={onOpenEnquiry} />
 
@@ -992,11 +1116,19 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     <section className="py-6 px-6 lg:px-16 max-w-7xl mx-auto">
                         <div className="flex justify-between items-end mb-8 border-b border-neutral-900 pb-4">
                             <h2 className="text-xl md:text-2xl font-light tracking-wider">Premium Featured <span className="text-luxury-gold font-medium">Projects</span></h2>
-                            <button onClick={() => setView('properties')} className="text-xs text-luxury-gold font-bold tracking-wider uppercase hover:underline">View All Flats ({listings.length}) &rarr;</button>
+                            <button onClick={() => setView('properties')} className="text-xs text-luxury-gold font-bold tracking-wider uppercase hover:underline">View All Flats ({visibleTotal}) &rarr;</button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
                             {listings.slice(0, 6).map(p => <PropertyCard key={p.id} property={p} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} selectedConfig={filterState.selectedConfig} />)}
                         </div>
+                    </section>
+                    <section className="py-6 px-6 lg:px-16 max-w-7xl mx-auto grid md:grid-cols-4 gap-5">
+                        {[
+                            ["New Launches", "Fresh inventory with launch offers and priority site visits."],
+                            ["Luxury Collection", "Premium homes with clubhouse lifestyle and standout addresses."],
+                            ["Investment Projects", "Growth corridors across Kharghar, Panvel, Ulwe, Thane and Dombivli."],
+                            ["Why TruePillar", "MahaRERA guidance, zero brokerage and verified developer pricing."]
+                        ].map(([title,text]) => <div key={title} className="tp-v40-section-card"><h3 className="text-luxury-gold text-sm font-black tracking-widest uppercase">{title}</h3><p className="text-neutral-300 text-sm leading-6 mt-4">{text}</p></div>)}
                     </section>
                 </div>
             );
@@ -1006,12 +1138,22 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         function Properties({ listings, onOpenEnquiry, onOpenProject, filterState }) {
             return (
                 <div className="bg-luxury-bg text-white min-h-screen py-12 px-6 lg:px-16 max-w-7xl mx-auto space-y-8">
-                    <div>
-                        <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Verified Listings</span>
-                        <h1 className="text-3xl font-light tracking-wider mt-1">Available Properties & <span className="text-luxury-gold font-semibold">Apartments</span></h1>
+                    <div className="tp-v40-sticky-list-head">
+                        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                            <div>
+                                <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest">Verified Listings</span>
+                                <h1 className="text-3xl font-light tracking-wider mt-1">Available Properties & <span className="text-luxury-gold font-semibold">Apartments</span></h1>
+                                <div className="text-xs text-neutral-400 font-light mt-2">Showing {listings.length} matches found across database nodes.</div>
+                            </div>
+                            <div className="flex flex-wrap gap-2 text-[10px] uppercase font-black">
+                                <button className="border border-luxury-gold text-luxury-gold rounded-full px-4 py-2">Grid</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">List</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">Sort: Featured</button>
+                                <button className="border border-white/10 text-neutral-300 rounded-full px-4 py-2">Map View</button>
+                            </div>
+                        </div>
+                        <div className="mt-5"><SearchFilterBar {...filterState} listings={listings} /></div>
                     </div>
-                    <SearchFilterBar {...filterState} listings={listings} />
-                    <div className="text-xs text-neutral-400 font-light">Showing {listings.length} matches found across database nodes.</div>
                     {listings.length === 0 ? (
                         <div className="text-center py-20 border border-dashed border-neutral-800 rounded-xl text-neutral-500 text-sm">No properties match your filter selections. Try altering your choices.</div>
                     ) : (
@@ -1254,6 +1396,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
             const [spotlightSettings,setSpotlightSettings]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){return {}}});
             const saveSpotlight=()=>{localStorage.setItem("tp_spotlight_v22",JSON.stringify(spotlightSettings));alert("Spotlight settings saved.");};
+            const [heroSettings,setHeroSettings]=React.useState(loadHeroSettings);
+            const saveHeroSettings=()=>{localStorage.setItem("tp_hero_settings_v40",JSON.stringify(heroSettings));alert("Hero settings saved. Refresh homepage to view changes.");};
+            const uploadHeroAsset=(file,type)=>{if(!file)return;const reader=new FileReader();reader.onload=()=>setHeroSettings(prev=>({...prev,[type]:reader.result}));reader.readAsDataURL(file);};
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
             const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', configurationsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
             const [isEditing, setIsEditing] = React.useState(false);
@@ -1428,29 +1573,45 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="block text-neutral-400 mb-1">City / Region</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.region} onChange={e => setFormData({...formData, region: e.target.value, subLocality: REGIONS[e.target.value][0]})}>
-                                                {Object.keys(REGIONS).map(r => <option key={r} value={r}>{r}</option>)}
-                                            </select>
+                                            <AdminSelect
+                                                ariaLabel="City / Region"
+                                                value={formData.region}
+                                                options={[...new Set([...Object.keys(REGIONS), formData.region].filter(Boolean))]}
+                                                onChange={region => setFormData({...formData, region, subLocality: (REGIONS[region] || [formData.subLocality || ""])[0]})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom city / region"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={Object.keys(REGIONS).includes(formData.region) ? "" : formData.region}
+                                                onChange={e => setFormData({...formData, region: e.target.value, subLocality: ""})}
+                                            />
                                         </div>
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Locality Node</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.subLocality} onChange={e => setFormData({...formData, subLocality: e.target.value})}>
-                                                {REGIONS[formData.region].map(sub => <option key={sub} value={sub}>{sub}</option>)}
-                                            </select>
+                                            <AdminSelect
+                                                ariaLabel="Locality Node"
+                                                value={formData.subLocality}
+                                                options={[...new Set([...(REGIONS[formData.region] || []), formData.subLocality].filter(Boolean))]}
+                                                onChange={subLocality => setFormData({...formData, subLocality})}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Add custom locality / node"
+                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
+                                                value={(REGIONS[formData.region] || []).includes(formData.subLocality) ? "" : formData.subLocality}
+                                                onChange={e => setFormData({...formData, subLocality: e.target.value})}
+                                            />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Typology Configuration</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.configuration} onChange={e => setFormData({...formData, configuration: e.target.value})}>
-                                                {CONFIGURATIONS.map(c => <option key={c} value={c}>{c}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="Typology Configuration" value={formData.configuration} options={CONFIGURATIONS} onChange={configuration => setFormData({...formData, configuration})} />
                                         </div>
                                         <div>
                                             <label className="block text-neutral-400 mb-1">Possession State</label>
-                                            <select className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
-                                                {DEVELOPMENT_STATUS.map(s => <option key={s} value={s}>{s}</option>)}
-                                            </select>
+                                            <AdminSelect ariaLabel="Possession State" value={formData.status} options={DEVELOPMENT_STATUS} onChange={status => setFormData({...formData, status})} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
@@ -1630,7 +1791,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             </div>
                         </div>
                     )}
-                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div></div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HERO MANAGER</h3><p className="text-xs text-gray-400 mt-1">Safe local controls for hero image, video, title, subtitle and buttons.</p><div className="grid md:grid-cols-2 gap-3 mt-4"><input value={heroSettings.title||""} onChange={e=>setHeroSettings({...heroSettings,title:e.target.value})} placeholder="Hero title" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.subtitle||""} onChange={e=>setHeroSettings({...heroSettings,subtitle:e.target.value})} placeholder="Hero subtitle" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.primaryCta||""} onChange={e=>setHeroSettings({...heroSettings,primaryCta:e.target.value})} placeholder="Primary button" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.secondaryCta||""} onChange={e=>setHeroSettings({...heroSettings,secondaryCta:e.target.value})} placeholder="Secondary button" className="bg-black border border-white/20 rounded p-3"/><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Image<input type="file" accept="image/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"image")} className="block mt-2 text-white"/></label><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Video<input type="file" accept="video/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"video")} className="block mt-2 text-white"/></label><label className="flex items-center gap-2 bg-black border border-white/20 rounded p-3 text-xs"><input type="checkbox" checked={heroSettings.enabled!==false} onChange={e=>setHeroSettings({...heroSettings,enabled:e.target.checked})}/> Enable Hero</label><input type="datetime-local" value={heroSettings.schedule||""} onChange={e=>setHeroSettings({...heroSettings,schedule:e.target.value})} className="bg-black border border-white/20 rounded p-3"/></div><div className="grid md:grid-cols-3 gap-3 mt-4"><button type="button" onClick={()=>setHeroSettings(DEFAULT_HERO_SETTINGS)} className="border border-red-800 text-red-400 rounded py-3">Delete / Reset Hero</button><button type="button" onClick={()=>setHeroSettings({...heroSettings,video:""})} className="border border-white/20 rounded py-3">Remove Video</button><button type="button" onClick={saveHeroSettings} className="bg-luxury-gold text-black font-black rounded py-3">SAVE HERO SETTINGS</button></div></div></div>
             );
         }
 
@@ -1811,9 +1973,10 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 window.scrollTo(0, 0);
             };
 
-            const openProject = p => {
+            const openProject = (p, config = "") => {
                 const n = normalizeProject(p);
                 setActiveProject(n);
+                setProjectConfigContext(config);
                 setView("project");
                 if (!IS_LOCAL_FILE) navigateToProjectUrl(n);
                 window.scrollTo(0, 0);
@@ -1872,6 +2035,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             <Home 
                                 setView={navigateView} 
                                 listings={matchingFilteredListings} 
+                                totalCount={listings.filter(p=>p.published!==false).length}
                                 onOpenEnquiry={setActiveEnquiryTarget}
                                 onOpenProject={openProject}
                                 filterState={filterPack} 
