@@ -636,6 +636,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             if (path === "/properties") return { type: "view", view: "properties" };
             if (path === "/about") return { type: "view", view: "about" };
             if (path === "/contact") return { type: "view", view: "contact" };
+            if (path === "/requirement-form") return { type: "view", view: "requirement" };
             if (path === "/admin") return { type: "view", view: "admin" };
             const slugMatch = path.match(/^\/([^/]+)$/);
             if (slugMatch) return { type: "project", slug: decodeURIComponent(slugMatch[1]) };
@@ -992,6 +993,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 'properties': 'PROPERTIES',
                 'about': 'ABOUT US',
                 'contact': 'CONTACT US',
+                'requirement': 'Post Requirement',
                 'admin': '🔒 Agent Login'
             };
 
@@ -1003,7 +1005,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     </div>
                     
                     <div className="flex flex-wrap justify-center gap-7 text-sm tracking-wider uppercase font-bold">
-                        {['home', 'properties', 'about', 'contact', 'admin'].map((viewId) => (
+                        {['home', 'properties', 'about', 'contact', 'requirement', 'admin'].map((viewId) => (
                             <button 
                                 key={viewId} 
                                 onClick={() => setView(viewId)} 
@@ -1044,6 +1046,20 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             catch(e) { return DEFAULT_HERO_SETTINGS; }
         };
 
+
+        const DEFAULT_HOME_SECTIONS = [
+            ["New Launches", "Fresh inventory with launch offers and priority site visits."],
+            ["Luxury Collection", "Premium homes with clubhouse lifestyle and standout addresses."],
+            ["Investment Projects", "Growth corridors across Kharghar, Panvel, Ulwe, Thane and Dombivli."],
+            ["Why TruePillar", "MahaRERA guidance, zero brokerage and verified developer pricing."]
+        ];
+        const loadHomeSections = () => {
+            try {
+                const saved = JSON.parse(localStorage.getItem("tp_home_sections_v41") || "[]");
+                return Array.isArray(saved) && saved.length ? saved : DEFAULT_HOME_SECTIONS;
+            } catch(e) { return DEFAULT_HOME_SECTIONS; }
+        };
+
         // --- HOME SCREEN VIEW ---
         function Home({ setView, listings, totalCount = 0, onOpenEnquiry, onOpenProject, filterState, onSubmitHomeLead }) {
             const [hName, setHName] = React.useState("");
@@ -1080,6 +1096,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
             const heroSettings = loadHeroSettings();
             const visibleTotal = totalCount || listings.length;
+            const homeSections = loadHomeSections();
 
             return (
                 <div className="space-y-8">
@@ -1097,6 +1114,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
                                 <button onClick={() => setView('contact')} className="border border-white/25 text-white bg-white/5 px-5 py-3 rounded-full text-xs font-black uppercase tracking-widest">{heroSettings.secondaryCta || "Contact Us"}</button>
                                 <button onClick={() => onOpenEnquiry({title:"General Site Visit",subLocality:"Multiple Locations",region:"MMR",carpetArea:"Flexible",status:"New Enquiry"})} className="border border-luxury-gold/60 text-luxury-gold bg-black/20 px-5 py-3 rounded-full text-xs font-black uppercase tracking-widest">{heroSettings.tertiaryCta || "Book Site Visit"}</button>
+                                <button onClick={() => setView('requirement')} className="bg-white text-black px-5 py-3 rounded-full text-xs font-black uppercase tracking-widest">Tell Us What You Need</button>
                             </div>
                         </div>
                     </section>
@@ -1127,12 +1145,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         </div>
                     </section>
                     <section className="py-6 px-6 lg:px-16 max-w-7xl mx-auto grid md:grid-cols-4 gap-5">
-                        {[
-                            ["New Launches", "Fresh inventory with launch offers and priority site visits."],
-                            ["Luxury Collection", "Premium homes with clubhouse lifestyle and standout addresses."],
-                            ["Investment Projects", "Growth corridors across Kharghar, Panvel, Ulwe, Thane and Dombivli."],
-                            ["Why TruePillar", "MahaRERA guidance, zero brokerage and verified developer pricing."]
-                        ].map(([title,text]) => <div key={title} className="tp-v40-section-card"><h3 className="text-luxury-gold text-sm font-black tracking-widest uppercase">{title}</h3><p className="text-neutral-300 text-sm leading-6 mt-4">{text}</p></div>)}
+                        {homeSections.map(([title,text]) => <div key={title} className="tp-v40-section-card"><h3 className="text-luxury-gold text-sm font-black tracking-widest uppercase">{title}</h3><p className="text-neutral-300 text-sm leading-6 mt-4">{text}</p></div>)}
                     </section>
                 </div>
             );
@@ -1165,6 +1178,76 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             {listings.map((property) => <PropertyCard key={property.id} property={property} onOpenEnquiry={onOpenEnquiry} onOpenProject={onOpenProject} selectedConfig={filterState.selectedConfig} />)}
                         </div>
                     )}
+                </div>
+            );
+        }
+
+
+
+
+        function RequirementForm({ onSubmitLead }) {
+            const [submitted, setSubmitted] = React.useState(false);
+            const [form, setForm] = React.useState({ name:"", phone:"", location:"", budget:"", configuration:"2 BHK", propertyType:"Residential", status:"Ready to Move", purpose:"Self Use", notes:"" });
+            const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
+            const submitRequirement = (e) => {
+                e.preventDefault();
+                const lead = {
+                    id: Date.now(),
+                    timestamp: new Date().toLocaleString(),
+                    clientName: form.name,
+                    clientPhone: form.phone,
+                    clientEmail: "N/A (Requirement Form)",
+                    assetTitle: "Buyer Requirement Form",
+                    assetLocation: form.location || "Location open",
+                    clientNotes: `Budget: ${form.budget || "Not specified"}. Configuration: ${form.configuration}. Property Type: ${form.propertyType}. Status: ${form.status}. Purpose: ${form.purpose}. Additional Requirements: ${form.notes || "None"}.`,
+                    status: "New Lead"
+                };
+                onSubmitLead(lead);
+                setSubmitted(true);
+            };
+            const whatsappText = `Hello TruePillar Realty, I submitted my requirement. Name: ${form.name}. Location: ${form.location}. Budget: ${form.budget}. Configuration: ${form.configuration}. Purpose: ${form.purpose}.`;
+            return (
+                <div className="py-14 px-6 max-w-5xl mx-auto">
+                    <div className="grid lg:grid-cols-[.85fr_1.15fr] gap-8 items-start">
+                        <div className="tp-v40-section-card sticky top-28">
+                            <span className="text-luxury-gold text-xs font-black tracking-[.22em] uppercase">Buyer Concierge</span>
+                            <h1 className="text-4xl mt-4 leading-tight">Tell Us What You Need</h1>
+                            <p className="text-neutral-300 text-sm leading-7 mt-4">Share your preferred location, budget, configuration and purpose. Our team will shortlist verified zero-brokerage options and contact you with matching projects.</p>
+                            <div className="grid grid-cols-2 gap-3 mt-6 text-xs">
+                                <div className="bg-black/30 border border-white/10 rounded-xl p-3"><b className="text-luxury-gold block text-lg">0%</b> Brokerage</div>
+                                <div className="bg-black/30 border border-white/10 rounded-xl p-3"><b className="text-luxury-gold block text-lg">RERA</b> Checked</div>
+                                <div className="bg-black/30 border border-white/10 rounded-xl p-3"><b className="text-luxury-gold block text-lg">Fast</b> Shortlist</div>
+                                <div className="bg-black/30 border border-white/10 rounded-xl p-3"><b className="text-luxury-gold block text-lg">Free</b> Site Visit</div>
+                            </div>
+                        </div>
+                        <div className="bg-luxury-card border border-neutral-800 rounded-2xl p-6 md:p-8 shadow-2xl">
+                            {submitted ? (
+                                <div className="text-center py-12 space-y-5">
+                                    <div className="text-5xl">✅</div>
+                                    <h2 className="text-2xl text-white">Requirement Received</h2>
+                                    <p className="text-neutral-400 text-sm">Thank you. Our team will review your requirement and contact you shortly.</p>
+                                    <div className="flex flex-wrap justify-center gap-3">
+                                        <a href={`https://wa.me/917718847841?text=${encodeURIComponent(whatsappText)}`} target="_blank" rel="noreferrer" className="bg-emerald-600 text-white px-5 py-3 rounded-full text-xs font-black uppercase">Continue on WhatsApp</a>
+                                        <a href="tel:+917718847841" className="bg-luxury-gold text-black px-5 py-3 rounded-full text-xs font-black uppercase">Call Now</a>
+                                        <button onClick={()=>setSubmitted(false)} className="border border-white/20 px-5 py-3 rounded-full text-xs font-black uppercase">Submit Another</button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <form onSubmit={submitRequirement} className="grid md:grid-cols-2 gap-4 text-sm">
+                                    <div><label className="block text-neutral-400 mb-1">Name</label><input required value={form.name} onChange={e=>update('name',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" placeholder="Your full name" /></div>
+                                    <div><label className="block text-neutral-400 mb-1">Mobile / WhatsApp</label><input required value={form.phone} onChange={e=>update('phone',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" placeholder="10-digit mobile" /></div>
+                                    <div><label className="block text-neutral-400 mb-1">Preferred Location</label><input value={form.location} onChange={e=>update('location',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" placeholder="Kharghar, Panvel, Thane..." /></div>
+                                    <div><label className="block text-neutral-400 mb-1">Budget</label><input value={form.budget} onChange={e=>update('budget',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" placeholder="e.g. ₹80L - ₹1.4Cr" /></div>
+                                    <div><label className="block text-neutral-400 mb-1">Configuration</label><select value={form.configuration} onChange={e=>update('configuration',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white">{CONFIGURATIONS.map(x=><option key={x}>{x}</option>)}</select></div>
+                                    <div><label className="block text-neutral-400 mb-1">Property Type</label><select value={form.propertyType} onChange={e=>update('propertyType',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white"><option>Residential</option><option>Commercial</option><option>Luxury</option><option>Investment</option></select></div>
+                                    <div><label className="block text-neutral-400 mb-1">Possession</label><select value={form.status} onChange={e=>update('status',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white"><option>Ready to Move</option><option>Under Construction</option><option>New Launch</option></select></div>
+                                    <div><label className="block text-neutral-400 mb-1">Purpose</label><select value={form.purpose} onChange={e=>update('purpose',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white"><option>Self Use</option><option>Investment</option></select></div>
+                                    <div className="md:col-span-2"><label className="block text-neutral-400 mb-1">Additional Requirements</label><textarea rows="4" value={form.notes} onChange={e=>update('notes',e.target.value)} className="w-full bg-luxury-bg border border-neutral-800 rounded p-3 text-white" placeholder="Preferred floor, possession date, amenities, loan needs, etc."></textarea></div>
+                                    <button type="submit" className="md:col-span-2 bg-luxury-gold text-black rounded py-4 font-black uppercase tracking-widest">Submit Requirement</button>
+                                </form>
+                            )}
+                        </div>
+                    </div>
                 </div>
             );
         }
@@ -1401,7 +1484,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             const [spotlightSettings,setSpotlightSettings]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){return {}}});
             const saveSpotlight=()=>{localStorage.setItem("tp_spotlight_v22",JSON.stringify(spotlightSettings));alert("Spotlight settings saved.");};
             const [heroSettings,setHeroSettings]=React.useState(loadHeroSettings);
+            const [homeSectionsText,setHomeSectionsText]=React.useState(()=>loadHomeSections().map(([title,text])=>`${title} | ${text}`).join("\n"));
             const saveHeroSettings=()=>{localStorage.setItem("tp_hero_settings_v40",JSON.stringify(heroSettings));alert("Hero settings saved. Refresh homepage to view changes.");};
+            const saveHomeSections=()=>{localStorage.setItem("tp_home_sections_v41",JSON.stringify(pairs(homeSectionsText).map(x=>[x.label,x.value]).filter(x=>x[0]||x[1])));alert("Homepage sections saved. Refresh homepage to view changes.");};
             const uploadHeroAsset=(file,type)=>{if(!file)return;const reader=new FileReader();reader.onload=()=>setHeroSettings(prev=>({...prev,[type]:reader.result}));reader.readAsDataURL(file);};
             const [activeSubTab, setActiveSubTab] = React.useState("leads");
             const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', configurationsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
@@ -1796,7 +1881,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         </div>
                     )}
                 <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div>
-                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HERO MANAGER</h3><p className="text-xs text-gray-400 mt-1">Safe local controls for hero image, video, title, subtitle and buttons.</p><div className="grid md:grid-cols-2 gap-3 mt-4"><input value={heroSettings.title||""} onChange={e=>setHeroSettings({...heroSettings,title:e.target.value})} placeholder="Hero title" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.subtitle||""} onChange={e=>setHeroSettings({...heroSettings,subtitle:e.target.value})} placeholder="Hero subtitle" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.primaryCta||""} onChange={e=>setHeroSettings({...heroSettings,primaryCta:e.target.value})} placeholder="Primary button" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.secondaryCta||""} onChange={e=>setHeroSettings({...heroSettings,secondaryCta:e.target.value})} placeholder="Secondary button" className="bg-black border border-white/20 rounded p-3"/><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Image<input type="file" accept="image/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"image")} className="block mt-2 text-white"/></label><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Video<input type="file" accept="video/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"video")} className="block mt-2 text-white"/></label><label className="flex items-center gap-2 bg-black border border-white/20 rounded p-3 text-xs"><input type="checkbox" checked={heroSettings.enabled!==false} onChange={e=>setHeroSettings({...heroSettings,enabled:e.target.checked})}/> Enable Hero</label><input type="datetime-local" value={heroSettings.schedule||""} onChange={e=>setHeroSettings({...heroSettings,schedule:e.target.value})} className="bg-black border border-white/20 rounded p-3"/></div><div className="grid md:grid-cols-3 gap-3 mt-4"><button type="button" onClick={()=>setHeroSettings(DEFAULT_HERO_SETTINGS)} className="border border-red-800 text-red-400 rounded py-3">Delete / Reset Hero</button><button type="button" onClick={()=>setHeroSettings({...heroSettings,video:""})} className="border border-white/20 rounded py-3">Remove Video</button><button type="button" onClick={saveHeroSettings} className="bg-luxury-gold text-black font-black rounded py-3">SAVE HERO SETTINGS</button></div></div></div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HERO MANAGER</h3><p className="text-xs text-gray-400 mt-1">Safe local controls for hero image, video, title, subtitle and buttons.</p><div className="grid md:grid-cols-2 gap-3 mt-4"><input value={heroSettings.title||""} onChange={e=>setHeroSettings({...heroSettings,title:e.target.value})} placeholder="Hero title" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.subtitle||""} onChange={e=>setHeroSettings({...heroSettings,subtitle:e.target.value})} placeholder="Hero subtitle" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.primaryCta||""} onChange={e=>setHeroSettings({...heroSettings,primaryCta:e.target.value})} placeholder="Primary button" className="bg-black border border-white/20 rounded p-3"/><input value={heroSettings.secondaryCta||""} onChange={e=>setHeroSettings({...heroSettings,secondaryCta:e.target.value})} placeholder="Secondary button" className="bg-black border border-white/20 rounded p-3"/><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Image<input type="file" accept="image/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"image")} className="block mt-2 text-white"/></label><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Video<input type="file" accept="video/*" onChange={e=>uploadHeroAsset(e.target.files && e.target.files[0],"video")} className="block mt-2 text-white"/></label><label className="flex items-center gap-2 bg-black border border-white/20 rounded p-3 text-xs"><input type="checkbox" checked={heroSettings.enabled!==false} onChange={e=>setHeroSettings({...heroSettings,enabled:e.target.checked})}/> Enable Hero</label><input type="datetime-local" value={heroSettings.schedule||""} onChange={e=>setHeroSettings({...heroSettings,schedule:e.target.value})} className="bg-black border border-white/20 rounded p-3"/></div><div className="grid md:grid-cols-3 gap-3 mt-4"><button type="button" onClick={()=>setHeroSettings(DEFAULT_HERO_SETTINGS)} className="border border-red-800 text-red-400 rounded py-3">Delete / Reset Hero</button><button type="button" onClick={()=>setHeroSettings({...heroSettings,video:""})} className="border border-white/20 rounded py-3">Remove Video</button><button type="button" onClick={saveHeroSettings} className="bg-luxury-gold text-black font-black rounded py-3">SAVE HERO SETTINGS</button></div></div>
+                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOMEPAGE SECTION CMS</h3><p className="text-xs text-gray-400 mt-1">Edit homepage collection cards. One per line: Heading | Description</p><textarea rows="5" value={homeSectionsText} onChange={e=>setHomeSectionsText(e.target.value)} className="w-full bg-black border border-white/20 rounded p-3 mt-3 text-white"></textarea><button type="button" onClick={saveHomeSections} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE HOMEPAGE SECTIONS</button></div></div>
             );
         }
 
@@ -1975,7 +2061,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             };
 
             const navigateView = (nextView) => {
-                const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", admin: "/admin" };
+                const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", requirement: "/requirement-form", admin: "/admin" };
                 runUiTransition(() => {
                     setActiveProject(null);
                     setView(nextView);
@@ -2064,6 +2150,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             />
                         )}
                         {view === 'project' && activeProject && <ProjectDetail property={activeProject} onBack={closeProject} onOpenEnquiry={setActiveEnquiryTarget} listings={listings} onOpenProject={openProject} selectedConfig={projectConfigContext} />}
+                        {view === 'requirement' && <RequirementForm onSubmitLead={saveLead} />}
                         {view === 'about' && (
                             <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
                                 <div>
@@ -2125,28 +2212,40 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         )}
                     </main>
 
+                    <div className="fixed bottom-3 left-3 right-3 z-50 grid grid-cols-3 gap-2 md:hidden">
+                        <a href="https://wa.me/917718847841" className="bg-emerald-600 text-white text-center py-3 rounded-full text-[10px] font-black">WhatsApp</a>
+                        <a href="tel:+917718847841" className="bg-luxury-gold text-black text-center py-3 rounded-full text-[10px] font-black">Call</a>
+                        <button onClick={()=>navigateView('requirement')} className="bg-white text-black py-3 rounded-full text-[10px] font-black">Requirement</button>
+                    </div>
+
                     <footer className="border-t border-neutral-900 bg-luxury-card py-12 px-6 lg:px-16 text-xs text-luxury-textMuted">
-                        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-                            <div className="space-y-3">
+                        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+                            <div className="space-y-3 md:col-span-2">
                                 <h4 className="text-white font-bold tracking-wider uppercase text-sm">TruePillar Realty</h4>
-                                <p className="font-light leading-relaxed">Your premium home consultancy partner across Mumbai Metropolitan micro-markets. Verified developer properties with absolute Zero Brokerage execution frameworks.</p>
+                                <p className="font-light leading-relaxed">Premium home consultancy across Mumbai Metropolitan micro-markets. Verified developer properties, transparent pricing, MahaRERA guidance and absolute Zero Brokerage.</p>
+                                <div className="inline-flex border border-luxury-gold/40 text-luxury-gold rounded-full px-3 py-2 font-black">MAHARERA A031272401680</div>
                             </div>
                             <div className="space-y-2 font-light">
-                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Contacts</h4>
-                                <div>📞 Phone Desk: +91 7718847841</div>
-                                <div>✉️ Support: sales@truepillar.in</div>
+                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Popular Locations</h4>
+                                {['Kharghar','Taloja','Panvel','Ulwe','Dombivli','Thane'].map(x=><div key={x}>↗ {x}</div>)}
+                            </div>
+                            <div className="space-y-2 font-light">
+                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Links</h4>
+                                <button onClick={()=>navigateView('properties')} className="block hover:text-luxury-gold">Properties</button>
+                                <button onClick={()=>navigateView('requirement')} className="block hover:text-luxury-gold">Post Requirement</button>
+                                <button onClick={()=>navigateView('contact')} className="block hover:text-luxury-gold">Contact</button>
+                                <div>Privacy • Terms</div>
+                            </div>
+                            <div className="space-y-2 font-light">
+                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Contact & Social</h4>
+                                <div>📞 +91 7718847841</div>
+                                <div>✉️ sales@truepillar.in</div>
                                 <div>📍 Kharghar, Navi Mumbai</div>
-                            </div>
-                            <div className="space-y-2 font-light">
-                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Follow Our Pages</h4>
-                                <div><a href="https://www.facebook.com/TruePillarRealty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold transition">➡️ Facebook Page</a></div>
-                                <div><a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold transition">➡️ Instagram Feed</a></div>
-                            </div>
-                            <div className="space-y-2">
-                                <h4 className="text-white font-bold tracking-wider uppercase text-sm">Regulatory & Compliance</h4>
-                                <p className="font-light">© 2026 TruePillar Realty. All transactional support conforms with standard MAHA-RERA consumer protection metrics.</p>
+                                <div><a href="https://www.facebook.com/TruePillarRealty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold transition">Facebook</a> • <a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold transition">Instagram</a></div>
+                                <div className="text-luxury-gold">★★★★★ Google Reviews</div>
                             </div>
                         </div>
+                        <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-neutral-900 text-neutral-600">© 2026 TruePillar Realty. Project details are indicative and subject to developer/RERA updates.</div>
                     </footer>
 
                     {activeEnquiryTarget && (
