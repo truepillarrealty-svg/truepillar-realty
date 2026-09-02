@@ -354,7 +354,36 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                         <p className="text-sm text-luxury-textMuted">MahaRERA Registration: A031272401680 | Direct from Builders | Zero Brokerage</p>
                         <a href="/privacy-policy" className="inline-block mt-3 text-sm text-luxury-gold hover:text-luxury-goldHover transition">Privacy Policy</a>
                     </div>
-                </footer>
+
+                    <footer className="border-t border-neutral-900 bg-[#08090b] py-16 px-6 lg:px-16 text-xs text-luxury-textMuted">
+                        <div className="max-w-7xl mx-auto space-y-10">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+                                <div className="space-y-4 md:col-span-2">
+                                    <h4 className="text-white font-bold tracking-wider uppercase text-lg">TruePillar <span className="text-luxury-gold">Realty</span></h4>
+                                    <p className="font-light leading-relaxed max-w-md">Premium real estate advisory across Mumbai Metropolitan micro-markets with verified developer inventory, zero brokerage, RERA clarity and concierge site visits.</p>
+                                    <div className="inline-flex items-center gap-3 bg-luxury-card border border-luxury-gold/30 rounded-full px-4 py-2 text-luxury-gold font-black">MAHARERA A031272401680</div>
+                                </div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Popular Locations</h4>{["Kharghar","Taloja","Panvel","Ulwe","Dombivli","Thane"].map(x=><div key={x}>↗ {x}</div>)}</div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Links</h4><div>↗ Featured Projects</div><div>↗ New Launches</div><div>↗ Investment Guide</div><a href="/privacy-policy" className="block hover:text-luxury-gold transition-colors">↗ Privacy Policy</a><div>↗ Terms</div></div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Connect</h4><div>📞 +91 7718847841</div><div>✉️ sales@truepillar.in</div><div>📍 Kharghar, Navi Mumbai</div><div><a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Instagram</a> • <a href="https://www.facebook.com/TruePillarRealty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Facebook</a></div></div>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-4 border-t border-white/10 pt-8">
+                                <div className="tp-v39-panel p-5"><b className="text-white">Newsletter</b><p className="mt-2">Get launch offers, price updates and investment insights.</p><div className="flex mt-4"><input placeholder="Email address" className="flex-1 bg-black border border-white/10 rounded-l px-3 py-3"/><button className="bg-luxury-gold text-black px-4 rounded-r font-black">Join</button></div></div>
+                                <div className="tp-v39-panel p-5"><b className="text-white">Google Reviews</b><div className="text-luxury-gold mt-2">★★★★★</div><p className="mt-2">Trusted guidance for verified site visits and transparent pricing.</p></div>
+                                <div className="tp-v39-panel p-5"><b className="text-white">Latest Blogs</b><p className="mt-2">Kharghar investment guide • Panvel growth corridor • Ready vs under-construction homes.</p></div>
+                            </div>
+                            <p className="text-neutral-600">© 2026 TruePillar Realty. All project details are indicative and subject to developer/RERA updates.</p>
+                        </div>
+                    </footer>
+
+                    {activeEnquiryTarget && (
+                        <EnquiryModal 
+                            property={activeEnquiryTarget} 
+                            onClose={() => setActiveEnquiryTarget(null)} 
+                            onSubmitLead={saveLead}
+                        />
+                    )}
+                </div>
             );
         }
 
