@@ -533,6 +533,15 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         const projectsCollection = db.collection("projects");
         const leadsCollection = db.collection("leads");
         const legacyCloudDoc = db.collection("appData").doc("truepillar");
+        const siteContentDoc = db.collection("siteContent").doc("public");
+        const DEFAULT_SITE_CONTENT = {
+            aboutTitle: "About TruePillar Realty",
+            aboutIntro: "TruePillar Realty is a premium property consultancy firm specializing in handpicked luxury homes, under-construction residential marvels, and modern apartments across the Mumbai Metropolitan Region.",
+            aboutMission: "Our goal is simple: to make property buying standard, streamlined, and stress-free with verified facts, real prices, and complimentary guided site visits.",
+            contactPhone: "+91 7718847841",
+            contactEmail: "truepillarrealty@gmail.com",
+            contactAddress: "Kharghar, Navi Mumbai, Maharashtra"
+        };
 
         const cleanForFirestore = (value) => JSON.parse(JSON.stringify(value, (key, val) => val === undefined ? null : val));
 
@@ -635,21 +644,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
         ];
 
-        function App() {
-            const [projects, setProjects] = React.useState([]);
-            const [selectedProject, setSelectedProject] = React.useState(null);
-            const [loading, setLoading] = React.useState(true);
-
-            React.useEffect(() => {
-                const unsubscribe = projectsCollection.onSnapshot(snapshot => {
-                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    setProjects(data.length > 0 ? data : generateDemoProjects());
-                    setLoading(false);
-                });
-            }
-            return listings;
-        };
-
         // --- SEARCH & FILTER COMPONENT ---
         function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
             const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
@@ -707,37 +701,33 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             const [name, setName] = React.useState("");
             const [phone, setPhone] = React.useState("");
             const [email, setEmail] = React.useState("");
-            const [date, setDate] = React.useState("");
             const [notes, setNotes] = React.useState("");
-            const [visitTime, setVisitTime] = React.useState("");
-            const [pickup, setPickup] = React.useState("");
-            const [visitors, setVisitors] = React.useState("1");
-
-            const generateDemoProjects = () => {
-                const demos = [];
-                for (let i = 1; i <= 16; i++) {
-                    const regions = Object.keys(REGIONS);
-                    const region = regions[i % regions.length];
-                    const subLocalities = REGIONS[region];
-                    const subLocality = subLocalities[i % subLocalities.length];
-                    demos.push({
-                        id: i,
-                        name: `Premium ${CONFIGURATIONS[i % CONFIGURATIONS.length]} in ${subLocality}`,
-                        location: `${subLocality}, ${region}`,
-                        price: `${45 + (i * 5)} Lakhs`,
-                        image: STOCK_IMAGES[i % STOCK_IMAGES.length],
-                        status: DEVELOPMENT_STATUS[i % DEVELOPMENT_STATUS.length],
-                        description: `Luxury residential property with premium amenities in ${region}.`
+            const [submitting, setSubmitting] = React.useState(false);
+            const submit = async (event) => {
+                event.preventDefault();
+                setSubmitting(true);
+                try {
+                    await onSubmitLead({
+                        id: `lead-${Date.now()}`,
+                        clientName: name.trim(), clientPhone: phone.trim(), clientEmail: email.trim(),
+                        clientNotes: notes.trim(), assetTitle: property?.title || "General enquiry",
+                        assetLocation: [property?.subLocality, property?.region].filter(Boolean).join(", ") || "Mumbai Metropolitan Region",
+                        status: "New Lead"
                     });
+                    window.location.assign("/confirmation.html");
+                } catch (error) {
+                    console.error("Unable to save enquiry", error);
+                    alert("We could not submit your enquiry. Please try again or call us directly.");
+                    setSubmitting(false);
                 }
-                return demos;
             };
-
-            if (loading) return <div className="min-h-screen bg-luxury-bg flex items-center justify-center"><p className="text-luxury-gold">Loading properties...</p></div>;
-
-            if (selectedProject) {
-                return <PropertyDetailView project={selectedProject} onBack={() => setSelectedProject(null)} />;
-            }
+            return <div className="fixed inset-0 z-[1000] bg-black/75 p-4 flex items-center justify-center" role="dialog" aria-modal="true" aria-label={formTitle}>
+                <div className="w-full max-w-lg rounded-2xl border border-luxury-gold/40 bg-[#121216] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-start justify-between gap-4 mb-5"><div><p className="text-[10px] font-bold tracking-[.2em] text-luxury-gold uppercase">TruePillar Realty</p><h2 className="text-2xl text-white mt-1">{formTitle}</h2><p className="text-sm text-neutral-400 mt-2">{property?.title || "Tell us how we can help you."}</p></div><button type="button" onClick={onClose} className="text-neutral-400 hover:text-white text-2xl leading-none" aria-label="Close enquiry form">×</button></div>
+                    <form onSubmit={submit} className="space-y-4"><input required value={name} onChange={e=>setName(e.target.value)} placeholder="Your full name *" className="w-full rounded-lg border border-neutral-700 bg-black/40 px-4 py-3 text-white focus:outline-none focus:border-luxury-gold"/><input required type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="Mobile / WhatsApp number *" className="w-full rounded-lg border border-neutral-700 bg-black/40 px-4 py-3 text-white focus:outline-none focus:border-luxury-gold"/><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email address (optional)" className="w-full rounded-lg border border-neutral-700 bg-black/40 px-4 py-3 text-white focus:outline-none focus:border-luxury-gold"/><textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Your requirement or preferred visit time" rows="4" className="w-full rounded-lg border border-neutral-700 bg-black/40 px-4 py-3 text-white focus:outline-none focus:border-luxury-gold"/><label className="flex items-start gap-2 text-xs leading-5 text-neutral-400"><input required type="checkbox" className="mt-1 accent-[#D4AF37]"/> <span>I agree that TruePillar Realty may use my details to respond to this enquiry, as described in the <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-luxury-gold underline">Privacy Policy</a>.</span></label><button disabled={submitting} className="w-full rounded-lg bg-luxury-gold px-5 py-3 font-bold text-black disabled:opacity-60">{submitting ? "Submitting…" : "Submit Enquiry"}</button></form>
+                </div>
+            </div>;
+        }
 
         function PropertyCard({ property, onOpenEnquiry, onOpenProject, selectedConfig="" }) {
             const cardProject=normalizeProject(property);
@@ -1081,386 +1071,20 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         }
 
         // --- ADMIN / LEAD PANEL VIEW ---
-        function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout }) {
-            const [spotlightSettings,setSpotlightSettings]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){return {}}});
-            const saveSpotlight=()=>{localStorage.setItem("tp_spotlight_v22",JSON.stringify(spotlightSettings));alert("Spotlight settings saved.");};
-            const [heroSlides,setHeroSlides]=React.useState(()=>{try{return JSON.parse(localStorage.getItem("tp_hero_slides_v39")||"[]")}catch(e){return []}});
-            const activeHeroSlide = heroSlides[0] || DEFAULT_HERO_SLIDES[0];
-            const updateHeroSlide=(patch)=>setHeroSlides(prev=>[{...(prev[0]||DEFAULT_HERO_SLIDES[0]),...patch},...prev.slice(1)]);
-            const saveHeroSlides=()=>{localStorage.setItem("tp_hero_slides_v39",JSON.stringify(heroSlides.length?heroSlides:[activeHeroSlide]));alert("Hero Manager saved. Refresh the homepage to see local CMS changes.");};
-            const deleteHeroSlide=()=>setHeroSlides([{...DEFAULT_HERO_SLIDES[0],enabled:false,image:"",video:""}]);
-            const uploadHeroFile=(file,type)=>{if(!file)return;const reader=new FileReader();reader.onload=()=>updateHeroSlide({[type]:reader.result});reader.readAsDataURL(file);};
-            const [activeSubTab, setActiveSubTab] = React.useState("leads");
-            const [formData, setFormData] = React.useState({ id:'', title:'', slug:'', developer:'', reraNumber:'', region:'Navi Mumbai', subLocality:'Kharghar', configuration:'2 BHK', status:'Ready to Move', price:'', image:STOCK_IMAGES[0], images:[], videos:[], sampleVideoLinks:[], highlightVideoLinks:[], floorPlans:[], mapLink:'', nearbyPlaces:[], statusBadge:'', pdfs:[], address:'', carpetArea:'', possession:'', amenities:'', description:'', highlights:'', priceOptionsText:'', configurationsText:'', specificationsText:'', locationAdvantagesText:'', faqsText:'', published:true });
-            const [isEditing, setIsEditing] = React.useState(false);
-            const [uploadStatus, setUploadStatus] = React.useState("");
-            const [isUploading, setIsUploading] = React.useState(false);
-            const [mediaConfigIndex, setMediaConfigIndex] = React.useState("");
-            const [configMediaDrafts, setConfigMediaDrafts] = React.useState({});
-
-            const parsedConfigurations = () => lines(formData.configurationsText || "").map(row => {
-                const parts = row.split("|").map(x => x.trim());
-                const name = parts[0] || "";
-                const existing = (formData.configurations || []).find(c => String(c.configuration||"").toLowerCase() === name.toLowerCase()) || {};
-                return { ...existing, configuration:name, carpetArea:parts[1]||"", price:parts.slice(2).join("|").trim()||"", sampleVideoLinks:existing.sampleVideoLinks||[], highlightVideoLinks:existing.highlightVideoLinks||[], floorPlans:existing.floorPlans||[] };
-            }).filter(x=>x.configuration||x.carpetArea||x.price);
-
-            const updateConfigMedia = (configIndex, patch) => {
-                const i = Number(configIndex);
-                if (!Number.isInteger(i)) return;
-                setConfigMediaDrafts(prev => ({
-                    ...prev,
-                    [i]: {...(prev[i] || {}), ...patch}
-                }));
-            };
-
-            const selectedMediaBase = mediaConfigIndex === "" ? null : parsedConfigurations()[Number(mediaConfigIndex)] || null;
-            const selectedMediaConfig = selectedMediaBase ? {...selectedMediaBase, ...(configMediaDrafts[Number(mediaConfigIndex)] || {})} : null;
-
-            const handleImageUpload = async (e) => {
-                const input = e.target;
-                const files = Array.from(input.files || []);
-                if (!files.length) return;
-
-                const invalid = files.find(file => !file.type.startsWith("image/"));
-                if (invalid) {
-                    alert("Please select image files only.");
-                    input.value = "";
-                    return;
-                }
-
-                setIsUploading(true);
-                setUploadStatus(`Uploading 0 of ${files.length} images...`);
-
-                try {
-                    const uploadedUrls = [];
-                    for (let i = 0; i < files.length; i++) {
-                        setUploadStatus(`Uploading ${i + 1} of ${files.length}: ${files[i].name}`);
-                        const url = await uploadProjectFile(files[i], "project-images");
-                        uploadedUrls.push(url);
-                    }
-
-                    setFormData(prev => {
-                        const currentImages = Array.isArray(prev.images) ? prev.images.filter(x => typeof x === "string" && x.startsWith("http")) : [];
-                        const mergedImages = [...currentImages, ...uploadedUrls];
-                        return {
-                            ...prev,
-                            images: mergedImages,
-                            image: mergedImages[0] || prev.image || STOCK_IMAGES[0]
-                        };
-                    });
-
-                    setUploadStatus(`✓ ${uploadedUrls.length} image${uploadedUrls.length === 1 ? "" : "s"} uploaded successfully. Now click ${isEditing ? "SAVE REVISIONS" : "ADD PROPERTY"}.`);
-                } catch(err) {
-                    console.error("Firebase Storage upload error:", err);
-                    const code = err && err.code ? ` (${err.code})` : "";
-                    setUploadStatus(`Upload failed${code}.`);
-                    alert(`Image upload failed${code}. Firebase Storage must be enabled and its Storage Rules must allow the logged-in admin to upload.`);
-                } finally {
-                    setIsUploading(false);
-                    input.value = "";
-                }
-            };
-
-            const removeImage = (index) => {
-                setFormData(prev => {
-                    const updated = prev.images.filter((_, i) => i !== index);
-
-                    return {
-                        ...prev,
-                        images: updated,
-                        image: updated[0] || STOCK_IMAGES[0]
-                    };
-                });
-            };
-
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                handleFormSubmitWithRedirect({ ...formData, projectId: project.id, projectName: project.name });
-            };
-
-            return (
-                <div className="py-8 px-6 lg:px-16 max-w-7xl mx-auto space-y-8 animate-fadeIn">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-neutral-800 pb-6 gap-4">
-                        <div>
-                            <span className="text-[10px] tracking-widest text-emerald-400 font-bold bg-emerald-950/40 border border-emerald-900 px-2.5 py-1 rounded-full uppercase">Secure Console</span>
-                            <h1 className="text-2xl font-medium tracking-wider text-white mt-2">TruePillar Realty <span className="text-luxury-gold">Lead & CRM Dashboard</span></h1>
-                        </div>
-                        <div className="flex gap-3">
-                            <button onClick={() => setActiveSubTab("leads")} className={`px-4 py-2 text-xs font-bold rounded uppercase tracking-wider transition ${activeSubTab === 'leads' ? 'bg-luxury-gold text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'}`}>Leads & Bookings ({leads.length})</button>
-                            <button onClick={() => setActiveSubTab("inventory")} className={`px-4 py-2 text-xs font-bold rounded uppercase tracking-wider transition ${activeSubTab === 'inventory' ? 'bg-luxury-gold text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'}`}>Manage Inventory ({listings.length})</button>
-                            <button onClick={onLogout} className="bg-red-950/40 hover:bg-red-900/60 border border-red-900 text-red-400 text-xs font-bold px-4 py-2 rounded transition uppercase tracking-wider">Logout</button>
-                        </div>
-                    </div>
-
-                    {activeSubTab === "leads" ? (
-                        <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6 shadow-xl space-y-4">
-                            <h2 className="text-lg font-medium text-white border-b border-neutral-900 pb-3">Customer Site Visit & Enquiry Leads</h2>
-                            {leads.length === 0 ? (
-                                <div className="text-center py-16 text-neutral-500 font-light text-sm border border-dashed border-neutral-900 rounded-lg">No lead records found. New client bookings will show up here instantly.</div>
-                            ) : (
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left text-xs text-neutral-300">
-                                        <thead>
-                                            <tr className="border-b border-neutral-800 text-neutral-400 font-semibold tracking-wide uppercase">
-                                                <th className="py-3 px-2">Client Details</th><th className="py-3 px-2">Project / Location</th><th className="py-3 px-2">Customer Request Note</th><th className="py-3 px-2">Lead Status</th><th className="py-3 px-2 text-right">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {leads.map(lead => (
-                                                <tr key={lead.id} className="border-b border-neutral-900/60 hover:bg-neutral-900/20">
-                                                    <td className="py-4 px-2 space-y-1">
-                                                        <div className="text-neutral-500 text-[10px] font-mono">{lead.timestamp}</div>
-                                                        <div className="font-bold text-white text-sm">{lead.clientName}</div>
-                                                        <div className="text-luxury-gold font-medium text-sm select-all">{lead.clientPhone}</div>
-                                                        <div className="text-neutral-400 text-[11px] font-mono select-all">{lead.clientEmail}</div>
-                                                    </td>
-                                                    <td className="py-4 px-2">
-                                                        <div className="font-semibold text-white text-sm">{lead.assetTitle}</div>
-                                                        <div className="text-neutral-400 text-[11px]">{lead.assetLocation}</div>
-                                                    </td>
-                                                    <td className="py-4 px-2 max-w-xs text-neutral-400 font-light leading-relaxed italic">{lead.clientNotes}</td>
-                                                    <td className="py-4 px-2">
-                                                        <select 
-                                                            value={lead.status} 
-                                                            className={`bg-luxury-bg border text-[10px] uppercase tracking-wider font-bold rounded p-1.5 focus:outline-none ${lead.status === 'Followed Up' ? 'border-emerald-500 text-emerald-400' : 'border-amber-500 text-amber-400'}`}
-                                                            onChange={(e) => onUpdateLeadStatus(lead.id, e.target.value)}
-                                                        >
-                                                            <option value="New Lead">🔴 New Lead</option>
-                                                            <option value="Followed Up">🟢 Followed Up</option>
-                                                        </select>
-                                                    </td>
-                                                    <td className="py-4 px-2 text-right">
-                                                        <button className="text-red-400 hover:text-red-300 font-medium text-[11px] hover:underline" onClick={() => onDeleteLead(lead.id)}>Delete</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                            <div className="bg-luxury-card p-6 border border-neutral-800 rounded-xl h-fit shadow-xl">
-                                <h2 className="text-lg mb-4 text-white font-medium border-b border-neutral-900 pb-2">{isEditing ? 'Modify Property Flat' : 'Add New Property Flat'}</h2>
-                                <form onSubmit={handleAssetSubmit} className="space-y-4 text-xs text-neutral-300">
-                                    <div>
-                                        <label className="block text-neutral-400 mb-1">Project Name</label>
-                                        <input type="text" placeholder="e.g., Elysian Crest" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white focus:border-luxury-gold" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">City / Region</label>
-                                            <AdminSelect
-                                                ariaLabel="City / Region"
-                                                value={formData.region}
-                                                options={[...new Set([...Object.keys(REGIONS), formData.region].filter(Boolean))]}
-                                                onChange={region => setFormData({...formData, region, subLocality: (REGIONS[region] || [formData.subLocality || ""])[0]})}
-                                            />
-                                            <input
-                                                type="text"
-                                                placeholder="Add custom city / region"
-                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
-                                                value={Object.keys(REGIONS).includes(formData.region) ? "" : formData.region}
-                                                onChange={e => setFormData({...formData, region: e.target.value, subLocality: ""})}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Locality Node</label>
-                                            <AdminSelect
-                                                ariaLabel="Locality Node"
-                                                value={formData.subLocality}
-                                                options={[...new Set([...(REGIONS[formData.region] || []), formData.subLocality].filter(Boolean))]}
-                                                onChange={subLocality => setFormData({...formData, subLocality})}
-                                            />
-                                            <input
-                                                type="text"
-                                                placeholder="Add custom locality / node"
-                                                className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-white focus:border-luxury-gold mt-2"
-                                                value={(REGIONS[formData.region] || []).includes(formData.subLocality) ? "" : formData.subLocality}
-                                                onChange={e => setFormData({...formData, subLocality: e.target.value})}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Typology Configuration</label>
-                                            <AdminSelect ariaLabel="Typology Configuration" value={formData.configuration} options={CONFIGURATIONS} onChange={configuration => setFormData({...formData, configuration})} />
-                                        </div>
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Possession State</label>
-                                            <AdminSelect ariaLabel="Possession State" value={formData.status} options={DEVELOPMENT_STATUS} onChange={status => setFormData({...formData, status})} />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Total Price (e.g. ₹1.40 Cr)</label>
-                                            <input type="text" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required />
-                                        </div>
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Carpet Area Size</label>
-                                            <input type="text" placeholder="e.g., 1050 Sq. Ft." className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.carpetArea} onChange={e => setFormData({...formData, carpetArea: e.target.value})} required />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Possession Date</label>
-                                            <input type="text" placeholder="e.g., Ready / Dec 2027" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.possession} onChange={e => setFormData({...formData, possession: e.target.value})} required />
-                                        </div>
-                                        <div>
-                                            <label className="block text-neutral-400 mb-1">Image URL LINK</label>
-                                            <input type="text" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-neutral-400 text-[11px]" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-neutral-400 mb-1">Full Detailed Address</label>
-                                        <input type="text" placeholder="Sector 20, Near Central Park..." className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} required />
-                                    </div>
-                                    <div>
-                                        <label className="block text-neutral-400 mb-1">Amenities (Commas separated)</label>
-                                        <input type="text" placeholder="Clubhouse, Swimming Pool, Gym" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.amenities.toString()} onChange={e => setFormData({...formData, amenities: e.target.value})} required />
-                                    </div>
-                                    
-
-<div className="border-t border-neutral-800 pt-4 space-y-4">
-    <h3 className="text-luxury-gold font-bold uppercase tracking-wider">Complete Project Page</h3>
-    <div className="grid grid-cols-2 gap-2">
-        <div><label className="block text-neutral-400 mb-1">Developer</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.developer||''} onChange={e=>setFormData({...formData,developer:e.target.value})}/></div>
-        <div><label className="block text-neutral-400 mb-1">MahaRERA Number</label><input className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.reraNumber||''} onChange={e=>setFormData({...formData,reraNumber:e.target.value})}/></div>
-    </div>
-    <div><label className="block text-neutral-400 mb-1">Project URL Slug</label><input placeholder="auto-created-from-name" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.slug||''} onChange={e=>setFormData({...formData,slug:slugify(e.target.value)})}/></div>
-    <div><label className="block text-neutral-400 mb-1">Detailed Description</label><textarea rows="5" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.description||''} onChange={e=>setFormData({...formData,description:e.target.value})}/></div>
-    <div><label className="block text-neutral-400 mb-1">Highlights — one per line</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.highlights||''} onChange={e=>setFormData({...formData,highlights:e.target.value})}/></div>
-    <div><label className="block text-neutral-400 mb-1">Project Configurations — one per line: BHK | Carpet Area | Price</label><textarea rows="5" placeholder={'1 BHK | 450 Sq. Ft. | ₹55 Lakhs\n2 BHK | 750 Sq. Ft. | ₹95 Lakhs'} className="w-full bg-luxury-bg border border-luxury-gold/40 p-3 rounded text-white" value={formData.configurationsText||''} onChange={e=>setFormData({...formData,configurationsText:e.target.value})}/><p className="text-[10px] text-neutral-500 mt-1">Add all configurations of this project here. BHK filters will match any row.</p></div>
-    <div className="bg-luxury-bg border border-luxury-gold/40 rounded-xl p-4 space-y-4">
-    <div>
-        <label className="block text-luxury-gold font-bold mb-2">CONFIGURATION-SPECIFIC MEDIA</label>
-        <select value={mediaConfigIndex} onChange={e=>setMediaConfigIndex(String(e.target.value))} className="w-full bg-luxury-card border border-luxury-gold/50 p-3 rounded text-white">
-            <option value="">Select BHK configuration</option>
-            {parsedConfigurations().map((c,i)=><option key={i} value={String(i)}>{c.configuration} — {c.carpetArea} — {c.price}</option>)}
-        </select>
-        <p className="text-[10px] text-neutral-500 mt-2">Select 1 BHK, 2 BHK, 3 BHK etc. Then add only that configuration's floor plans and videos.</p>
-    </div>
-
-    {selectedMediaConfig && <div className="space-y-4">
-        <div>
-            <label className="block text-neutral-400 mb-1">{selectedMediaConfig.configuration} Sample Flat Video Links</label>
-            <textarea rows="3" placeholder="One YouTube / Instagram / Facebook link per line" className="w-full bg-luxury-card border border-neutral-800 p-3 rounded text-white" value={(selectedMediaConfig.sampleVideoLinks||[]).join('\n')} onChange={e=>{ const nextLinks=lines(e.target.value); updateConfigMedia(mediaConfigIndex,{sampleVideoLinks:nextLinks}); }}></textarea>
-        </div>
-<div className="space-y-2">
-            <label className="block text-neutral-400">{selectedMediaConfig.configuration} Floor Plans</label>
-            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={async e=>{
-                const files=Array.from(e.target.files||[]);
-                if(!files.length)return;
-                setIsUploading(true);
-                try{
-                    const added=[];
-                    for(const file of files){
-                        if(file.size>5*1024*1024){ alert(file.name+" is above 5 MB and was skipped."); continue; }
-                        setUploadStatus(`Uploading ${selectedMediaConfig.configuration} floor plan: ${file.name}`);
-                        const url=await uploadProjectFile(file,"floor-plans");
-                        added.push({label:selectedMediaConfig.configuration,area:selectedMediaConfig.carpetArea,price:selectedMediaConfig.price,image:url});
-                    }
-                    updateConfigMedia(mediaConfigIndex,{floorPlans:[...(selectedMediaConfig.floorPlans||[]),...added]});
-                    setUploadStatus(`✓ ${added.length} ${selectedMediaConfig.configuration} floor plan(s) uploaded.`);
-                }catch(err){console.error(err);setUploadStatus("Upload failed: "+(err.message||"Please check Cloudinary preset."));}
-                finally{setIsUploading(false);e.target.value="";}
-            }} disabled={isUploading} className="w-full bg-luxury-card border border-neutral-800 p-2 rounded text-xs text-white disabled:opacity-50"/>
-            <div className="space-y-2">{(selectedMediaConfig.floorPlans||[]).map((plan,i)=><div key={i} className="flex items-center gap-3 bg-luxury-card border border-neutral-800 p-2 rounded"><img src={plan.image} className="w-16 h-16 object-contain bg-white rounded"/><div className="flex-1 text-xs"><b className="block text-white">{selectedMediaConfig.configuration}</b><span className="text-neutral-500">{selectedMediaConfig.carpetArea} • {selectedMediaConfig.price}</span></div><button type="button" onClick={()=>updateConfigMedia(mediaConfigIndex,{floorPlans:selectedMediaConfig.floorPlans.filter((_,x)=>x!==i)})} className="text-red-400 text-xs">Remove</button></div>)}</div>
-        </div>
-    </div>}
-</div>
-
-<div><label className="block text-neutral-400 mb-1">Specifications — Name | Detail</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.specificationsText||''} onChange={e=>setFormData({...formData,specificationsText:e.target.value})}/></div>
-    <div><label className="block text-neutral-400 mb-1">Location Advantages — Place | 5 min</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.locationAdvantagesText||''} onChange={e=>setFormData({...formData,locationAdvantagesText:e.target.value})}/></div>
-    <div><label className="block text-neutral-400 mb-1">FAQs — Question | Answer</label><textarea rows="4" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={formData.faqsText||''} onChange={e=>setFormData({...formData,faqsText:e.target.value})}/></div>
-    <label className="flex items-center gap-2"><input type="checkbox" checked={formData.published!==false} onChange={e=>setFormData({...formData,published:e.target.checked})}/> Published on website</label>
-</div>
-
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Project Highlight Video Links</label>
-    <textarea rows="4" placeholder={"Paste one link per line\nYouTube, Instagram or Facebook"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white" value={(formData.highlightVideoLinks||[]).join('\n')} onChange={e=>setFormData({...formData,highlightVideoLinks:lines(e.target.value)})}></textarea>
-    <p className="text-[10px] text-neutral-500">These appear in the Project Highlight Videos section on the detail page.</p>
-</div>
-
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Google Maps Project Link</label>
-    <input value={formData.mapLink||''} onChange={e=>setFormData({...formData,mapLink:e.target.value})} placeholder="Paste Google Maps share link" className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"/>
-</div>
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Nearby Places</label>
-    <textarea rows="4" value={(formData.nearbyPlaces||[]).map(x=>`${x.label} | ${x.value}`).join('\n')} onChange={e=>setFormData({...formData,nearbyPlaces:pairs(e.target.value)})} placeholder={"One per line:\nMetro Station | 5 min\nHospital | 7 min"} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"></textarea>
-</div>
-
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Project Status Badge</label>
-    <select value={formData.statusBadge||''} onChange={e=>setFormData({...formData,statusBadge:e.target.value})} className="w-full bg-luxury-bg border border-neutral-800 p-3 rounded text-white"><option value="">No Badge</option><option>New Launch</option><option>Ready to Move</option><option>Near Possession</option><option>Limited Inventory</option><option>Price Updated Today</option></select>
-</div>
-<div className="space-y-3">
-    <button type="button" onClick={async()=>{const msg=`${formData.title||"Project"}\n📍 ${formData.subLocality||""}, ${formData.region||""}\n🏠 ${formData.configuration||""}\n💰 ${formData.price||""}\n📅 Possession: ${formData.possession||""}`;try{await navigator.clipboard.writeText(msg);alert("WhatsApp-ready project summary copied.");}catch(e){alert(msg);}}} className="w-full border border-emerald-700 text-emerald-400 p-3 rounded font-bold">Copy WhatsApp-Ready Project Summary</button>
-</div>
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Upload Multiple Project Images</label>
-    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={handleImageUpload} disabled={isUploading} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white disabled:opacity-50" />
-    {uploadStatus && <div className={`text-xs p-3 rounded border ${uploadStatus.startsWith("✓") ? "text-emerald-400 border-emerald-800 bg-emerald-950/30" : uploadStatus.startsWith("Upload failed") ? "text-red-400 border-red-800 bg-red-950/30" : "text-luxury-gold border-luxury-gold/30 bg-luxury-gold/5"}`}>{uploadStatus}</div>}
-    <div className="flex flex-wrap gap-2">
-        {(formData.images || []).map((img, index) => (
-            <div key={index} className="relative">
-                <img src={img} className="w-20 h-20 object-cover rounded border border-neutral-700" />
-                <button type="button" onClick={() => removeImage(index)} className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 rounded-full text-[10px]">×</button>
-            </div>
-        ))}
-    </div>
-</div>
-
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Upload Project Videos</label>
-    <input type="file" accept="video/mp4,video/webm,video/quicktime" multiple onChange={handleVideoUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
-    <div className="space-y-2">
-        {(formData.videos || []).map((video, index) => (
-            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
-                <video src={playableVideoUrl(video)} className="w-24 h-16 object-cover rounded bg-black" controls />
-                <span className="text-[11px] text-neutral-400 flex-1">Project Video {index + 1}</span>
-                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, videos: formData.videos.filter((_, i) => i !== index)})}>Remove</button>
-            </div>
-        ))}
-    </div>
-</div>
-
-<div className="space-y-3">
-    <label className="block text-neutral-400 mb-1">Upload PDFs / Brochures / Cost Sheets</label>
-    <input type="file" accept="application/pdf" multiple onChange={handlePdfUpload} className="w-full bg-luxury-bg border border-neutral-800 p-2 rounded text-xs text-white" />
-    <div className="space-y-2">
-        {(formData.pdfs || []).map((pdf, index) => (
-            <div key={index} className="flex items-center justify-between gap-3 bg-luxury-bg border border-neutral-800 p-2 rounded">
-                <span className="text-[11px] text-neutral-300 truncate flex-1">📄 {pdf.name || `PDF ${index + 1}`}</span>
-                <button type="button" className="text-red-400 text-xs" onClick={() => setFormData({...formData, pdfs: formData.pdfs.filter((_, i) => i !== index)})}>Remove</button>
-            </div>
-        ))}
-    </div>
-</div>
-
-<button type="submit" disabled={isUploading} className="w-full bg-luxury-gold hover:bg-luxury-goldHover disabled:opacity-50 disabled:cursor-not-allowed text-black py-3 font-bold uppercase tracking-wider transition rounded shadow-lg mt-2">{isUploading ? "WAIT — UPLOADING FILES..." : (isEditing ? 'Save Revisions' : 'Publish New Flat Listing')}</button>
-
-                                </form>
-                            </div>
-                            <div className="tp-v20-detail-side">
-                                <h1 className="text-5xl font-bold text-luxury-gold mb-4">{project.name}</h1>
-                                <p className="text-xl text-luxury-textMuted mb-4">📍 {project.location}</p>
-                                <p className="text-4xl font-bold text-luxury-gold mb-6">₹{project.price}</p>
-                                <p className="text-lg text-luxury-textMuted leading-relaxed mb-8">{project.description}</p>
-                                <div className="flex gap-4">
-                                    <button className="bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold px-6 py-3 rounded-lg transition">View Project Details</button>
-                                    <button className="border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-black font-bold px-6 py-3 rounded-lg transition">Download Brochure</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HOME SPOTLIGHT MANAGER</h3><p className="text-xs text-gray-400 mt-1">Choose up to 5 projects. They rotate automatically.</p><div className="grid md:grid-cols-2 gap-3 mt-4">{[0,1,2,3,4].map(i=><select key={i} value={(spotlightSettings.projectIds||[])[i]||""} onChange={e=>{const ids=[...(spotlightSettings.projectIds||[])];ids[i]=e.target.value;setSpotlightSettings({...spotlightSettings,projectIds:ids})}} className="bg-black border border-white/20 rounded p-3"><option value="">Spotlight Project {i+1}</option>{listings.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select>)}</div><input value={spotlightSettings.heading||""} onChange={e=>setSpotlightSettings({...spotlightSettings,heading:e.target.value})} placeholder="Spotlight heading" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><textarea value={spotlightSettings.offerText||""} onChange={e=>setSpotlightSettings({...spotlightSettings,offerText:e.target.value})} placeholder="Offer write-up" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[90px]"></textarea><textarea value={spotlightSettings.benefits||""} onChange={e=>setSpotlightSettings({...spotlightSettings,benefits:e.target.value})} placeholder="Benefits" className="w-full bg-black border border-white/20 rounded p-3 mt-3 min-h-[80px]"></textarea><input value={spotlightSettings.startingPrice||""} onChange={e=>setSpotlightSettings({...spotlightSettings,startingPrice:e.target.value})} placeholder="Optional starting price override" className="w-full bg-black border border-white/20 rounded p-3 mt-3"/><button onClick={saveSpotlight} className="w-full bg-luxury-gold text-black font-black py-3 rounded mt-4">SAVE SPOTLIGHT SETTINGS</button></div>
-                <div className="bg-[#111216] border border-luxury-gold/30 rounded-xl p-5 my-6"><h3 className="text-luxury-gold font-black text-lg">HERO MANAGER</h3><p className="text-xs text-gray-400 mt-1">Upload image/video, change titles/buttons, enable or delete the cinematic hero. Saves to local CMS storage without changing Firestore data.</p><div className="grid md:grid-cols-2 gap-3 mt-4"><input value={activeHeroSlide.title||""} onChange={e=>updateHeroSlide({title:e.target.value})} placeholder="Hero title" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.subtitle||""} onChange={e=>updateHeroSlide({subtitle:e.target.value})} placeholder="Hero subtitle" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.primaryCta||""} onChange={e=>updateHeroSlide({primaryCta:e.target.value})} placeholder="Primary CTA" className="bg-black border border-white/20 rounded p-3"/><input value={activeHeroSlide.secondaryCta||""} onChange={e=>updateHeroSlide({secondaryCta:e.target.value})} placeholder="Secondary CTA" className="bg-black border border-white/20 rounded p-3"/><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Image<input type="file" accept="image/*" onChange={e=>uploadHeroFile(e.target.files?.[0],"image")} className="block mt-2 text-white"/></label><label className="bg-black border border-white/20 rounded p-3 text-xs text-neutral-400">Upload Hero Video<input type="file" accept="video/*" onChange={e=>uploadHeroFile(e.target.files?.[0],"video")} className="block mt-2 text-white"/></label><label className="flex items-center gap-2 bg-black border border-white/20 rounded p-3 text-xs"><input type="checkbox" checked={activeHeroSlide.enabled!==false} onChange={e=>updateHeroSlide({enabled:e.target.checked})}/> Enable Hero</label><input type="datetime-local" value={activeHeroSlide.schedule||""} onChange={e=>updateHeroSlide({schedule:e.target.value})} className="bg-black border border-white/20 rounded p-3"/></div><div className="grid md:grid-cols-3 gap-3 mt-4"><button type="button" onClick={()=>setHeroSlides(prev=>[...prev.slice(1),prev[0]||DEFAULT_HERO_SLIDES[0]])} className="border border-white/20 rounded py-3">Reorder Hero</button><button type="button" onClick={deleteHeroSlide} className="border border-red-800 text-red-400 rounded py-3">Delete Hero</button><button type="button" onClick={saveHeroSlides} className="bg-luxury-gold text-black font-black rounded py-3">SAVE HERO MANAGER</button></div></div></div>
-            );
+        function AdminDashboard({ listings, onAdd, onDelete, onEdit, leads, onDeleteLead, onUpdateLeadStatus, onLogout, siteContent, onSaveSiteContent }) {
+            const [tab, setTab] = React.useState("leads");
+            const [contentDraft, setContentDraft] = React.useState(siteContent);
+            const [projectDraft, setProjectDraft] = React.useState({title:"", region:"Navi Mumbai", subLocality:"Kharghar", configuration:"2 BHK", status:"New Launch", price:"", address:"", description:"", published:true});
+            React.useEffect(() => setContentDraft(siteContent), [siteContent]);
+            const publishProject = async (e) => { e.preventDefault(); const id = `project-${Date.now()}`; await onAdd({...projectDraft, id, slug: slugify(projectDraft.title), images: [], image: STOCK_IMAGES[0]}); setProjectDraft({title:"", region:"Navi Mumbai", subLocality:"Kharghar", configuration:"2 BHK", status:"New Launch", price:"", address:"", description:"", published:true}); alert("Property saved."); };
+            const button = (id,label) => <button key={id} type="button" onClick={()=>setTab(id)} className={`rounded px-4 py-2 text-xs font-bold uppercase ${tab===id?'bg-luxury-gold text-black':'bg-neutral-900 text-neutral-300 hover:text-white'}`}>{label}</button>;
+            return <div className="mx-auto max-w-6xl space-y-7 px-5 py-8">
+                <div className="flex flex-col gap-4 border-b border-neutral-800 pb-5 md:flex-row md:items-center md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-luxury-gold">Secure console</p><h1 className="mt-1 text-2xl text-white">Admin dashboard</h1></div><button type="button" onClick={onLogout} className="rounded border border-red-900 px-4 py-2 text-xs font-bold uppercase text-red-300">Log out</button></div>
+                <div className="flex flex-wrap gap-2">{button("leads",`Enquiries (${leads.length})`)}{button("inventory",`Properties (${listings.length})`)}{button("content","About & contact")}</div>
+                {tab === "content" && <form onSubmit={async e=>{e.preventDefault();await onSaveSiteContent(contentDraft);alert("Site content published.");}} className="max-w-3xl space-y-4 rounded-xl border border-neutral-800 bg-luxury-card p-6"><h2 className="text-lg text-white">Edit public pages</h2>{[["aboutTitle","About page title"],["contactPhone","Phone number"],["contactEmail","Email address"],["contactAddress","Office address"]].map(([key,label])=><label key={key} className="block text-xs text-neutral-400">{label}<input required value={contentDraft[key]||""} onChange={e=>setContentDraft({...contentDraft,[key]:e.target.value})} className="mt-1 w-full rounded border border-neutral-700 bg-black/30 p-3 text-white"/></label>)}<label className="block text-xs text-neutral-400">About introduction<textarea required rows="4" value={contentDraft.aboutIntro||""} onChange={e=>setContentDraft({...contentDraft,aboutIntro:e.target.value})} className="mt-1 w-full rounded border border-neutral-700 bg-black/30 p-3 text-white"/></label><label className="block text-xs text-neutral-400">Mission statement<textarea required rows="4" value={contentDraft.aboutMission||""} onChange={e=>setContentDraft({...contentDraft,aboutMission:e.target.value})} className="mt-1 w-full rounded border border-neutral-700 bg-black/30 p-3 text-white"/></label><button className="rounded bg-luxury-gold px-5 py-3 text-xs font-bold uppercase text-black">Publish changes</button></form>}
+                {tab === "leads" && <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-luxury-card p-5"><h2 className="mb-4 text-lg text-white">Customer enquiries</h2><table className="w-full text-left text-xs"><thead className="text-neutral-500"><tr><th className="p-2">Name</th><th className="p-2">Contact</th><th className="p-2">Property</th><th className="p-2">Status</th><th className="p-2"></th></tr></thead><tbody>{leads.map(lead=><tr key={lead.id} className="border-t border-neutral-800 text-neutral-300"><td className="p-2">{lead.clientName}</td><td className="p-2">{lead.clientPhone}<br/>{lead.clientEmail}</td><td className="p-2">{lead.assetTitle}</td><td className="p-2"><select value={lead.status||"New Lead"} onChange={e=>onUpdateLeadStatus(lead.id,e.target.value)} className="rounded bg-black p-2"><option>New Lead</option><option>Followed Up</option></select></td><td className="p-2"><button type="button" onClick={()=>onDeleteLead(lead.id)} className="text-red-400">Delete</button></td></tr>)}</tbody></table>{!leads.length&&<p className="py-10 text-center text-sm text-neutral-500">No enquiries yet.</p>}</div>}
+                {tab === "inventory" && <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><form onSubmit={publishProject} className="space-y-3 rounded-xl border border-neutral-800 bg-luxury-card p-5"><h2 className="text-lg text-white">Add property</h2>{[["title","Project name"],["region","City / region"],["subLocality","Locality"],["configuration","Configuration"],["status","Status"],["price","Starting price"],["address","Address"]].map(([key,label])=><label key={key} className="block text-xs text-neutral-400">{label}<input required value={projectDraft[key]} onChange={e=>setProjectDraft({...projectDraft,[key]:e.target.value})} className="mt-1 w-full rounded border border-neutral-700 bg-black/30 p-3 text-white"/></label>)}<label className="block text-xs text-neutral-400">Description<textarea value={projectDraft.description} onChange={e=>setProjectDraft({...projectDraft,description:e.target.value})} className="mt-1 w-full rounded border border-neutral-700 bg-black/30 p-3 text-white"/></label><button className="w-full rounded bg-luxury-gold p-3 text-xs font-bold uppercase text-black">Save property</button></form><div className="space-y-3">{listings.map(project=><div key={project.id} className="flex items-center justify-between gap-4 rounded-xl border border-neutral-800 bg-luxury-card p-4"><div><b className="text-white">{project.title}</b><p className="mt-1 text-xs text-neutral-400">{project.subLocality}, {project.region} · {project.price}</p></div><div className="flex gap-3 text-xs"><button type="button" onClick={()=>onEdit({...project,published:project.published===false})} className="text-luxury-gold">{project.published===false?'Publish':'Hide'}</button><button type="button" onClick={()=>onDelete(project.id)} className="text-red-400">Delete</button></div></div>)}</div></div>}
+            </div>;
         }
 
         function SecureLoginGate({ onLoginSuccess }) {
@@ -1545,6 +1169,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             
             const [listings, setListings] = React.useState([]);
             const [leads, setLeads] = React.useState([]);
+            const [siteContent, setSiteContent] = React.useState(DEFAULT_SITE_CONTENT);
             const [cloudReady, setCloudReady] = React.useState(false);
 
             const [search, setSearch] = React.useState("");
@@ -1554,6 +1179,11 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             const [projectConfigContext, setProjectConfigContext] = React.useState("");
             const [selectedStatus, setSelectedStatus] = React.useState("");
             const [activeEnquiryTarget, setActiveEnquiryTarget] = React.useState(null);
+
+            React.useEffect(() => {
+                const unsubscribe = siteContentDoc.onSnapshot(doc => setSiteContent({...DEFAULT_SITE_CONTENT, ...(doc.exists ? doc.data() : {})}), error => console.error("Site content sync error", error));
+                return () => unsubscribe();
+            }, []);
 
             React.useEffect(() => {
                 let projectsLoaded = false;
@@ -1648,6 +1278,10 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 window.scrollTo(0, 0);
             };
 
+            const saveSiteContent = async (content) => {
+                await siteContentDoc.set(cleanForFirestore(content), { merge: true });
+            };
+
             const saveProject = async (project) => {
                 const normalized = normalizeProject(project);
                 await projectsCollection.doc(String(normalized.id)).set(cleanForFirestore(normalized), { merge: false });
@@ -1714,8 +1348,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                             <div className='py-16 px-6 max-w-5xl mx-auto font-light text-neutral-300 leading-relaxed space-y-12 animate-fadeIn'>
                                 <div>
                                     <span className="text-xs uppercase font-bold text-luxury-gold tracking-widest block mb-1">Who We Are</span>
-                                    <h1 className='text-3xl text-white font-medium tracking-wide mb-4'>About TruePillar Realty</h1><div className="mt-5 inline-flex items-center gap-3 bg-luxury-card border border-neutral-800 rounded-lg px-4 py-3 text-sm"><span className="text-neutral-400">MAHARERA REGISTRATION NO.</span><strong className="text-luxury-gold">A031272401680</strong></div>
-                                    <p className="text-sm md:text-base text-neutral-300">TruePillar Realty is a premium property consultancy firm specializing in handpicked luxury homes, under-construction residential marvels, and modern apartments across the Mumbai Metropolitan Region. Built upon the three core pillars of **Trust, Transparency, and Value**, we help modern families discover their dream spaces without navigating confusing, opaque market channels.</p>
+                                    <h1 className='text-3xl text-white font-medium tracking-wide mb-4'>{siteContent.aboutTitle}</h1><div className="mt-5 inline-flex items-center gap-3 bg-luxury-card border border-neutral-800 rounded-lg px-4 py-3 text-sm"><span className="text-neutral-400">MAHARERA REGISTRATION NO.</span><strong className="text-luxury-gold">A031272401680</strong></div>
+                                    <p className="text-sm md:text-base text-neutral-300">{siteContent.aboutIntro}</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1738,7 +1372,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
                                 <div className="bg-luxury-card border border-neutral-800 rounded-xl p-8 space-y-4">
                                     <h3 className="text-lg font-medium text-white tracking-wide">Our Mission Statement</h3>
-                                    <p className="text-xs md:text-sm text-neutral-400 leading-relaxed font-light">"Our goal is simple: to make property buying standard, streamlined, and stress-free. Whether you are looking for an affordable 1 BHK startup layout in Dombivli, a spacious family 2 BHK on Thane's Ghodbunder high road, a modern 3 BHK lifestyle tower flat in Kharghar, or an elite penthouse overlooking Mumbai's iconic skyline—TruePillar Realty equips you with verified facts, real prices, and complimentary guided site vehicles to turn your real estate milestones into safe, rewarding realities."</p>
+                                    <p className="text-xs md:text-sm text-neutral-400 leading-relaxed font-light">{siteContent.aboutMission}</p>
                                 </div>
                             </div>
                         )}
@@ -1747,9 +1381,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                 <h1 className='text-3xl text-white font-medium mb-4 tracking-wide'>Get In Touch With Us</h1>
                                 <p className="text-sm text-neutral-400">Have questions about an upcoming premium luxury project or want to plan a family visit to a site location? Reach out to us directly through any channel below.</p>
                                 <div className="bg-luxury-card border border-neutral-800 rounded-xl p-6 space-y-4 font-medium text-sm">
-                                    <div>📍 Main Office Location: <span className="text-neutral-400 font-light block mt-0.5">Kharghar, Navi Mumbai, Maharashtra</span></div>
-                                    <div>📞 Central Support Helpline: <span className="text-luxury-gold block mt-0.5">+91 7718847841</span></div>
-                                    <div>✉️ Business Email Address: <span className="text-luxury-gold font-mono block mt-0.5">truepillarrealty@gmail.com • salaj.jha@truepillar.in</span></div>
+                                    <div>📍 Main Office Location: <span className="text-neutral-400 font-light block mt-0.5">{siteContent.contactAddress}</span></div>
+                                    <div>📞 Central Support Helpline: <span className="text-luxury-gold block mt-0.5">{siteContent.contactPhone}</span></div>
+                                    <div>✉️ Business Email Address: <span className="text-luxury-gold font-mono block mt-0.5">{siteContent.contactEmail}</span></div>
                                 </div>
                             </div>
                         )}
@@ -1766,6 +1400,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                     onDeleteLead={deleteLead}
                                     onUpdateLeadStatus={updateLeadStatus}
                                     onLogout={() => setIsAuthenticated(false)}
+                                    siteContent={siteContent}
+                                    onSaveSiteContent={saveSiteContent}
                                 />
                             )
                         )}
@@ -1787,7 +1423,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                                     <div className="inline-flex items-center gap-3 bg-luxury-card border border-luxury-gold/30 rounded-full px-4 py-2 text-luxury-gold font-black">MAHARERA A031272401680</div>
                                 </div>
                                 <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Popular Locations</h4>{["Kharghar","Taloja","Panvel","Ulwe","Dombivli","Thane"].map(x=><div key={x}>↗ {x}</div>)}</div>
-                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Links</h4>{["Featured Projects","New Launches","Investment Guide","Privacy Policy","Terms"].map(x=><div key={x}>↗ {x}</div>)}</div>
+                                <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Quick Links</h4><div>↗ Featured Projects</div><div>↗ New Launches</div><div>↗ Investment Guide</div><a href="/privacy-policy" className="block hover:text-luxury-gold">↗ Privacy Policy</a><div>↗ Terms</div></div>
                                 <div className="space-y-2 font-light"><h4 className="text-white font-bold tracking-wider uppercase text-sm">Connect</h4><div>📞 +91 7718847841</div><div>✉️ sales@truepillar.in</div><div>📍 Kharghar, Navi Mumbai</div><div><a href="https://www.instagram.com/truepillar.realty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Instagram</a> • <a href="https://www.facebook.com/TruePillarRealty/" target="_blank" rel="noreferrer" className="hover:text-luxury-gold">Facebook</a></div></div>
                             </div>
                             <div className="grid md:grid-cols-3 gap-4 border-t border-white/10 pt-8">
