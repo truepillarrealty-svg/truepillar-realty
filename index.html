@@ -738,6 +738,97 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 return <PropertyDetailView project={selectedProject} onBack={() => setSelectedProject(null)} />;
             }
 
+        // --- RESTORED SHARED PROJECT / ROUTING HELPERS ---
+        const slugify = (text = "") => String(text || "").toLowerCase().trim().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+        const IS_LOCAL_FILE = window.location.protocol === "file:";
+
+        const getRouteFromPath = () => {
+            if (IS_LOCAL_FILE) return { type: "view", view: "home" };
+            const path = window.location.pathname.replace(/\/+$/, "") || "/";
+            if (path === "/") return { type: "view", view: "home" };
+            if (path === "/properties") return { type: "view", view: "properties" };
+            if (path === "/about") return { type: "view", view: "about" };
+            if (path === "/contact") return { type: "view", view: "contact" };
+            if (path === "/admin") return { type: "view", view: "admin" };
+            const slugMatch = path.match(/^\/([^/]+)$/);
+            if (slugMatch) {
+                try { return { type: "project", slug: decodeURIComponent(slugMatch[1]) }; }
+                catch (_) { return { type: "project", slug: slugMatch[1] }; }
+            }
+            return { type: "view", view: "home" };
+        };
+
+        const navigateToProjectUrl = (project) => {
+            const url = "/" + (project.slug || slugify(project.title || ("project-" + project.id)));
+            if (!IS_LOCAL_FILE && window.location.pathname !== url) {
+                window.history.pushState({ project: project.id }, "", url);
+            }
+        };
+
+        const lines = (text = "") => String(text || "").split("\n").map(x => x.trim()).filter(Boolean);
+        const pairs = (text = "") => lines(text).map(row => {
+            const parts = row.split("|");
+            return { label: (parts.shift() || "").trim(), value: parts.join("|").trim() };
+        });
+
+        const normalizeProject = (p = {}) => {
+            const title = p.title || ("Project " + (p.id || ""));
+            const configurations = (Array.isArray(p.configurations) && p.configurations.length
+                ? p.configurations
+                : [{ configuration: p.configuration || "", carpetArea: p.carpetArea || "", price: p.price || "" }])
+                .map(c => ({
+                    ...c,
+                    sampleVideoLinks: Array.isArray(c.sampleVideoLinks) ? c.sampleVideoLinks : [],
+                    highlightVideoLinks: Array.isArray(c.highlightVideoLinks) ? c.highlightVideoLinks : [],
+                    floorPlans: Array.isArray(c.floorPlans) ? c.floorPlans : []
+                }));
+            return {
+                ...p,
+                title,
+                slug: p.slug || slugify(title),
+                developer: p.developer || "Verified Developer",
+                reraNumber: p.reraNumber || "",
+                description: p.description || ("Discover " + title + ", a premium residential project in " + (p.subLocality || "") + ", " + (p.region || "") + ". Contact TruePillar Realty for verified pricing, layouts, availability and a complimentary site visit."),
+                images: (Array.isArray(p.images) ? p.images : [p.image]).filter(x => typeof x === "string" && (x.startsWith("data:image/") || x.startsWith("http") || x.startsWith("blob:"))),
+                videos: Array.isArray(p.videos) ? p.videos : [],
+                sampleVideoLinks: Array.isArray(p.sampleVideoLinks) ? p.sampleVideoLinks : [],
+                highlightVideoLinks: Array.isArray(p.highlightVideoLinks) ? p.highlightVideoLinks : [],
+                floorPlans: Array.isArray(p.floorPlans) ? p.floorPlans : [],
+                mapLink: p.mapLink || "",
+                nearbyPlaces: Array.isArray(p.nearbyPlaces) ? p.nearbyPlaces : [],
+                statusBadge: p.statusBadge || "",
+                pdfs: Array.isArray(p.pdfs) ? p.pdfs : [],
+                highlights: Array.isArray(p.highlights) ? p.highlights : [],
+                priceOptions: Array.isArray(p.priceOptions) ? p.priceOptions : [],
+                configurations,
+                specifications: Array.isArray(p.specifications) ? p.specifications : [],
+                locationAdvantages: Array.isArray(p.locationAdvantages) ? p.locationAdvantages : [],
+                faqs: Array.isArray(p.faqs) ? p.faqs : [],
+                published: p.published !== false
+            };
+        };
+
+        const projectLink = p => window.location.origin + "/" + (p.slug || slugify(p.title));
+        const projectConfigurations = p => (Array.isArray(p.configurations) && p.configurations.length
+            ? p.configurations
+            : [{ configuration: p.configuration || "", carpetArea: p.carpetArea || "", price: p.price || "" }])
+            .filter(x => x && (x.configuration || x.carpetArea || x.price));
+        const projectMatchesConfiguration = (p, configuration) => !configuration || projectConfigurations(p).some(x => String(x.configuration || "").toLowerCase() === String(configuration).toLowerCase());
+        const projectConfigSummary = p => [...new Set(projectConfigurations(p).map(x => x.configuration).filter(Boolean))].join(", ") || p.configuration || "";
+        const projectStartingPrice = p => projectConfigurations(p)[0]?.price || p.price || "";
+        const projectAreaSummary = p => {
+            const areas = projectConfigurations(p).map(x => x.carpetArea).filter(Boolean);
+            return areas.length > 1 ? areas[0] + " onwards" : (areas[0] || p.carpetArea || "");
+        };
+        const projectCardSampleVideo = (p, selectedConfig = "") => {
+            const configurations = projectConfigurations(p);
+            const selected = selectedConfig ? configurations.find(c => String(c.configuration || "").toLowerCase() === String(selectedConfig).toLowerCase()) : null;
+            if (selected?.sampleVideoLinks?.length) return selected.sampleVideoLinks[0];
+            const any = configurations.find(c => c?.sampleVideoLinks?.length);
+            return any?.sampleVideoLinks?.[0] || p.sampleVideoLinks?.[0] || "";
+        };
+        const getActiveConfiguration = (p, selectedConfig) => projectConfigurations(p).find(x => String(x.configuration || "").toLowerCase() === String(selectedConfig || "").toLowerCase()) || projectConfigurations(p)[0] || {};
+
         function PropertyCard({ property, onOpenEnquiry, onOpenProject, selectedConfig="" }) {
             const cardProject=normalizeProject(property);
             const cardConfigurations = projectConfigurations(cardProject);
