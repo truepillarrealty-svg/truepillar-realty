@@ -27,10 +27,19 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://firestore.googleapis.com/v1/projects/truepillar-realty/databases/(default)/documents/projects?pageSize=1000");
-    if (!response.ok) throw new Error("Could not read public project data");
-    const data = await response.json();
-    const documents = data.documents || [];
+    const documents = [];
+    let pageToken = "";
+    for (let page = 0; page < 10; page++) {
+      const endpoint = new URL("https://firestore.googleapis.com/v1/projects/truepillar-realty/databases/(default)/documents/projects");
+      endpoint.searchParams.set("pageSize", "1000");
+      if (pageToken) endpoint.searchParams.set("pageToken", pageToken);
+      const response = await fetch(endpoint.toString());
+      if (!response.ok) throw new Error("Could not read public project data");
+      const data = await response.json();
+      documents.push(...(data.documents || []));
+      pageToken = data.nextPageToken || "";
+      if (!pageToken) break;
+    }
     const project = documents.map(doc => {
       const fields = doc.fields || {};
       const p = {};
