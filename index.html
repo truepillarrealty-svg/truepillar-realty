@@ -635,20 +635,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
         ];
 
-        function App() {
-            const [projects, setProjects] = React.useState([]);
-            const [selectedProject, setSelectedProject] = React.useState(null);
-            const [loading, setLoading] = React.useState(true);
-
-            React.useEffect(() => {
-                const unsubscribe = projectsCollection.onSnapshot(snapshot => {
-                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    setProjects(data.length > 0 ? data : generateDemoProjects());
-                    setLoading(false);
-                });
-            });
-        };
-
         // --- SEARCH & FILTER COMPONENT ---
         function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
             const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
@@ -711,32 +697,71 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             const [visitTime, setVisitTime] = React.useState("");
             const [pickup, setPickup] = React.useState("");
             const [visitors, setVisitors] = React.useState("1");
+            const [submitting, setSubmitting] = React.useState(false);
+            const [error, setError] = React.useState("");
 
-            const generateDemoProjects = () => {
-                const demos = [];
-                for (let i = 1; i <= 16; i++) {
-                    const regions = Object.keys(REGIONS);
-                    const region = regions[i % regions.length];
-                    const subLocalities = REGIONS[region];
-                    const subLocality = subLocalities[i % subLocalities.length];
-                    demos.push({
-                        id: i,
-                        name: `Premium ${CONFIGURATIONS[i % CONFIGURATIONS.length]} in ${subLocality}`,
-                        location: `${subLocality}, ${region}`,
-                        price: `${45 + (i * 5)} Lakhs`,
-                        image: STOCK_IMAGES[i % STOCK_IMAGES.length],
-                        status: DEVELOPMENT_STATUS[i % DEVELOPMENT_STATUS.length],
-                        description: `Luxury residential property with premium amenities in ${region}.`
-                    });
+            const handleSubmit = async (event) => {
+                event.preventDefault();
+                setError("");
+                if (!name.trim() || !/^\d{10}$/.test(phone.replace(/\D/g, ""))) {
+                    setError("Please enter your name and a valid 10-digit mobile number.");
+                    return;
                 }
-                return demos;
+                setSubmitting(true);
+                try {
+                    await onSubmitLead({
+                        id: `lead-${Date.now()}`,
+                        name: name.trim(),
+                        phone: phone.replace(/\D/g, ""),
+                        email: email.trim(),
+                        date,
+                        visitDate: date,
+                        visitTime,
+                        pickup,
+                        visitors,
+                        notes,
+                        message: notes,
+                        propertyTitle: property?.title || property?.name || "General enquiry",
+                        project: property?.title || property?.name || "General enquiry",
+                        source: "site_visit_enquiry",
+                        status: "New"
+                    });
+                    alert("Thank you! Your enquiry has been submitted.");
+                    onClose();
+                } catch (submitError) {
+                    console.error("Unable to submit enquiry:", submitError);
+                    setError("We couldn't submit your enquiry. Please try again or contact us on WhatsApp.");
+                } finally {
+                    setSubmitting(false);
+                }
             };
 
-            if (loading) return <div className="min-h-screen bg-luxury-bg flex items-center justify-center"><p className="text-luxury-gold">Loading properties...</p></div>;
-
-            if (selectedProject) {
-                return <PropertyDetailView project={selectedProject} onBack={() => setSelectedProject(null)} />;
-            }
+            return (
+                <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/80 p-4" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+                    <div role="dialog" aria-modal="true" aria-label={formTitle} className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-luxury-gold/40 bg-luxury-card p-6 md:p-8 shadow-2xl">
+                        <button type="button" onClick={onClose} aria-label="Close enquiry form" className="absolute right-4 top-4 text-2xl text-neutral-400 hover:text-white">×</button>
+                        <p className="text-xs font-bold uppercase tracking-[.2em] text-luxury-gold">TruePillar Realty • No Brokerage</p>
+                        <h2 className="mt-3 pr-8 text-2xl font-black text-white">{formTitle}</h2>
+                        {property && <p className="mt-2 text-sm text-neutral-400">Property: <span className="text-luxury-gold">{property.title || property.name || "Selected property"}</span></p>}
+                        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                            <div className="grid gap-4 md:grid-cols-2">
+                                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name *" autoComplete="name" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                                <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="10-digit mobile number *" autoComplete="tel" inputMode="numeric" maxLength={15} required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email (optional)" autoComplete="email" className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                                <select value={visitTime} onChange={(e) => setVisitTime(e.target.value)} className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white"><option value="">Preferred visit time (optional)</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+                                <select value={visitors} onChange={(e) => setVisitors(e.target.value)} className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white"><option value="1">1 visitor</option><option value="2">2 visitors</option><option value="3">3 visitors</option><option value="4+">4 or more visitors</option></select>
+                            </div>
+                            <input value={pickup} onChange={(e) => setPickup(e.target.value)} placeholder="Pickup location (optional)" className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Your requirements (optional)" rows={3} className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            {error && <p role="alert" className="rounded-lg border border-red-800 bg-red-950/30 p-3 text-sm text-red-300">{error}</p>}
+                            <button type="submit" disabled={submitting} className="w-full rounded-lg bg-luxury-gold py-4 font-black text-black transition hover:bg-luxury-goldHover disabled:opacity-60">{submitting ? "SUBMITTING…" : "SUBMIT ENQUIRY / BOOK SITE VISIT"}</button>
+                            <p className="text-center text-xs text-neutral-500">Need help now? Call or WhatsApp +91 7718847841.</p>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
 
         function PropertyCard({ property, onOpenEnquiry, onOpenProject, selectedConfig="" }) {
             const cardProject=normalizeProject(property);
@@ -1492,25 +1517,37 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 e.preventDefault(); setError(""); setSuccess("");
                 if (recoveryEmail.trim().toLowerCase() !== "truepillarrealty@gmail.com") return setError("Enter the registered recovery email.");
                 localStorage.setItem("tp_agent_password", "truepillar2026");
-                setSuccess("Password reset to the default password: truepillar2026. Log in and use Change Password immediately.");
+                setSuccess("Password reset to the default password. Log in and change it immediately.");
                 setRecoveryEmail(""); setMode("login");
             };
 
-                        <div className="tp-v20-visit-panel bg-luxury-card border border-luxury-gold border-opacity-40 rounded-lg p-8 max-w-2xl">
-                            <h2 className="text-3xl font-bold text-luxury-gold mb-8">BOOK A FREE SITE VISIT</h2>
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                <div className="grid md:grid-cols-2 gap-5">
-                                    <input type="text" placeholder="Your Full Name *" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                    <input type="tel" placeholder="Phone Number *" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                </div>
-                                <input type="email" placeholder="Email (Optional)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" />
-                                <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                <textarea placeholder="Any specific requirements?" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white h-32"></textarea>
-                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-4 rounded-lg transition text-lg">
-                                    CONFIRM & BOOK FREE SITE VISIT
-                                </button>
-                            </form>
-                        </div>
+            return (
+                <div className="min-h-[70vh] flex items-center justify-center px-6 py-14">
+                    <div className="w-full max-w-md rounded-2xl border border-luxury-gold/30 bg-luxury-card p-7 shadow-2xl">
+                        <p className="text-xs font-black uppercase tracking-[.2em] text-luxury-gold">TruePillar Realty</p>
+                        <h2 className="mt-3 text-2xl font-black text-white">{mode === "login" ? "Admin Login" : mode === "change" ? "Change Password" : "Reset Password"}</h2>
+                        <p className="mt-2 text-sm text-neutral-400">Authorized administration only.</p>
+                        {error && <p role="alert" className="mt-4 rounded border border-red-800 bg-red-950/30 p-3 text-sm text-red-300">{error}</p>}
+                        {success && <p role="status" className="mt-4 rounded border border-emerald-800 bg-emerald-950/30 p-3 text-sm text-emerald-300">{success}</p>}
+                        {mode === "login" && <form onSubmit={executeAuthChallenge} className="mt-5 space-y-4">
+                            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" autoComplete="username" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <button type="submit" className="w-full rounded-lg bg-luxury-gold py-3 font-black text-black">LOGIN</button>
+                            <div className="flex justify-between text-xs"><button type="button" onClick={() => { setMode("forgot"); setError(""); setSuccess(""); }} className="text-luxury-gold">Forgot password?</button><button type="button" onClick={() => { setMode("change"); setError(""); setSuccess(""); }} className="text-neutral-400">Change password</button></div>
+                        </form>}
+                        {mode === "change" && <form onSubmit={changePassword} className="mt-5 space-y-3">
+                            <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password (6+ characters)" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <button type="submit" className="w-full rounded-lg bg-luxury-gold py-3 font-black text-black">SAVE PASSWORD</button>
+                            <button type="button" onClick={() => { setMode("login"); setError(""); setSuccess(""); }} className="w-full text-sm text-neutral-400">Back to login</button>
+                        </form>}
+                        {mode === "forgot" && <form onSubmit={forgotPassword} className="mt-5 space-y-3">
+                            <p className="text-xs text-neutral-400">Enter the registered recovery email to reset the local admin password.</p>
+                            <input type="email" value={recoveryEmail} onChange={(e) => setRecoveryEmail(e.target.value)} placeholder="Recovery email" required className="w-full rounded-lg border border-neutral-700 bg-luxury-bg px-4 py-3 text-white" />
+                            <button type="submit" className="w-full rounded-lg bg-luxury-gold py-3 font-black text-black">RESET PASSWORD</button>
+                            <button type="button" onClick={() => { setMode("login"); setError(""); setSuccess(""); }} className="w-full text-sm text-neutral-400">Back to login</button>
+                        </form>}
                     </div>
                 </div>
             );
