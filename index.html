@@ -635,20 +635,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
         ];
 
-        function App() {
-            const [projects, setProjects] = React.useState([]);
-            const [selectedProject, setSelectedProject] = React.useState(null);
-            const [loading, setLoading] = React.useState(true);
-
-            React.useEffect(() => {
-                const unsubscribe = projectsCollection.onSnapshot(snapshot => {
-                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    setProjects(data.length > 0 ? data : generateDemoProjects());
-                    setLoading(false);
-                });
-            }
-        };
-
         // --- SEARCH & FILTER COMPONENT ---
         function SearchFilterBar({ listings = [], search, setSearch, selectedRegion, setSelectedRegion, selectedSubLocality, setSelectedSubLocality, selectedConfig, setSelectedConfig, selectedStatus, setSelectedStatus }) {
             const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
