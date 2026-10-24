@@ -2,7 +2,8 @@ const BASE_URLS = [
   "https://www.truepillar.in/",
   "https://www.truepillar.in/properties",
   "https://www.truepillar.in/about",
-  "https://www.truepillar.in/contact"
+  "https://www.truepillar.in/contact",
+  "https://www.truepillar.in/privacy-policy.html"
 ];
 
 const FALLBACK_PROJECT_SLUGS = [
