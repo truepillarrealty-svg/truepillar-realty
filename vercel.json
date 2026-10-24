@@ -5,7 +5,7 @@
       "destination": "/api/sitemap"
     },
     {
-      "source": "/((?!properties$|about$|contact$|admin$|robots\\.txt$|sitemap\\.xml$|wp-sitemap\\.xml$|sitemap_index\\.xml$|confirmation\\.html$|privacy-policy\\.html$)[^/]+)",
+      "source": "/((?!properties$|about$|contact$|admin$|privacy-policy$|terms-and-conditions$|site-visit$|robots\\.txt$|sitemap\\.xml$|wp-sitemap\\.xml$|sitemap_index\\.xml$|confirmation\\.html$|privacy-policy\\.html$)[^/]+)",
       "destination": "/api/project-page?slug=$1"
     },
     {
