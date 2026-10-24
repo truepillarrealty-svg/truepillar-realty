@@ -1,6 +1,26 @@
 {
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/api/site-page?slug="
+    },
+    {
+      "source": "/properties",
+      "destination": "/api/site-page?slug=properties"
+    },
+    {
+      "source": "/about",
+      "destination": "/api/site-page?slug=about"
+    },
+    {
+      "source": "/contact",
+      "destination": "/api/site-page?slug=contact"
+    },
+    {
+      "source": "/admin",
+      "destination": "/api/site-page?slug=admin"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     },
