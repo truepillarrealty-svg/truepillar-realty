@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://truepillar.in/sitemap.xml
+Sitemap: https://www.truepillar.in/sitemap.xml
