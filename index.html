@@ -56,6 +56,16 @@
     <meta name="format-detection" content="telephone=yes">
     <meta property="og:site_name" content="TruePillar Realty">
     <meta property="og:url" content="https://truepillar.in/">
+    <script>
+      (function () {
+        var path = window.location.pathname.replace(/\\/+$/, "") || "/";
+        var canonicalUrl = "https://truepillar.in" + path;
+        var canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) canonical.setAttribute("href", canonicalUrl);
+        var ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) ogUrl.setAttribute("content", canonicalUrl);
+      })();
+    </script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="TruePillar Realty | Premium Homes & Zero Brokerage">
     <meta name="twitter:description" content="Explore verified residential projects across Navi Mumbai, Thane, Mumbai and Dombivli. Book a free site visit.">
