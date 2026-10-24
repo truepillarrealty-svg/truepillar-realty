@@ -508,6 +508,30 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         // Detect local preview mode; production hosting uses normal web URLs.
         const IS_LOCAL_FILE = window.location.protocol === "file:";
 
+        // Resolve clean URLs used by the site navigation.
+        function getRouteFromPath() {
+            const path = window.location.pathname.replace(/\\/+$/, "") || "/";
+            const projectMatch = path.match(/^\\/project\\/([^/]+)$/i);
+            if (projectMatch) {
+                return { type: "project", slug: decodeURIComponent(projectMatch[1]) };
+            }
+            const routes = {
+                "/": "home",
+                "/properties": "properties",
+                "/about": "about",
+                "/contact": "contact",
+                "/admin": "admin"
+            };
+            return { type: "page", view: routes[path.toLowerCase()] || "home" };
+        }
+
+        function navigateToProjectUrl(project) {
+            const slug = (project && (project.slug || slugify(project.title))) || "";
+            if (slug) {
+                window.history.pushState({ view: "project", slug }, "", "/project/" + encodeURIComponent(slug));
+            }
+        }
+
         function playableVideoUrl(url) {
             const u = String(url||"").trim();
             if (!u) return "";
