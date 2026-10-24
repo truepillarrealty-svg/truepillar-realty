@@ -563,6 +563,32 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         const cleanForFirestore = (value) => JSON.parse(JSON.stringify(value, (key, val) => val === undefined ? null : val));
 
+        
+        // Shared data helpers used by property cards, the admin CMS and Firestore sync.
+        const slugify = (value) => String(value || "")
+            .normalize("NFD").replace(/[\\u0300-\\u036f]/g, "")
+            .toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+        const normalizeProject = (project = {}) => {
+            const item = { ...project };
+            item.id = item.id || item.projectId || slugify(item.title || item.name) || String(Date.now());
+            item.title = item.title || item.name || "Untitled Property";
+            item.slug = item.slug || slugify(item.title);
+            item.images = Array.isArray(item.images) ? item.images : (item.image ? [item.image] : []);
+            item.configurations = Array.isArray(item.configurations) ? item.configurations : [];
+            return item;
+        };
+
+        const projectConfigurations = (project = {}) => {
+            const item = normalizeProject(project);
+            const raw = item.configurations;
+            if (raw.length) {
+                return raw.map(config => typeof config === "string" ? { configuration: config } : config);
+            }
+            const fallback = item.configuration || item.config || "";
+            return fallback ? [{ configuration: fallback, price: item.price || item.startingPrice || "" }] : [];
+        };
+
         const CLOUDINARY_CLOUD_NAME = "he2l7oy3";
         const CLOUDINARY_UPLOAD_PRESET = "truepillar_upload";
 
