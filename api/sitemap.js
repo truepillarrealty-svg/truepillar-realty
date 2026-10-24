@@ -52,7 +52,7 @@ async function getPublishedProjectSlugs() {
       const slug = (typeof savedSlug === "string" && savedSlug.trim())
         ? savedSlug.trim().replace(/^\/+|\/+$/g, "")
         : slugify(title || "");
-      if (slug && !["properties", "about", "contact", "admin"].includes(slug)) {
+      if (slug && !["properties", "about", "contact", "admin", "site-visit"].includes(slug)) {
         slugs.add(slug);
       }
     }
