@@ -58,7 +58,8 @@
     <meta property="og:url" content="https://truepillar.in/">
     <script>
       (function () {
-        var path = window.location.pathname.replace(/\\/+$/, "") || "/";
+        var path = window.location.pathname || "/";
+        while (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
         var canonicalUrl = "https://truepillar.in" + path;
         var canonical = document.querySelector('link[rel="canonical"]');
         if (canonical) canonical.setAttribute("href", canonicalUrl);
