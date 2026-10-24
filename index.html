@@ -1573,28 +1573,60 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 setRecoveryEmail(""); setMode("login");
             };
 
-                        <div className="tp-v20-visit-panel bg-luxury-card border border-luxury-gold border-opacity-40 rounded-lg p-8 max-w-2xl">
-                            <h2 className="text-3xl font-bold text-luxury-gold mb-8">BOOK A FREE SITE VISIT</h2>
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                <div className="grid md:grid-cols-2 gap-5">
-                                    <input type="text" placeholder="Your Full Name *" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                    <input type="tel" placeholder="Phone Number *" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                </div>
-                                <input type="email" placeholder="Email (Optional)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" />
-                                <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white" required />
-                                <textarea placeholder="Any specific requirements?" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="w-full bg-luxury-bg border border-luxury-gold border-opacity-30 px-5 py-3 rounded text-white h-32"></textarea>
-                                <button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-goldHover text-black font-bold py-4 rounded-lg transition text-lg">
-                                    CONFIRM & BOOK FREE SITE VISIT
-                                </button>
-                            </form>
+            return (
+                <div className="min-h-screen bg-luxury-bg text-white flex items-center justify-center px-4 py-12">
+                    <div className="w-full max-w-md bg-luxury-card border border-luxury-gold/30 rounded-2xl p-8 shadow-2xl">
+                        <div className="text-center mb-8">
+                            <div className="text-luxury-gold text-xs tracking-[.25em] font-bold uppercase">TruePillar Realty</div>
+                            <h1 className="text-2xl font-bold mt-3">{mode === "login" ? "ADMIN LOGIN" : mode === "change" ? "CHANGE PASSWORD" : "RESET PASSWORD"}</h1>
                         </div>
+                        {error && <div role="alert" className="mb-4 p-3 rounded border border-red-800 bg-red-950/30 text-red-300 text-sm">{error}</div>}
+                        {success && <div role="status" className="mb-4 p-3 rounded border border-emerald-800 bg-emerald-950/30 text-emerald-300 text-sm">{success}</div>}
+                        {mode === "login" && (
+                            <form onSubmit={executeAuthChallenge} className="space-y-4">
+                                <label className="block text-sm text-neutral-300">Username
+                                    <input autoComplete="username" value={username} onChange={e=>setUsername(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" required />
+                                </label>
+                                <label className="block text-sm text-neutral-300">Password
+                                    <input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" required />
+                                </label>
+                                <button type="submit" className="w-full bg-luxury-gold text-black font-bold rounded-lg p-3">SIGN IN</button>
+                                <div className="flex justify-between text-sm">
+                                    <button type="button" onClick={()=>{setError("");setSuccess("");setMode("change");}} className="text-luxury-gold hover:underline">Change password</button>
+                                    <button type="button" onClick={()=>{setError("");setSuccess("");setMode("forgot");}} className="text-neutral-300 hover:underline">Forgot password?</button>
+                                </div>
+                            </form>
+                        )}
+                        {mode === "change" && (
+                            <form onSubmit={changePassword} className="space-y-4">
+                                <label className="block text-sm text-neutral-300">Current password
+                                    <input type="password" autoComplete="current-password" value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" required />
+                                </label>
+                                <label className="block text-sm text-neutral-300">New password
+                                    <input type="password" autoComplete="new-password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" minLength={6} required />
+                                </label>
+                                <label className="block text-sm text-neutral-300">Confirm new password
+                                    <input type="password" autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" minLength={6} required />
+                                </label>
+                                <button type="submit" className="w-full bg-luxury-gold text-black font-bold rounded-lg p-3">SAVE PASSWORD</button>
+                                <button type="button" onClick={()=>{setError("");setSuccess("");setMode("login");}} className="w-full text-neutral-300 text-sm">Back to login</button>
+                            </form>
+                        )}
+                        {mode === "forgot" && (
+                            <form onSubmit={forgotPassword} className="space-y-4">
+                                <p className="text-sm text-neutral-400">Enter the registered recovery email to reset the local admin password.</p>
+                                <label className="block text-sm text-neutral-300">Recovery email
+                                    <input type="email" autoComplete="email" value={recoveryEmail} onChange={e=>setRecoveryEmail(e.target.value)} className="mt-1 w-full bg-black border border-neutral-700 rounded-lg p-3 text-white" required />
+                                </label>
+                                <button type="submit" className="w-full bg-luxury-gold text-black font-bold rounded-lg p-3">RESET PASSWORD</button>
+                                <button type="button" onClick={()=>{setError("");setSuccess("");setMode("login");}} className="w-full text-neutral-300 text-sm">Back to login</button>
+                            </form>
+                        )}
                     </div>
                 </div>
             );
         }
 
-        // --- CORE APPLICATION ARCHITECTURE WRAPPER ---
-        
         function TopSpotlight({ listings=[], onOpenProject, onOpenEnquiry }) {
             let settings={}; try{settings=JSON.parse(localStorage.getItem("tp_spotlight_v22")||"{}")}catch(e){}
             const ids=Array.isArray(settings.projectIds)?settings.projectIds.slice(0,5).filter(Boolean):[];
