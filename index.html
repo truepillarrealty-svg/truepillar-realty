@@ -505,6 +505,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
     <div id="root"></div>
 
     <script type="text/babel">
+        // Detect local preview mode; production hosting uses normal web URLs.
+        const IS_LOCAL_FILE = window.location.protocol === "file:";
+
         function playableVideoUrl(url) {
             const u = String(url||"").trim();
             if (!u) return "";
