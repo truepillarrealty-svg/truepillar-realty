@@ -57,8 +57,6 @@
         var canonicalUrl = "https://www.truepillar.in" + path;
         var canonical = document.querySelector('link[rel="canonical"]');
         if (canonical) canonical.setAttribute("href", canonicalUrl);
-        var ogUrl = document.querySelector('meta[property="og:url"]');
-        if (ogUrl) ogUrl.setAttribute("content", canonicalUrl);
       })();
     </script>
     <!-- Clean URLs: /project-name -->
@@ -66,7 +64,7 @@
     <meta name="theme-color" content="#0A0A0C">
     <meta name="format-detection" content="telephone=yes">
     <meta property="og:site_name" content="TruePillar Realty">
-    <meta property="og:url" content="">
+    <meta property="og:url" content="https://www.truepillar.in/">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="TruePillar Realty | Premium Homes & Zero Brokerage">
