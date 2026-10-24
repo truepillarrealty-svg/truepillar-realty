@@ -510,8 +510,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         // Resolve clean URLs used by the site navigation.
         function getRouteFromPath() {
-            const path = window.location.pathname.replace(/\\/+$/, "") || "/";
-            const projectMatch = path.match(/^\\/project\\/([^/]+)$/i);
+            const path = window.location.pathname.replace(/\/+$/, "") || "/";
+            const projectMatch = path.match(/^\/project\/([^/]+)$/i);
             if (projectMatch) {
                 return { type: "project", slug: decodeURIComponent(projectMatch[1]) };
             }
