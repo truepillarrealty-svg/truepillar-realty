@@ -1,8 +1,8 @@
 const BASE_URLS = [
-  "https://truepillar.in/",
-  "https://truepillar.in/properties",
-  "https://truepillar.in/about",
-  "https://truepillar.in/contact"
+  "https://www.truepillar.in/",
+  "https://www.truepillar.in/properties",
+  "https://www.truepillar.in/about",
+  "https://www.truepillar.in/contact"
 ];
 
 const FALLBACK_PROJECT_SLUGS = [
@@ -79,7 +79,7 @@ module.exports = async function handler(req, res) {
     console.error("Dynamic sitemap Firestore lookup failed:", error.message);
   }
 
-  const urls = [...BASE_URLS, ...projectSlugs.map(slug => `https://truepillar.in/${slug}`)];
+  const urls = [...BASE_URLS, ...projectSlugs.map(slug => `https://www.truepillar.in/${slug}`)];
   const uniqueUrls = [...new Set(urls)];
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
