@@ -555,8 +555,6 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             "Dombivli": ["Dombivli East", "Palava City", "Manpada", "Thakurli", "Kalyan Road"]
         };
 
-        // Include all locality labels supplied for the bulk project inventory in the location filter.
-        REGIONS["Navi Mumbai"] = [...new Set([...REGIONS["Navi Mumbai"], ...TP_REQUESTED_LOCALITIES])];
         const CONFIGURATIONS = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK / Penthouse"];
         const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch", "Details Pending"];
         const COMPANY_MAHARERA = "A031272401680";
@@ -647,6 +645,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 published: true
             });
         });
+
+        // Include all locality labels supplied for the bulk project inventory in the location filter.
+        REGIONS["Navi Mumbai"] = [...new Set([...REGIONS["Navi Mumbai"], ...TP_REQUESTED_LOCALITIES])];
 
         const IS_LOCAL_FILE = window.location.protocol === "file:";
 
