@@ -555,8 +555,10 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             "Dombivli": ["Dombivli East", "Palava City", "Manpada", "Thakurli", "Kalyan Road"]
         };
 
+        // Include all locality labels supplied for the bulk project inventory in the location filter.
+        REGIONS["Navi Mumbai"] = [...new Set([...REGIONS["Navi Mumbai"], ...TP_REQUESTED_LOCALITIES])];
         const CONFIGURATIONS = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK / Penthouse"];
-        const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch"];
+        const DEVELOPMENT_STATUS = ["Ready to Move", "Under Construction", "New Launch", "Details Pending"];
         const COMPANY_MAHARERA = "A031272401680";
         const AMENITIES_POOL = ["Premium Clubhouse", "Infinity Swimming Pool", "Modern Gymnasium", "24/7 Multi-tier Security", "High-Speed Elevators", "Grand Entrance Lobby", "Ample Car Parking", "Landscaped Gardens", "Kids Play Area", "100% Power Backup"];
 
@@ -616,6 +618,35 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
 
         // --- PROJECT PAGE HELPERS ---
         const slugify = (text = "") => text.toLowerCase().trim().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+
+        // TP_REQUESTED_PROJECT_SEED_V1: one-time import of the user's supplied project names.
+        const TP_REQUESTED_PROJECTS = [{"title":"Godrej Varanya","locality":"Kharghar"},{"title":"Tata Orbis","locality":"Ghansoli"},{"title":"Godrej Eternal Palms","locality":"Sanpada"},{"title":"L&T West Manor","locality":"Seawoods"},{"title":"Progressive Aura","locality":"Ulwe Sector 3"},{"title":"L&T Crestoria Estate","locality":"Panvel"},{"title":"Aurum Q Living","locality":"Ghansoli"},{"title":"K Raheja Jade City","locality":"Juinagar"},{"title":"L&T The Villas At Seawoods Residences","locality":"Seawoods"},{"title":"Lakhani Bliss","locality":"Ulwe Sector 9"},{"title":"Godrej Green Terraces","locality":"Panvel"},{"title":"EV 23 Miami West","locality":"Kopar Khairane"},{"title":"Godrej Bayview Vashi","locality":"Vashi Sector 9"},{"title":"Arihant Clan Aalishan Phase 2","locality":"Kharghar Sector 37"},{"title":"Balaji Delta Hills","locality":"Ulwe"},{"title":"Lodha Alibaug","locality":"Alibaug"},{"title":"Dwarka CHS","locality":"Kopar Khairane Sector 14"},{"title":"Kolte Patil La Vita","locality":"Vashi Sector 2"},{"title":"L&T Seawoods Residences Phase 2","locality":"Seawoods"},{"title":"Arihant Aspire","locality":"Palaspe Phata"},{"title":"Today Altus 24","locality":"Airoli"},{"title":"Arihant Aleenta","locality":"Vashi Sector 9"},{"title":"LnT West Square","locality":"Seawoods"},{"title":"Today Kharghar Hills","locality":"Adivali"},{"title":"Embassy Serenity","locality":"Alibaug"},{"title":"Gami Satyam Skyscape","locality":"Ghansoli"},{"title":"Arihant Advika","locality":"Vashi Sector 9"},{"title":"Paradise Sai World One","locality":"Nerul"},{"title":"Shapoorji Pallonji Indias Wellness Capital","locality":"Khopoli"},{"title":"Juhi Elegance","locality":"Ghansoli Sector 9"},{"title":"Gami Ayur","locality":"Vashi Sector 18"},{"title":"Paradise Sai World Pyramid","locality":"Nerul"},{"title":"Lodha Villa Cerro","locality":"Khopoli"},{"title":"Satyam Stella","locality":"Kopar Khairane Sector 3"},{"title":"Satyam Veloura","locality":"Vashi Sector 14"},{"title":"Satyam Grand Atlantis","locality":"Kharghar Sector 36"},{"title":"Godrej The Highlands","locality":"Panvel"},{"title":"EV 23 Malibu West","locality":"Kopar Khairane Sector 23"},{"title":"Haware Intelligentia Centroid","locality":"Vashi Sector 19E"},{"title":"Paradise Sai Palm View","locality":"Nerul"},{"title":"Emaar Casa Venero","locality":"Alibaug"},{"title":"Bhagwati Celestria","locality":"TTC Industrial Area"},{"title":"Gami Vraj","locality":"Sanpada Sector 24"},{"title":"Satyam One Crest","locality":"Kharghar Sector 20"},{"title":"Kalpataru Park Riviera","locality":"Panvel"},{"title":"Gami Telon","locality":"Ghansoli Sector 3"},{"title":"Satyam Ashtavinayak","locality":"Vashi Sector 15"},{"title":"Aramus The Domus Menarco","locality":"Kharghar"},{"title":"Arihant World Villas","locality":"Chouk"},{"title":"Gami Avant","locality":"Vashi Sector 18"},{"title":"Raheja Lunaris","locality":"Juinagar"},{"title":"Today Nova Vista","locality":"Nerul"},{"title":"Arihant Aloki Phase 4","locality":"Karjat"},{"title":"Raheja Atlantis","locality":"Juinagar"},{"title":"L&T Seawoods Residences","locality":"Seawoods"},{"title":"Today Tattvam","locality":"New Panvel"},{"title":"Metro Aykon","locality":"Vashi Sector 19D"},{"title":"Sai Proviso Atlantis","locality":"Kharghar"},{"title":"Today Upvan","locality":"Dhansar"},{"title":"Satyam Trinity Towers","locality":"Kharghar Sector 36"},{"title":"Godrej Woodside Estate","locality":"Karjat-Khopoli Marg"},{"title":"Satyam Altura","locality":"Sanpada Sector 7"},{"title":"Varsha Balaji Sapphire","locality":"Nerul Sector 19A"},{"title":"Total Violet Hill","locality":"Alibaug"},{"title":"EV 9 Square","locality":"Vashi Sector 9"},{"title":"Metro Satyam Queens Necklace","locality":"Rohinjan"},{"title":"Godrej Golf Side Estate","locality":"Panvel"},{"title":"Raheja Solaris","locality":"Juinagar"},{"title":"Satyam Le 36","locality":"Kharghar"},{"title":"Goodwill Wisteria","locality":"Vashi Sector 19D"},{"title":"Platinum Sicily","locality":"Nerul"},{"title":"HoABL Forever Land","locality":"Pimploli BK"},{"title":"Kamdhenu Crown","locality":"Sanpada Sector 19"},{"title":"Varsha Balaji Park","locality":"Kharghar"},{"title":"Sai Neel Riddhi Empire","locality":"Old Panvel"},{"title":"Tricity Aura","locality":"Roadpali"},{"title":"Today Saubhagyam","locality":"Palaspe Phata"},{"title":"Tricity Bayview","locality":"Roadpali"},{"title":"Varsha Balaji Vista","locality":"New Panvel East"},{"title":"Tricity Aspire","locality":"Kharghar Sector 34A"},{"title":"Lodha Aero Estate","locality":"Khopoli"},{"title":"Pyramid Centria","locality":"Nerul Sector 10A"},{"title":"Kamdhenu Pinnacle","locality":"Nerul Sector 13"},{"title":"Godrej Golf Crest","locality":"Panvel"},{"title":"Paradise Sai Prerna","locality":"Kharghar Sector 34A"},{"title":"Hitech Cosmos","locality":"Kharghar"},{"title":"Qualcon Celestia","locality":"Kharghar"},{"title":"Satyam Surya Manhattan","locality":"Kharghar"},{"title":"Gajra Bhoomi Serenity","locality":"Kharghar"},{"title":"GeeCee Emerald","locality":"Kharghar"},{"title":"AK Sapphire","locality":"Kharghar"},{"title":"Saiyogi Sai Residency","locality":"Kharghar"},{"title":"Marathon Nexzone Nirvana","locality":"Palaspe Phata"},{"title":"Gami Mirava","locality":"Panvel Sector 21"},{"title":"Haware Intelligentia Supreme","locality":"Kalamboli"},{"title":"Metro Kings Court","locality":"Old Panvel"}];
+        const TP_REQUESTED_LOCALITIES = [...new Set(TP_REQUESTED_PROJECTS.map(p => p.locality))];
+        const buildRequestedProjectSeeds = () => TP_REQUESTED_PROJECTS.map((item) => {
+            const slug = slugify(item.title) + "-" + slugify(item.locality);
+            return normalizeProject({
+                id: "tp-seed-" + slug,
+                slug,
+                title: item.title,
+                developer: "To be updated",
+                region: "Navi Mumbai",
+                subLocality: item.locality,
+                address: item.locality + ", Navi Mumbai, Maharashtra, India",
+                configuration: "",
+                configurations: [],
+                status: "Details Pending",
+                statusBadge: "Details Pending",
+                price: "Price on request",
+                carpetArea: "",
+                possession: "To be updated",
+                image: "",
+                images: [],
+                amenities: [],
+                description: "Project listing added to the TruePillar Realty inventory. Project specifications, developer information, pricing, configurations, possession timeline, MahaRERA details and media are pending verification and can be completed from the Admin Control Panel.",
+                published: true
+            });
+        });
 
         const IS_LOCAL_FILE = window.location.protocol === "file:";
 
@@ -1823,6 +1854,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             const [listings, setListings] = React.useState([]);
             const [leads, setLeads] = React.useState([]);
             const [cloudReady, setCloudReady] = React.useState(false);
+            const requestedSeedAttempted = React.useRef(false);
 
             const [search, setSearch] = React.useState("");
             const [selectedRegion, setSelectedRegion] = React.useState("");
@@ -1882,6 +1914,18 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     unsubscribeLeads();
                 };
             }, []);
+
+            React.useEffect(() => {
+                if (!cloudReady || requestedSeedAttempted.current) return;
+                requestedSeedAttempted.current = true;
+                const existingSlugs = new Set(listings.map(p => p.slug || (slugify(p.title) + "-" + slugify(p.subLocality || ""))));
+                const missing = buildRequestedProjectSeeds().filter(p => !existingSlugs.has(p.slug));
+                if (!missing.length) return;
+                const batch = db.batch();
+                missing.forEach(project => batch.set(projectsCollection.doc(String(project.id)), cleanForFirestore(project), { merge: false }));
+                batch.commit().then(() => console.info(`TruePillar project import complete: ${missing.length} new project placeholders added.`))
+                    .catch(error => console.error("TruePillar project import failed; check Firestore write rules.", error));
+            }, [cloudReady, listings]);
 
             React.useEffect(() => {
                 if (IS_LOCAL_FILE) return;
