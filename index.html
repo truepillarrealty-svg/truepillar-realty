@@ -1919,8 +1919,8 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
             React.useEffect(() => {
                 if (!cloudReady || requestedSeedAttempted.current) return;
                 requestedSeedAttempted.current = true;
-                const existingSlugs = new Set(listings.map(p => p.slug || (slugify(p.title) + "-" + slugify(p.subLocality || ""))));
-                const missing = buildRequestedProjectSeeds().filter(p => !existingSlugs.has(p.slug));
+                const existingProjectKeys = new Set(listings.map(p => slugify(p.title) + "|" + slugify(p.subLocality || "")));
+                const missing = buildRequestedProjectSeeds().filter(p => !existingProjectKeys.has(slugify(p.title) + "|" + slugify(p.subLocality || "")));
                 if (!missing.length) return;
                 const batch = db.batch();
                 missing.forEach(project => batch.set(projectsCollection.doc(String(project.id)), cleanForFirestore(project), { merge: false }));
