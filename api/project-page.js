@@ -41,12 +41,30 @@ function renderProjectSeoContent(project, title, description, canonical, image) 
   const locality = textValue(project.subLocality || project.locality || project.location);
   const region = textValue(project.region || project.city || "Maharashtra");
   const developer = textValue(project.developer || project.builder);
-  const configuration = textValue(project.configuration || project.configurations);
-  const price = textValue(project.price || project.priceRange);
+  const configurationEntries = (Array.isArray(project.configurations) ? project.configurations : [])
+    .filter(item => item && typeof item === "object")
+    .map(item => ({
+      name: textValue(item.configuration || item.name || item.type),
+      area: textValue(item.carpetArea || item.area),
+      price: textValue(item.price || item.startingPrice)
+    }))
+    .filter(item => item.name || item.area || item.price);
+  const configuration = [...new Set(configurationEntries.map(item => item.name).filter(Boolean))].join(", ") ||
+    textValue(project.configuration || project.configurationsText);
+  const configurationPricing = configurationEntries.map(item =>
+    [item.name, item.area, item.price].filter(Boolean).join(" · ")
+  ).filter(Boolean).join(" | ");
+  const price = configurationPricing || textValue(project.price || project.priceRange);
   const possession = textValue(project.possession || project.possessionDate);
   const rera = textValue(project.mahareraNumber || project.reraNumber || project.rera || project.registrationNumber);
   const status = textValue(project.status || project.statusBadge);
-  const projectDescription = textValue(project.description || project.overview);
+  const projectDescription = [
+    textValue(project.title) ? textValue(project.title) + " is listed by TruePillar Realty." : "",
+    locality ? "Location: " + locality + (region ? ", " + region : "") + "." : "",
+    developer ? "Developer: " + developer + "." : "",
+    configuration ? "Configurations: " + configuration + "." : "",
+    possession ? "Published possession: " + possession + "." : ""
+  ].filter(Boolean).join(" ");
   const address = textValue(project.address);
   const facts = [
     ["Developer", developer],
@@ -199,10 +217,10 @@ module.exports = async function handler(req, res) {
     const detailParts = [
       project.developer ? "by " + textValue(project.developer) : "",
       [project.subLocality, project.region].filter(Boolean).map(textValue).join(", "),
-      textValue(project.configuration || project.configurations),
-      textValue(project.price)
+      configuration,
+      configurationPricing
     ].filter(Boolean);
-    let description = `${project.title}: ${detailParts.join(". ")}. Get verified project information and request the latest cost sheet from TruePillar Realty.`;
+    let description = `${project.title}${detailParts.length ? " – " + detailParts.join(", ") : ""}. View project details and request current availability from TruePillar Realty.`;
     description = description.replace(/\s+/g, " ").slice(0, 155);
     const canonical = "https://www.truepillar.in/" + project.slug;
     const possibleImages = Array.isArray(project.images) ? project.images : [];
