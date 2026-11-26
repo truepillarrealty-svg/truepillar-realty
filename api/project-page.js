@@ -203,7 +203,7 @@ module.exports = async function handler(req, res) {
       textValue(project.price)
     ].filter(Boolean);
     let description = `${project.title}: ${detailParts.join(". ")}. Get verified project information and request the latest cost sheet from TruePillar Realty.`;
-    description = description.replace(/\s+/g, " ").slice(0, 300);
+    description = description.replace(/\s+/g, " ").slice(0, 155);
     const canonical = "https://www.truepillar.in/" + project.slug;
     const possibleImages = Array.isArray(project.images) ? project.images : [];
     const image = safeImage(project.image) || safeImage(possibleImages.find(Boolean));
