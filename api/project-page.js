@@ -256,6 +256,23 @@ module.exports = async function handler(req, res) {
     html = html.replace(/<meta property="og:url" content="[^"]*">/i, `<meta property="og:url" content="${canonical}">`);
     if (image) html = html.replace("</head>", `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}"></head>`);
 
+    // Pass the public project record into the client app so direct project URLs
+    // can render immediately without waiting for the Firestore browser listener.
+    const publicProjectFields = [
+      "id","title","slug","developer","builder","region","city","subLocality","locality","location","address",
+      "configuration","configurations","configurationsText","price","priceRange","possession","possessionDate",
+      "status","statusBadge","mahareraNumber","reraNumber","rera","registrationNumber","description",
+      "images","image","amenities","specifications","highlights","locationAdvantages","mapLink","nearbyPlaces",
+      "floorPlans","videos","sampleVideoLinks","highlightVideoLinks","pdfs","priceOptions","published"
+    ];
+    const publicProject = Object.fromEntries(publicProjectFields
+      .filter(key => project[key] !== undefined)
+      .map(key => [key, project[key]]));
+    const projectBootstrap = "<script>window.__TP_PROJECT_DATA__=" +
+      JSON.stringify(publicProject).replace(/</g, "\\u003c") +
+      ";</script>";
+    html = html.replace("</head>", projectBootstrap + "\\n</head>");
+
     // The React/Vite application already renders the visible project details.
     // Inject only structured data here to avoid rendering a second, duplicate project section below the app.
     const seoContent = renderProjectSeoContent(project, title, description, canonical, image);
