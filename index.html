@@ -1887,8 +1887,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
         }
 
         function App() {
-            const [view, setView] = React.useState('home');
-            const [activeProject, setActiveProject] = React.useState(null);
+            const initialServerProject = window.__TP_PROJECT_DATA__ ? normalizeProject(window.__TP_PROJECT_DATA__) : null;
+            const [view, setView] = React.useState(initialServerProject ? 'project' : 'home');
+            const [activeProject, setActiveProject] = React.useState(initialServerProject);
             const [isAuthenticated, setIsAuthenticated] = React.useState(false);
             
             const [listings, setListings] = React.useState([]);
@@ -1999,6 +2000,9 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                     if (route.type === "project") {
                         const found = listings.find(p => (p.slug || slugify(p.title)) === route.slug);
                         if (found) { setActiveProject(normalizeProject(found)); setView("project"); }
+                        else if (activeProject && (activeProject.slug || slugify(activeProject.title)) === route.slug) {
+                            setView("project");
+                        }
                         else if (cloudReady) { setActiveProject(null); setView("properties"); }
                     } else {
                         setActiveProject(null);
@@ -2008,7 +2012,7 @@ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-siz
                 applyRoute();
                 window.addEventListener("popstate", applyRoute);
                 return () => window.removeEventListener("popstate", applyRoute);
-            }, [listings, cloudReady]);
+            }, [listings, cloudReady, activeProject]);
 
             const navigateView = (nextView) => {
                 const paths = { home: "/", properties: "/properties", about: "/about", contact: "/contact", admin: "/admin" };
