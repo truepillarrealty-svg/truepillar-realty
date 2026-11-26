@@ -100,7 +100,9 @@ function renderProjectSeoContent(project, title, description, canonical, image) 
         "url": canonical,
         "name": title,
         "description": description,
-        "isPartOf": { "@type": "WebSite", "name": "TruePillar Realty", "url": "https://www.truepillar.in/" },
+        "isPartOf": { "@id": "https://www.truepillar.in/#website" },
+        "publisher": { "@id": "https://www.truepillar.in/#real-estate-agent" },
+        "about": { "@id": canonical + "#residence" },
         "breadcrumb": { "@id": canonical + "#breadcrumb" }
       },
       {
