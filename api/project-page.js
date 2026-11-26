@@ -150,7 +150,7 @@ function renderProjectSeoContent(project, title, description, canonical, image) 
 }
 
 module.exports = async function handler(req, res) {
-  const requestedSlug = String(req.query.slug || "").replace(/^\\/+|\\/+$/g, "").toLowerCase();
+  const requestedSlug = String(req.query.slug || "").replace(/^\/+|\/+$/g, "").toLowerCase();
   if (!requestedSlug || requestedSlug.includes("/")) {
     res.status(400).send("Invalid project slug");
     return;
@@ -177,7 +177,7 @@ module.exports = async function handler(req, res) {
       for (const [key, field] of Object.entries(fields)) project[key] = decodeValue(field);
       project.id = doc.name ? doc.name.split("/").pop() : "";
       project.slug = (typeof project.slug === "string" && project.slug.trim())
-        ? project.slug.trim().replace(/^\\/+|\\/+$/g, "")
+        ? project.slug.trim().replace(/^\/+|\/+$/g, "")
         : slugify(project.title || "");
       return project;
     });
@@ -203,12 +203,12 @@ module.exports = async function handler(req, res) {
       textValue(project.price)
     ].filter(Boolean);
     let description = `${project.title}: ${detailParts.join(". ")}. Get verified project information and request the latest cost sheet from TruePillar Realty.`;
-    description = description.replace(/\\s+/g, " ").slice(0, 300);
+    description = description.replace(/\s+/g, " ").slice(0, 300);
     const canonical = "https://www.truepillar.in/" + project.slug;
     const possibleImages = Array.isArray(project.images) ? project.images : [];
     const image = safeImage(project.image) || safeImage(possibleImages.find(Boolean));
 
-    html = html.replace(/<title>[\\s\\S]*?<\\/title>/i, `<title>${escapeHtml(title)}</title>`);
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`);
     html = html.replace(/<meta name="description" content="[^"]*">/i, `<meta name="description" content="${escapeHtml(description)}">`);
     html = html.replace(/<link rel="canonical"[^>]*>/i, `<link rel="canonical" href="${canonical}">`);
     html = html.replace(/<meta property="og:title" content="[^"]*">/i, `<meta property="og:title" content="${escapeHtml(title)}">`);
@@ -217,7 +217,7 @@ module.exports = async function handler(req, res) {
     if (image) html = html.replace("</head>", `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}"></head>`);
 
     const seoContent = renderProjectSeoContent(project, title, description, canonical, image);
-    html = html.replace("</body>", seoContent + "\\n</body>");
+    html = html.replace("</body>", seoContent + "\n</body>");
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
