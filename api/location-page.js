@@ -42,10 +42,21 @@ async function loadProjects() {
   return [...unique.values()];
 }
 
+const PROJECT_IMAGE_FALLBACKS = {
+  "arihant-aspire": "https://d1zdkpwby52v4t.cloudfront.net/arihantaspires/assets/img/deskbanner2.jpg",
+  "godrej-golf-side-estate": "https://newprojectsonline.com/assets/uploads/banners/responsive/whatsapp_1708687085-godrej-golf-side-estate-g8.webp",
+  "godrej-green-terraces": "https://ik.imagekit.io/sjnshacs8/propertygallery/6a4760ba31766_godrej-green-terraces-elevation.webp",
+  "godrej-the-highlands": "https://www.realtyriders.com/godrej-highlands/assets/img/deskban2.webp",
+  "kalpataru-park-riviera": "https://www.constructionweekonline.in/cloud/2021/11/25/YLZSGfhY-KALPATARU-PARK-RIVIERA-1-1.jpg",
+  "l-and-t-crestoria-estate": "https://crestoriaestate.in/assets/lt-crestoria-estate-panvel-master-plan.jpg",
+  "today-saubhagyam": "https://keystonerealestateadvisory.com/public/uploads/property/ixwELFw3cDOj8czQGCFPNaqvXefqaF7JGNd6LH5o.webp",
+  "today-tattvam": "https://ik.imagekit.io/sjnshacs8/propertygallery/6a33c68fa20d0_today-tattvam-elevation.webp"
+};
+
 function render(location, key, projects) {
   const matches=projects.filter(location.test).sort((a,b)=>String(a.title).localeCompare(String(b.title)));
   const cards=matches.map(p=>{
-    const image=(Array.isArray(p.images)?p.images.find(Boolean):"") || p.image || "";
+    const image=(Array.isArray(p.images)?p.images.find(Boolean):"") || p.image || PROJECT_IMAGE_FALLBACKS[p.slug] || "";
     const configurations=Array.isArray(p.configurations)?p.configurations.filter(Boolean):[];
     const configRows=configurations.map(c=>{
       if(typeof c==="string") return {name:c,area:"",price:""};
