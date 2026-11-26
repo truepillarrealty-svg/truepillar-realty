@@ -13,9 +13,12 @@ const BASE_URLS = [
   "https://www.truepillar.in/locations/nerul"
 ];
 
+// Keep key public project URLs discoverable even if the Firestore sitemap
+// lookup temporarily omits a record or a project uses a legacy short slug.
 const FALLBACK_PROJECT_SLUGS = [
   "paradise-sai-world-empire",
-  "satyam-le-36"
+  "satyam-le-36",
+  "bhoomi-serenity"
 ];
 
 function slugify(value = "") {
