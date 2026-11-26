@@ -66,6 +66,13 @@ function renderProjectSeoContent(project, title, description, canonical, image) 
     possession ? "Published possession: " + possession + "." : ""
   ].filter(Boolean).join(" ");
   const address = textValue(project.address);
+  const localitySlug = /kharghar/i.test(locality) ? "kharghar"
+    : /panvel|palaspe|palaspa/i.test(locality) ? "panvel"
+    : /vashi/i.test(locality) ? "vashi"
+    : /ghansoli/i.test(locality) ? "ghansoli"
+    : /nerul/i.test(locality) ? "nerul"
+    : /thane/i.test(region) ? "thane"
+    : /navi mumbai/i.test(region) ? "navi-mumbai" : "";
   const facts = [
     ["Developer", developer],
     ["Location", [locality, region].filter(Boolean).join(", ")],
@@ -139,7 +146,7 @@ function renderProjectSeoContent(project, title, description, canonical, image) 
       <h2>Project Details</h2>
       <dl class="tp-project-facts">${factRows || '<div class="tp-project-fact"><dt>Details</dt><dd>Contact TruePillar Realty for the latest verified project information.</dd></div>'}</dl>
       <p class="tp-project-disclaimer">Prices, inventory, approvals and possession timelines can change. Confirm the latest cost sheet, sanctioned plans, MahaRERA details and availability before making a purchase decision. Any unverified field is intentionally not represented as confirmed.</p>
-      <div class="tp-project-cta"><a href="https://wa.me/917718847841?text=${encodeURIComponent("Please share the latest details for " + (project.title || "this project"))}" rel="nofollow">Request latest price & details on WhatsApp</a><a href="/properties">Explore all properties</a></div>
+      <div class="tp-project-cta"><a href="https://wa.me/917718847841?text=${encodeURIComponent("Please share the latest details for " + (project.title || "this project"))}" rel="nofollow">Request latest price & details on WhatsApp</a><a href="/properties">Explore all properties</a>${localitySlug ? `<a href="/locations/${localitySlug}">More projects in ${escapeHtml(locality)}</a>` : ""}</div>
     </article>
   </div>
 </main>
