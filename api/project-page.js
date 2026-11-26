@@ -254,8 +254,11 @@ module.exports = async function handler(req, res) {
     html = html.replace(/<meta property="og:url" content="[^"]*">/i, `<meta property="og:url" content="${canonical}">`);
     if (image) html = html.replace("</head>", `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}"></head>`);
 
+    // The React/Vite application already renders the visible project details.
+    // Inject only structured data here to avoid rendering a second, duplicate project section below the app.
     const seoContent = renderProjectSeoContent(project, title, description, canonical, image);
-    html = html.replace("</body>", seoContent + "\n</body>");
+    const schemaMarkup = seoContent.match(/<script type="application\/ld\+json" id="tp-server-project-schema">[\s\S]*?<\/script>/i);
+    if (schemaMarkup) html = html.replace("</head>", schemaMarkup[0] + "\n</head>");
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
