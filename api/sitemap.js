@@ -3,7 +3,14 @@ const BASE_URLS = [
   "https://www.truepillar.in/properties",
   "https://www.truepillar.in/about",
   "https://www.truepillar.in/contact",
-  "https://www.truepillar.in/privacy-policy.html"
+  "https://www.truepillar.in/privacy-policy.html",
+  "https://www.truepillar.in/locations/kharghar",
+  "https://www.truepillar.in/locations/panvel",
+  "https://www.truepillar.in/locations/navi-mumbai",
+  "https://www.truepillar.in/locations/thane",
+  "https://www.truepillar.in/locations/vashi",
+  "https://www.truepillar.in/locations/ghansoli",
+  "https://www.truepillar.in/locations/nerul"
 ];
 
 const FALLBACK_PROJECT_SLUGS = [
