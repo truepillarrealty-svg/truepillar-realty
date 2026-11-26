@@ -60,5 +60,12 @@
       "source": "/((?!robots\\.txt|sitemap\\.xml|wp-sitemap\\.xml|sitemap_index\\.xml|confirmation\\.html|privacy-policy\\.html).*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/tharwani-pristine",
+      "destination": "/tharwani-pristinea",
+      "permanent": true
+    }
   ]
 }
