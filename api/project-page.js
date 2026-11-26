@@ -5,12 +5,18 @@ function slugify(value = "") {
     .replace(/^-+|-+$/g, "");
 }
 
-function valueOf(field) {
-  if (!field) return undefined;
-  if (field.stringValue !== undefined) return field.stringValue;
-  if (field.booleanValue !== undefined) return field.booleanValue;
-  if (field.integerValue !== undefined) return field.integerValue;
-  if (field.doubleValue !== undefined) return field.doubleValue;
+function decodeValue(value) {
+  if (!value || typeof value !== "object") return undefined;
+  if (Object.prototype.hasOwnProperty.call(value, "stringValue")) return value.stringValue;
+  if (Object.prototype.hasOwnProperty.call(value, "booleanValue")) return value.booleanValue;
+  if (Object.prototype.hasOwnProperty.call(value, "integerValue")) return Number(value.integerValue);
+  if (Object.prototype.hasOwnProperty.call(value, "doubleValue")) return value.doubleValue;
+  if (Object.prototype.hasOwnProperty.call(value, "timestampValue")) return value.timestampValue;
+  if (Object.prototype.hasOwnProperty.call(value, "nullValue")) return null;
+  if (value.arrayValue) return (value.arrayValue.values || []).map(decodeValue);
+  if (value.mapValue) {
+    return Object.fromEntries(Object.entries(value.mapValue.fields || {}).map(([key, item]) => [key, decodeValue(item)]));
+  }
   return undefined;
 }
 
@@ -19,8 +25,132 @@ function escapeHtml(value = "") {
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
+function textValue(value) {
+  if (value === undefined || value === null || value === "") return "";
+  if (Array.isArray(value)) return value.map(textValue).filter(Boolean).join(", ");
+  if (typeof value === "object") return "";
+  return String(value).trim();
+}
+
+function safeImage(value) {
+  const candidate = textValue(value);
+  return /^https:\/\/[^\s"'<>]+$/i.test(candidate) ? candidate : "";
+}
+
+function renderProjectSeoContent(project, title, description, canonical, image) {
+  const locality = textValue(project.subLocality || project.locality || project.location);
+  const region = textValue(project.region || project.city || "Maharashtra");
+  const developer = textValue(project.developer || project.builder);
+  const configuration = textValue(project.configuration || project.configurations);
+  const price = textValue(project.price || project.priceRange);
+  const possession = textValue(project.possession || project.possessionDate);
+  const rera = textValue(project.mahareraNumber || project.reraNumber || project.rera || project.registrationNumber);
+  const status = textValue(project.status || project.statusBadge);
+  const projectDescription = textValue(project.description || project.overview);
+  const address = textValue(project.address);
+  const facts = [
+    ["Developer", developer],
+    ["Location", [locality, region].filter(Boolean).join(", ")],
+    ["Configurations", configuration],
+    ["Indicative price", price],
+    ["Possession", possession],
+    ["MahaRERA registration", rera],
+    ["Project status", status]
+  ].filter(([, value]) => value);
+
+  const factRows = facts.map(([label, value]) =>
+    `<div class="tp-project-fact"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`
+  ).join("");
+
+  const imageMarkup = image
+    ? `<figure class="tp-project-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(project.title || "Residential project")} in ${escapeHtml(locality || region)}" loading="eager"><figcaption>Project image supplied for this listing. Confirm current specifications and availability with the developer.</figcaption></figure>`
+    : "";
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": canonical + "#webpage",
+        "url": canonical,
+        "name": title,
+        "description": description,
+        "isPartOf": { "@type": "WebSite", "name": "TruePillar Realty", "url": "https://www.truepillar.in/" },
+        "breadcrumb": { "@id": canonical + "#breadcrumb" }
+      },
+      {
+        "@type": "Residence",
+        "@id": canonical + "#residence",
+        "name": textValue(project.title) || "Residential project",
+        "description": projectDescription || description,
+        "url": canonical,
+        ...(image ? { "image": image } : {}),
+        ...(address || locality || region ? {
+          "address": {
+            "@type": "PostalAddress",
+            ...(address ? { "streetAddress": address } : {}),
+            ...(locality ? { "addressLocality": locality } : {}),
+            "addressRegion": region,
+            "addressCountry": "IN"
+          }
+        } : {})
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": canonical + "#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.truepillar.in/" },
+          { "@type": "ListItem", "position": 2, "name": "Properties", "item": "https://www.truepillar.in/properties" },
+          { "@type": "ListItem", "position": 3, "name": textValue(project.title) || "Project", "item": canonical }
+        ]
+      }
+    ]
+  };
+
+  return `
+<main id="tp-project-seo-content" class="tp-project-seo">
+  <nav aria-label="Breadcrumb" class="tp-project-breadcrumb"><a href="/">Home</a><span>›</span><a href="/properties">All Properties</a><span>›</span><span>${escapeHtml(project.title || "Project")}</span></nav>
+  <div class="tp-project-seo-grid">
+    <article>
+      <p class="tp-project-eyebrow">TruePillar Realty · Project Information</p>
+      <h1>${escapeHtml(project.title || "Residential Project")}</h1>
+      <p class="tp-project-lead">${escapeHtml([locality, region].filter(Boolean).join(", ") || "Mumbai Metropolitan Region")}${developer ? " · By " + escapeHtml(developer) : ""}</p>
+      ${imageMarkup}
+      <h2>Project Overview</h2>
+      <p>${escapeHtml(projectDescription || description)}</p>
+      <h2>Project Details</h2>
+      <dl class="tp-project-facts">${factRows || '<div class="tp-project-fact"><dt>Details</dt><dd>Contact TruePillar Realty for the latest verified project information.</dd></div>'}</dl>
+      <p class="tp-project-disclaimer">Prices, inventory, approvals and possession timelines can change. Confirm the latest cost sheet, sanctioned plans, MahaRERA details and availability before making a purchase decision. Any unverified field is intentionally not represented as confirmed.</p>
+      <div class="tp-project-cta"><a href="https://wa.me/917718847841?text=${encodeURIComponent("Please share the latest details for " + (project.title || "this project"))}" rel="nofollow">Request latest price & details on WhatsApp</a><a href="/properties">Explore all properties</a></div>
+    </article>
+  </div>
+</main>
+<style>
+.tp-project-seo{background:#0a0a0c;color:#f8fafc;padding:36px 24px 56px;border-top:1px solid #262626}
+.tp-project-seo-grid{max-width:1100px;margin:0 auto}
+.tp-project-breadcrumb{max-width:1100px;margin:0 auto 28px;display:flex;flex-wrap:wrap;gap:9px;color:#9ca3af;font-size:12px}
+.tp-project-breadcrumb a{color:#d4af37;text-decoration:none}
+.tp-project-eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#d4af37;font-weight:700}
+.tp-project-seo h1{font-size:clamp(28px,4vw,42px);line-height:1.15;color:#fff;margin:8px 0}
+.tp-project-seo h2{font-size:20px;color:#fff;margin:28px 0 10px}
+.tp-project-lead,.tp-project-seo article>p{color:#b7bec9;line-height:1.75;font-size:14px}
+.tp-project-image{margin:24px 0}
+.tp-project-image img{width:100%;max-height:520px;object-fit:cover;border-radius:14px;border:1px solid #292929}
+.tp-project-image figcaption{font-size:11px;color:#9ca3af;margin-top:7px}
+.tp-project-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:16px 0}
+.tp-project-fact{background:#121216;border:1px solid #292929;border-radius:10px;padding:14px}
+.tp-project-fact dt{font-size:11px;color:#d4af37;text-transform:uppercase;letter-spacing:.08em}
+.tp-project-fact dd{margin:5px 0 0;color:#f3f4f6;font-size:14px;line-height:1.5}
+.tp-project-disclaimer{font-size:12px!important;color:#9ca3af!important;border-left:2px solid #d4af37;padding-left:12px;margin-top:20px}
+.tp-project-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.tp-project-cta a{display:inline-block;padding:12px 17px;border:1px solid #d4af37;border-radius:8px;color:#f8fafc;text-decoration:none;font-weight:650;font-size:13px}
+.tp-project-cta a:first-child{background:#d4af37;color:#090909}
+</style>
+<script type="application/ld+json" id="tp-server-project-schema">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>`;
+}
+
 module.exports = async function handler(req, res) {
-  const requestedSlug = String(req.query.slug || "").replace(/^\/+|\/+$/g, "").toLowerCase();
+  const requestedSlug = String(req.query.slug || "").replace(/^\\/+|\\/+$/g, "").toLowerCase();
   if (!requestedSlug || requestedSlug.includes("/")) {
     res.status(400).send("Invalid project slug");
     return;
@@ -40,14 +170,20 @@ module.exports = async function handler(req, res) {
       pageToken = data.nextPageToken || "";
       if (!pageToken) break;
     }
-    const project = documents.map(doc => {
+
+    const projects = documents.map(doc => {
       const fields = doc.fields || {};
-      const p = {};
-      for (const [key, field] of Object.entries(fields)) p[key] = valueOf(field);
-      p.id = doc.name ? doc.name.split("/").pop() : "";
-      p.slug = (typeof p.slug === "string" && p.slug.trim()) ? p.slug.trim().replace(/^\/+|\/+$/g, "") : slugify(p.title || "");
-      return p;
-    }).find(p => p.slug.toLowerCase() === requestedSlug && p.published !== false);
+      const project = {};
+      for (const [key, field] of Object.entries(fields)) project[key] = decodeValue(field);
+      project.id = doc.name ? doc.name.split("/").pop() : "";
+      project.slug = (typeof project.slug === "string" && project.slug.trim())
+        ? project.slug.trim().replace(/^\\/+|\\/+$/g, "")
+        : slugify(project.title || "");
+      return project;
+    });
+    const project = projects.find(item =>
+      item.slug.toLowerCase() === requestedSlug && item.published !== false && item.title
+    );
 
     if (!project) {
       res.status(404).setHeader("Content-Type", "text/html; charset=utf-8");
@@ -58,30 +194,31 @@ module.exports = async function handler(req, res) {
     const pageResponse = await fetch("https://www.truepillar.in/index.html");
     if (!pageResponse.ok) throw new Error("Could not load website shell");
     let html = await pageResponse.text();
-    const title = `${project.title || "Property"} in ${project.subLocality || project.region || "Mumbai"} | Price, Floor Plan & Site Visit | TruePillar Realty`;
-    const description = `${project.title || "Residential project"} by ${project.developer || "the developer"} in ${project.subLocality || project.region || "Mumbai"}, ${project.region || "Maharashtra"}. ${project.configuration || "Available configurations"} starting from ${project.price || "price on request"}. View details and book a free site visit with TruePillar Realty.`;
+
+    const title = `${project.title} in ${textValue(project.subLocality || project.region || "Mumbai")} | Project Details & Price | TruePillar Realty`;
+    const detailParts = [
+      project.developer ? "by " + textValue(project.developer) : "",
+      [project.subLocality, project.region].filter(Boolean).map(textValue).join(", "),
+      textValue(project.configuration || project.configurations),
+      textValue(project.price)
+    ].filter(Boolean);
+    let description = `${project.title}: ${detailParts.join(". ")}. Get verified project information and request the latest cost sheet from TruePillar Realty.`;
+    description = description.replace(/\\s+/g, " ").slice(0, 300);
     const canonical = "https://www.truepillar.in/" + project.slug;
-    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`);
+    const possibleImages = Array.isArray(project.images) ? project.images : [];
+    const image = safeImage(project.image) || safeImage(possibleImages.find(Boolean));
+
+    html = html.replace(/<title>[\\s\\S]*?<\\/title>/i, `<title>${escapeHtml(title)}</title>`);
     html = html.replace(/<meta name="description" content="[^"]*">/i, `<meta name="description" content="${escapeHtml(description)}">`);
     html = html.replace(/<link rel="canonical"[^>]*>/i, `<link rel="canonical" href="${canonical}">`);
     html = html.replace(/<meta property="og:title" content="[^"]*">/i, `<meta property="og:title" content="${escapeHtml(title)}">`);
     html = html.replace(/<meta property="og:description" content="[^"]*">/i, `<meta property="og:description" content="${escapeHtml(description)}">`);
     html = html.replace(/<meta property="og:url" content="[^"]*">/i, `<meta property="og:url" content="${canonical}">`);
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "Residence",
-      "name": project.title || "Residential project",
-      "description": description,
-      "url": canonical,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": project.address || "",
-        "addressLocality": project.subLocality || "",
-        "addressRegion": project.region || "",
-        "addressCountry": "IN"
-      }
-    };
-    html = html.replace("</head>", `<script type="application/ld+json" id="tp-server-project-schema">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>\n</head>`);
+    if (image) html = html.replace("</head>", `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}"></head>`);
+
+    const seoContent = renderProjectSeoContent(project, title, description, canonical, image);
+    html = html.replace("</body>", seoContent + "\\n</body>");
+
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
     res.status(200).send(html);
