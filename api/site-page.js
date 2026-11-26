@@ -101,6 +101,16 @@ function renderProjectDirectory(projects) {
     <p class="tp-seo-eyebrow">TruePillar Realty · Project Directory</p>
     <h2 id="tp-seo-project-heading">Explore ${projects.length} Residential Projects</h2>
     <p class="tp-seo-intro">Browse residential projects across Navi Mumbai, Panvel, Kharghar, Thane, Mumbai and nearby locations. Open any project to view available details, configurations, pricing information and possession updates.</p>
+    <nav class="tp-seo-locations" aria-label="Browse projects by location">
+      <strong>Browse by location:</strong>
+      <a href="/locations/kharghar">Kharghar</a>
+      <a href="/locations/panvel">Panvel</a>
+      <a href="/locations/navi-mumbai">Navi Mumbai</a>
+      <a href="/locations/thane">Thane</a>
+      <a href="/locations/vashi">Vashi</a>
+      <a href="/locations/ghansoli">Ghansoli</a>
+      <a href="/locations/nerul">Nerul</a>
+    </nav>
     <ul class="tp-seo-project-list">${items}</ul>
     <p class="tp-seo-contact">Need help comparing projects? Call or WhatsApp <a href="https://wa.me/917718847841">+91 7718847841</a>.</p>
   </div>
@@ -118,6 +128,9 @@ function renderProjectDirectory(projects) {
 .tp-seo-project span,.tp-seo-project small{color:#a1a1aa;font-size:12px;line-height:1.5}
 .tp-seo-contact{color:#d4d4d8;font-size:13px}
 .tp-seo-contact a{color:#d4af37}
+.tp-seo-locations{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:20px 0 8px;color:#a1a1aa;font-size:12px}
+.tp-seo-locations a{color:#d4af37;text-decoration:none;border:1px solid #39332a;border-radius:20px;padding:6px 11px}
+.tp-seo-locations a:hover{border-color:#d4af37}
 </style>
 <script type="application/ld+json" id="tp-seo-project-itemlist">${JSON.stringify(itemList).replace(/</g, "\\u003c")}</script>`;
 }
