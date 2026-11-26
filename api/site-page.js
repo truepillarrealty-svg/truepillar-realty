@@ -58,7 +58,7 @@ async function getPublishedProjects() {
       for (const [key, value] of Object.entries(fields)) project[key] = fieldValue(value);
       if (project.published === false || !project.title) continue;
       project.slug = (typeof project.slug === "string" && project.slug.trim())
-        ? project.slug.trim().replace(/^\\/+|\\/+$/g, "")
+        ? project.slug.trim().replace(/^\/+|\/+$/g, "")
         : slugify(project.title);
       if (project.slug) projects.push(project);
     }
@@ -123,7 +123,7 @@ function renderProjectDirectory(projects) {
 }
 
 module.exports = async function handler(req, res) {
-  const slug = String(req.query.slug || "").replace(/^\\/+|\\/+$/g, "").toLowerCase();
+  const slug = String(req.query.slug || "").replace(/^\/+|\/+$/g, "").toLowerCase();
   const page = PAGES[slug];
   if (!page) {
     res.status(404).send("Page not found");
@@ -134,7 +134,7 @@ module.exports = async function handler(req, res) {
     if (!response.ok) throw new Error("Could not load website shell");
     let html = await response.text();
     const canonical = "https://www.truepillar.in" + (slug ? "/" + slug : "/");
-    html = html.replace(/<title>[\\s\\S]*?<\\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
     html = html.replace(/<meta name="description" content="[^"]*">/i, `<meta name="description" content="${escapeHtml(page.description)}">`);
     html = html.replace(/<link rel="canonical"[^>]*>/i, `<link rel="canonical" href="${canonical}">`);
     html = html.replace(/<meta property="og:title" content="[^"]*">/i, `<meta property="og:title" content="${escapeHtml(page.title)}">`);
@@ -146,7 +146,7 @@ module.exports = async function handler(req, res) {
       try {
         const projects = await getPublishedProjects();
         if (projects.length) {
-          html = html.replace("</body>", renderProjectDirectory(projects) + "\\n</body>");
+          html = html.replace("</body>", renderProjectDirectory(projects) + "\n</body>");
         } else {
           console.warn("Properties SEO directory: Firestore returned no published projects.");
         }
