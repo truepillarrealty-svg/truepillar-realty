@@ -58,18 +58,10 @@ module.exports = async function handler(req,res){
   const location=LOCATIONS[key];
   if(!location){res.status(404).send("Location not found");return;}
   try{
-    const response=await fetch("https://www.truepillar.in/index.html");
-    if(!response.ok) throw new Error("Could not load website shell");
-    let html=await response.text();
-    const canonical="https://www.truepillar.in/locations/"+key;
-    html=html.replace(/<title>[\s\S]*?<\/title>/i,"<title>"+esc(location.title)+"</title>");
-    html=html.replace(/<meta name="description" content="[^"]*">/i,'<meta name="description" content="'+esc(location.description)+'">');
-    html=html.replace(/<link rel="canonical"[^>]*>/i,'<link rel="canonical" href="'+canonical+'">');
-    html=html.replace(/<meta property="og:title" content="[^"]*">/i,'<meta property="og:title" content="'+esc(location.title)+'">');
-    html=html.replace(/<meta property="og:description" content="[^"]*">/i,'<meta property="og:description" content="'+esc(location.description)+'">');
-    html=html.replace(/<meta property="og:url" content="[^"]*">/i,'<meta property="og:url" content="'+canonical+'">');
     const projects=await loadProjects();
-    html=html.replace("</body>",render(location,key,projects)+"\n</body>");
+    const canonical="https://www.truepillar.in/locations/"+key;
+    const page=render(location,key,projects);
+    const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(location.title)+'</title><meta name="description" content="'+esc(location.description)+'"><link rel="canonical" href="'+canonical+'"><meta property="og:type" content="website"><meta property="og:title" content="'+esc(location.title)+'"><meta property="og:description" content="'+esc(location.description)+'"><meta property="og:url" content="'+canonical+'"><meta name="theme-color" content="#09090b"><style>*{box-sizing:border-box}body{margin:0;background:#09090b;color:#f8fafc;font-family:Inter,Arial,sans-serif}.tp-header{height:70px;border-bottom:1px solid #242424;background:#0d0d10;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100% - 1200px)/2));gap:20px}.tp-brand{font-size:17px;font-weight:900;letter-spacing:.04em;color:#fff;text-decoration:none}.tp-brand span{color:#d4af37}.tp-nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.tp-nav a{font-size:12px;font-weight:700;color:#d4d4d8;text-decoration:none}.tp-nav a:hover{color:#d4af37}.tp-header-cta{color:#111!important;background:#d4af37;padding:10px 14px;border-radius:6px}.tp-footer{border-top:1px solid #292929;background:#111114;padding:28px 24px;color:#a1a1aa;text-align:center;font-size:12px;line-height:1.8}.tp-footer a{color:#d4af37;text-decoration:none}@media(max-width:650px){.tp-header{height:auto;min-height:64px;padding:16px 18px;align-items:flex-start;flex-direction:column}.tp-nav{gap:14px}.tp-nav a{font-size:11px}}</style></head><body><header class="tp-header"><a class="tp-brand" href="https://www.truepillar.in/">TRUEPILLAR <span>REALTY</span></a><nav class="tp-nav"><a href="/">HOME</a><a href="/properties">PROPERTIES</a><a href="/about">ABOUT US</a><a href="/contact">CONTACT US</a><a class="tp-header-cta" href="https://wa.me/917718847841">WHATSAPP US</a></nav></header>'+page+'<footer class="tp-footer"><strong>TRUEPILLAR REALTY</strong><br>Property assistance across Navi Mumbai, Mumbai, Thane and nearby markets<br><a href="https://wa.me/917718847841">WhatsApp +91 7718847841</a> · <a href="https://www.truepillar.in/properties">Explore all properties</a><br>Prices, inventory, approvals and possession details must be reconfirmed with the developer.</footer></body></html>';
     res.setHeader("Content-Type","text/html; charset=utf-8");
     res.setHeader("Cache-Control","public, s-maxage=300, stale-while-revalidate=3600");
     res.status(200).send(html);
