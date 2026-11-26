@@ -21,6 +21,34 @@
       "destination": "/api/site-page?slug=admin"
     },
     {
+      "source": "/locations/kharghar",
+      "destination": "/api/location-page?slug=kharghar"
+    },
+    {
+      "source": "/locations/panvel",
+      "destination": "/api/location-page?slug=panvel"
+    },
+    {
+      "source": "/locations/navi-mumbai",
+      "destination": "/api/location-page?slug=navi-mumbai"
+    },
+    {
+      "source": "/locations/thane",
+      "destination": "/api/location-page?slug=thane"
+    },
+    {
+      "source": "/locations/vashi",
+      "destination": "/api/location-page?slug=vashi"
+    },
+    {
+      "source": "/locations/ghansoli",
+      "destination": "/api/location-page?slug=ghansoli"
+    },
+    {
+      "source": "/locations/nerul",
+      "destination": "/api/location-page?slug=nerul"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     },
