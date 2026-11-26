@@ -214,6 +214,19 @@ module.exports = async function handler(req, res) {
     let html = await pageResponse.text();
 
     const title = `${project.title} in ${textValue(project.subLocality || project.region || "Mumbai")} | Project Details & Price | TruePillar Realty`;
+    const seoConfigRows = (Array.isArray(project.configurations) ? project.configurations : [])
+      .filter(item => item && typeof item === "object")
+      .map(item => ({
+        name: textValue(item.configuration || item.name || item.type),
+        area: textValue(item.carpetArea || item.area),
+        price: textValue(item.price || item.startingPrice)
+      }))
+      .filter(item => item.name || item.area || item.price);
+    const configuration = [...new Set(seoConfigRows.map(item => item.name).filter(Boolean))].join(", ") ||
+      textValue(project.configuration || project.configurationsText);
+    const configurationPricing = seoConfigRows.map(item =>
+      [item.name, item.area, item.price].filter(Boolean).join(" · ")
+    ).filter(Boolean).join("; ");
     const detailParts = [
       project.developer ? "by " + textValue(project.developer) : "",
       [project.subLocality, project.region].filter(Boolean).map(textValue).join(", "),
