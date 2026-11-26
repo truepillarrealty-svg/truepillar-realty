@@ -45,14 +45,79 @@ async function loadProjects() {
 function render(location, key, projects) {
   const matches=projects.filter(location.test).sort((a,b)=>String(a.title).localeCompare(String(b.title)));
   const cards=matches.map(p=>{
-    const details=[p.configuration,p.price,p.possession].filter(Boolean).map(esc).join(" · ");
-    return '<li><a href="/'+encodeURIComponent(p.slug)+'">'+esc(p.title)+'</a><span>'+esc([p.subLocality,p.region].filter(Boolean).join(", "))+'</span>'+(details?'<small>'+details+'</small>':"")+'</li>';
+    const image=(Array.isArray(p.images)?p.images.find(Boolean):"") || p.image || "";
+    const configurations=Array.isArray(p.configurations)?p.configurations.filter(Boolean):[];
+    const configRows=configurations.map(c=>{
+      if(typeof c==="string") return {name:c,area:"",price:""};
+      return {
+        name:c.configuration||c.name||c.type||"",
+        area:c.carpetArea||c.area||"",
+        price:c.price||c.startingPrice||""
+      };
+    }).filter(c=>c.name||c.area||c.price);
+    const configSummary=configRows.length
+      ? configRows.map(c=>[c.name,c.area,c.price].filter(Boolean).join(" · ")).join(" | ")
+      : [p.configuration,p.price].filter(Boolean).join(" · ");
+    const possession=p.possession||p.possessionDate||"To be confirmed";
+    const status=p.statusBadge||p.status||"Residential Project";
+    const imageMarkup=image
+      ? '<div class="tp-location-card-image"><img src="'+esc(image)+'" alt="'+esc(p.title)+' in '+esc(location.name)+'" loading="lazy"><span>'+esc(status)+'</span></div>'
+      : '<div class="tp-location-card-image tp-location-no-image"><span>'+esc(status)+'</span><b>'+esc(p.title)+'</b><small>Project image not yet available</small></div>';
+    const configMarkup=configRows.length
+      ? '<div class="tp-location-configs">'+configRows.slice(0,4).map(c=>'<div class="tp-location-config"><b>'+esc(c.name||"Configuration")+'</b><small>'+esc(c.area||"Area on request")+'</small><strong>'+esc(c.price||"Price on request")+'</strong></div>').join("")+'</div>'
+      : '<p class="tp-location-card-config">'+esc(configSummary||"Configuration details on request")+'</p>';
+    const projectUrl="/"+encodeURIComponent(p.slug);
+    const wa="https://wa.me/917718847841?text="+encodeURIComponent("Hello TruePillar Realty, please share the latest details and cost sheet for "+p.title+".");
+    return '<article class="tp-location-card">'+imageMarkup+'<div class="tp-location-card-body"><div class="tp-location-card-top"><span>'+esc(p.configuration||configRows.map(c=>c.name).filter(Boolean).join(", ")||"RESIDENTIAL")+'</span><small>📍 '+esc(p.subLocality||p.locality||location.name)+'</small></div><h3><a href="'+projectUrl+'">'+esc(p.title)+'</a></h3><p class="tp-location-developer">'+esc(p.developer||p.builder||"Developer details on request")+'</p>'+configMarkup+'<div class="tp-location-possession">🔑 Possession: <b>'+esc(possession)+'</b></div><div class="tp-location-card-actions"><a class="tp-location-view" href="'+projectUrl+'">VIEW DETAILS</a><a class="tp-location-enquire" href="'+wa+'" target="_blank" rel="noopener noreferrer">WHATSAPP</a></div></div></article>';
   }).join("");
   const canonical="https://www.truepillar.in/locations/"+key;
   const schema={"@context":"https://schema.org","@type":"CollectionPage","name":"Residential projects in "+location.name,"url":canonical,"mainEntity":{"@type":"ItemList","numberOfItems":matches.length,"itemListElement":matches.map((p,i)=>({"@type":"ListItem","position":i+1,"name":p.title,"url":"https://www.truepillar.in/"+p.slug}))}};
-  return '<section class="tp-location"><nav><a href="/">Home</a> › <a href="/properties">All Properties</a> › '+esc(location.name)+'</nav><p class="eyebrow">TruePillar Realty · Local Property Guide</p><h1>Residential Projects in '+esc(location.name)+'</h1><p class="intro">'+esc(location.copy)+'</p><h2>Projects listed in '+esc(location.name)+'</h2><p class="count">'+matches.length+' published project listings found in the current directory. Pricing and availability should be reconfirmed before a visit.</p>'+(matches.length?'<ul class="cards">'+cards+'</ul>':'<p>No published project listings are currently available for this location. <a href="/properties">Browse all properties</a>.</p>')+'<h2>What to compare before booking</h2><ul class="checks"><li>Check carpet area and configuration in the latest developer cost sheet.</li><li>Verify the MahaRERA registration and exact phase or tower.</li><li>Calculate stamp duty, registration, parking and other applicable charges separately.</li><li>Confirm current inventory, possession timeline and occupancy certificate status where applicable.</li></ul><p class="contact">Need help shortlisting? Call or WhatsApp <a href="https://wa.me/917718847841">+91 7718847841</a> or <a href="/properties">view all listed projects</a>.</p></section><style>.tp-location{background:#0a0a0c;color:#f8fafc;padding:44px 24px 60px;border-top:1px solid #292929}.tp-location>*{max-width:1200px;margin-left:auto;margin-right:auto}.tp-location nav{font-size:12px;color:#9ca3af;margin-bottom:26px}.tp-location a{color:#d4af37;text-decoration:none}.tp-location .eyebrow{color:#d4af37;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}.tp-location h1{font-size:clamp(28px,4vw,40px);margin-top:10px;color:#fff}.tp-location h2{font-size:21px;margin-top:30px;color:#fff}.tp-location .intro{max-width:900px;color:#c0c4cc;font-size:15px;line-height:1.8}.tp-location .count{color:#a1a1aa;font-size:13px}.tp-location .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;list-style:none;padding:0;margin-top:22px}.tp-location .cards li{display:flex;flex-direction:column;gap:6px;padding:15px;background:#121216;border:1px solid #292929;border-radius:10px}.tp-location .cards li>a{color:#fff;font-weight:700}.tp-location .cards span,.tp-location .cards small{font-size:12px;color:#a1a1aa;line-height:1.5}.tp-location .checks{color:#c0c4cc;line-height:1.9;padding-left:20px}.tp-location .contact{margin-top:28px;color:#d4d4d8}</style><script type="application/ld+json">'+JSON.stringify(schema).replace(/</g,"\\u003c")+'</script>';
+  return '<section class="tp-location"><nav><a href="/">Home</a> › <a href="/properties">All Properties</a> › '+esc(location.name)+'</nav><p class="eyebrow">TruePillar Realty · Local Property Guide</p><h1>Residential Projects in '+esc(location.name)+'</h1><p class="intro">'+esc(location.copy)+'</p><h2>Projects listed in '+esc(location.name)+'</h2><p class="count">'+matches.length+' published project listings found in the current directory. Pricing and availability should be reconfirmed before a visit.</p>'+(matches.length?'<div class="tp-location-grid">'+cards+'</div>':'<p>No published project listings are currently available for this location. <a href="/properties">Browse all properties</a>.</p>')+'<h2>What to compare before booking</h2><ul class="checks"><li>Check carpet area and configuration in the latest developer cost sheet.</li><li>Verify the MahaRERA registration and exact phase or tower.</li><li>Calculate stamp duty, registration, parking and other applicable charges separately.</li><li>Confirm current inventory, possession timeline and occupancy certificate status where applicable.</li></ul><p class="contact">Need help shortlisting? Call or WhatsApp <a href="https://wa.me/917718847841">+91 7718847841</a> or <a href="/properties">view all listed projects</a>.</p></section><style>
+.tp-location{background:#0a0a0c;color:#f8fafc;padding:44px 24px 60px;border-top:1px solid #292929}
+.tp-location>*{max-width:1200px;margin-left:auto;margin-right:auto}
+.tp-location nav{font-size:12px;color:#9ca3af;margin-bottom:26px}
+.tp-location a{color:#d4af37;text-decoration:none}
+.tp-location .eyebrow{color:#d4af37;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.tp-location h1{font-size:clamp(28px,4vw,40px);margin-top:10px;color:#fff}
+.tp-location h2{font-size:21px;margin-top:30px;color:#fff}
+.tp-location .intro{max-width:900px;color:#c0c4cc;font-size:15px;line-height:1.8}
+.tp-location .count{color:#a1a1aa;font-size:13px}
+.tp-location-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:24px auto 32px;max-width:1200px}
+.tp-location-card{background:#121216;border:1px solid #292929;border-radius:13px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 12px 28px rgba(0,0,0,.22)}
+.tp-location-card-image{height:205px;background:#09090b;position:relative;overflow:hidden}
+.tp-location-card-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.tp-location-card:hover .tp-location-card-image img{transform:scale(1.04)}
+.tp-location-card-image>span{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.88);border:1px solid #d4af37;color:#d4af37;border-radius:5px;padding:5px 8px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.tp-location-no-image{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:20px;text-align:center;color:#fff}
+.tp-location-no-image b{font-size:20px}
+.tp-location-no-image small{color:#9ca3af;font-size:11px}
+.tp-location-card-body{padding:18px;display:flex;flex-direction:column;flex:1}
+.tp-location-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.tp-location-card-top>span{color:#d4af37;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.tp-location-card-top>small{color:#a1a1aa;font-size:10px;text-align:right}
+.tp-location-card h3{font-size:19px;line-height:1.25;margin:0 0 7px;color:#fff}
+.tp-location-card h3 a{color:#fff}
+.tp-location-card h3 a:hover{color:#d4af37}
+.tp-location-developer{font-size:11px;color:#a1a1aa;margin:0 0 13px}
+.tp-location-configs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 13px}
+.tp-location-config{background:#09090b;border:1px solid #292929;border-radius:7px;padding:9px;min-width:0}
+.tp-location-config b,.tp-location-config small,.tp-location-config strong{display:block;overflow-wrap:anywhere}
+.tp-location-config b{font-size:11px;color:#fff}
+.tp-location-config small{font-size:10px;color:#9ca3af;margin-top:3px}
+.tp-location-config strong{font-size:11px;color:#d4af37;margin-top:5px}
+.tp-location-card-config{color:#cbd5e1;font-size:11px;line-height:1.6;margin:0 0 13px}
+.tp-location-possession{font-size:11px;color:#9ca3af;padding:10px 0;border-top:1px solid #292929;margin-top:auto}
+.tp-location-possession b{color:#fff}
+.tp-location-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.tp-location-card-actions a{display:flex;align-items:center;justify-content:center;border-radius:6px;padding:11px 6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-align:center}
+.tp-location-view{border:1px solid #d4af37;color:#d4af37!important}
+.tp-location-enquire{background:#d4af37;color:#09090b!important}
+.tp-location .checks{color:#c0c4cc;line-height:1.9;padding-left:20px}
+.tp-location .contact{margin-top:28px;color:#d4d4d8}
+@media(max-width:900px){.tp-location-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.tp-location{padding:28px 14px 44px}.tp-location-grid{grid-template-columns:1fr;gap:14px}.tp-location-card-image{height:210px}}
+</style><script type="application/ld+json">'+JSON.stringify(schema).replace(/</g,"\\u003c")+'</script>';
 }
-
 module.exports = async function handler(req,res){
   const key=String(req.query.slug||"").toLowerCase().replace(/^\/+|\/+$/g,"");
   const location=LOCATIONS[key];
