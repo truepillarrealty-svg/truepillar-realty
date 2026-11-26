@@ -73,16 +73,49 @@
     <script type="application/ld+json">
     {
       "@context":"https://schema.org",
-      "@type":"RealEstateAgent",
-      "name":"TruePillar Realty",
-      "url":"https://www.truepillar.in/",
-      "telephone":"+91-7718847841",
-      "areaServed":["Navi Mumbai","Thane","Mumbai","Dombivli"],
-      "description":"Verified premium residential properties with zero brokerage and free site visit assistance.",
-      "identifier":{"@type":"PropertyValue","name":"MahaRERA Registration Number","value":"A031272401680"},
-      "sameAs":[
-        "https://www.facebook.com/TruePillarRealty/",
-        "https://www.instagram.com/truepillar.realty/"
+      "@graph":[
+        {
+          "@type":"RealEstateAgent",
+          "@id":"https://www.truepillar.in/#real-estate-agent",
+          "name":"TruePillar Realty",
+          "url":"https://www.truepillar.in/",
+          "telephone":"+91-7718847841",
+          "email":"sales@truepillar.in",
+          "description":"TruePillar Realty is a residential property consultancy serving Navi Mumbai, Mumbai, Thane and nearby markets, helping homebuyers compare developer projects, configurations, pricing information and site visits.",
+          "areaServed":[
+            {"@type":"City","name":"Navi Mumbai"},
+            {"@type":"City","name":"Mumbai"},
+            {"@type":"City","name":"Thane"},
+            {"@type":"City","name":"Dombivli"}
+          ],
+          "address":{
+            "@type":"PostalAddress",
+            "addressLocality":"Kharghar, Navi Mumbai",
+            "addressRegion":"Maharashtra",
+            "addressCountry":"IN"
+          },
+          "identifier":{"@type":"PropertyValue","name":"MahaRERA Registration Number","value":"A031272401680"},
+          "sameAs":[
+            "https://www.facebook.com/TruePillarRealty/",
+            "https://www.instagram.com/truepillar.realty/"
+          ],
+          "knowsAbout":[
+            "Residential projects in Navi Mumbai",
+            "Residential projects in Kharghar",
+            "Residential projects in Panvel",
+            "Residential projects in Thane",
+            "MahaRERA registered residential projects",
+            "Home buying and property site visits"
+          ]
+        },
+        {
+          "@type":"WebSite",
+          "@id":"https://www.truepillar.in/#website",
+          "url":"https://www.truepillar.in/",
+          "name":"TruePillar Realty",
+          "publisher":{"@id":"https://www.truepillar.in/#real-estate-agent"},
+          "inLanguage":"en-IN"
+        }
       ]
     }
     </script>
